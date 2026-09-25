@@ -1,929 +1,364 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3D Space Runner</title>
-
+<title>NEON // GRID — 3D Logic Game</title>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{box-sizing:border-box}
+:root{
+ --bg:#050812;--panel:#0c1320;--card:#111b2b;--line:#26364d;
+ --text:#eef7ff;--muted:#7e8da6;--accent:#56e6ff;--good:#70ff9f;
+ --bad:#ff617b;--gold:#ffd66b
 }
-
-body {
-    overflow: hidden;
-    background: #02030a;
-    font-family: Arial, sans-serif;
-    color: white;
-    user-select: none;
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0%,#13213a,#050812 55%);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif}
+body{display:flex;justify-content:center;padding:24px}
+.game{width:min(1050px,100%)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:14px}
+.brand{font-weight:900;letter-spacing:.18em;font-size:22px}
+.subtitle{font-size:10px;color:var(--muted);letter-spacing:.2em;margin-top:4px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.stat{background:rgba(17,27,43,.9);border:1px solid var(--line);border-radius:11px;padding:8px 13px;text-align:center;min-width:70px}
+.stat b{display:block;font-size:17px}.stat span{font-size:9px;color:var(--muted);letter-spacing:.1em}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:14px}
+.board-panel,.card{background:rgba(12,19,32,.94);border:1px solid var(--line);border-radius:18px}
+.board-panel{padding:18px}
+.levelbar{display:flex;justify-content:space-between;gap:12px;margin-bottom:14px;color:var(--muted);font-size:12px}
+.levelbar strong{color:var(--text);font-size:14px}
+.board{
+ width:min(620px,100%);aspect-ratio:1;margin:auto;padding:10px;
+ display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
+ background:#070c15;border:1px solid #34465f;border-radius:16px;
+ transform:perspective(850px) rotateX(7deg);
+ box-shadow:inset 0 0 45px #02040a,0 18px 50px rgba(0,0,0,.3)
 }
-
-/* GAME */
-#game {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-    perspective: 800px;
-    background:
-        radial-gradient(circle at 50% 30%, #17245e 0%, #070a22 35%, #010208 75%);
+.cell{
+ position:relative;border:1px solid #26364d;border-radius:9px;
+ background:linear-gradient(145deg,#172337,#0d1523);
+ cursor:pointer;min-width:0;transition:.12s;
+ box-shadow:inset 0 -7px 14px rgba(0,0,0,.25)
 }
-
-/* STARS */
-.star {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 0 8px white;
+.cell:hover{border-color:#5c7696;transform:translateY(-1px)}
+.cell:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cell.on{
+ background:radial-gradient(circle at 35% 28%,#d8ffff,#38d8ee 30%,#08677f 72%,#052e3a);
+ border-color:#8af7ff;
+ box-shadow:0 0 18px rgba(86,230,255,.6),inset 0 -8px 15px rgba(0,0,0,.25)
 }
-
-/* HUD */
-#hud {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 100;
-    display: flex;
-    gap: 15px;
+.cell.on:after{content:"";position:absolute;inset:29%;border-radius:50%;background:white;box-shadow:0 0 15px white}
+.cell.target{border-color:#627895}
+.cell.target:before{content:"";position:absolute;inset:31%;border:2px dashed #70839e;border-radius:50%}
+.cell.enemy{background:linear-gradient(145deg,#3a1723,#190d15);border-color:#813548;cursor:not-allowed}
+.cell.enemy:after{content:"×";position:absolute;inset:0;display:grid;place-items:center;color:#ff617b;font-weight:900;font-size:25px}
+.message{min-height:24px;text-align:center;margin-top:13px;color:var(--muted);font-size:12px}
+.message.good{color:var(--good)}.message.bad{color:var(--bad)}
+.side{display:flex;flex-direction:column;gap:10px}
+.card{padding:13px}
+.card h3{font-size:10px;letter-spacing:.14em;margin:0 0 9px}
+.card p{font-size:11px;color:var(--muted);line-height:1.55;margin:5px 0}
+.meter{height:7px;background:#070c14;border-radius:99px;overflow:hidden;margin:9px 0 6px}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#7b8cff);border-radius:99px;transition:.2s}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px;font-size:10px;color:var(--muted)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.cyan{background:var(--accent)}.red{background:var(--bad)}.gray{border:1px dashed #71849e}
+.actions{display:flex;gap:8px}
+button.action{border:1px solid var(--line);background:#142033;color:var(--text);padding:10px;border-radius:10px;cursor:pointer;flex:1;font-weight:700;font-size:11px}
+button.action:hover{border-color:#5b7595}
+button.primary{background:var(--accent);color:#031015;border-color:var(--accent)}
+.overlay{position:fixed;inset:0;background:rgba(2,5,10,.86);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+.overlay.show{display:flex}
+.modal{background:#101a2a;border:1px solid #3b4e68;border-radius:18px;padding:26px;text-align:center;max-width:370px;width:100%;box-shadow:0 25px 90px rgba(0,0,0,.6)}
+.modal h2{margin:0 0 8px;font-size:26px}.modal p{color:var(--muted);font-size:12px;line-height:1.6}
+@media(max-width:760px){
+ body{padding:12px}.top{align-items:flex-start;flex-direction:column}.stats{justify-content:flex-start}
+ .layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.actions{grid-column:1/-1}
 }
-
-.box {
-    padding: 10px 18px;
-    border: 1px solid rgba(255,255,255,.2);
-    border-radius: 12px;
-    background: rgba(0,0,0,.35);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 20px rgba(0,180,255,.15);
+@media(max-width:480px){
+ .board-panel{padding:10px}.board{gap:5px;padding:7px}.side{display:flex}
+ .brand{font-size:18px}.stat{min-width:60px;padding:7px 9px}
 }
-
-.box span {
-    color: #00eaff;
-    font-weight: bold;
-}
-
-/* ROAD */
-#road {
-    position: absolute;
-    width: 75vw;
-    height: 160vh;
-    left: 50%;
-    top: 20%;
-    transform:
-        translateX(-50%)
-        rotateX(65deg);
-    transform-origin: center top;
-
-    background:
-        repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 9vw,
-            rgba(0,220,255,.18) 9.2vw,
-            transparent 9.5vw
-        ),
-        repeating-linear-gradient(
-            0deg,
-            rgba(0,220,255,.10) 0px,
-            rgba(0,220,255,.10) 3px,
-            transparent 4px,
-            transparent 70px
-        ),
-        linear-gradient(
-            90deg,
-            #050713,
-            #0c1230,
-            #050713
-        );
-
-    border-left: 4px solid #00eaff;
-    border-right: 4px solid #00eaff;
-
-    box-shadow:
-        0 0 30px #00eaff,
-        inset 0 0 80px rgba(0,200,255,.3);
-}
-
-/* ROAD GLOW */
-#road::before,
-#road::after {
-    content: "";
-    position: absolute;
-    width: 15px;
-    height: 100%;
-    top: 0;
-    background: #00eaff;
-    filter: blur(15px);
-}
-
-#road::before {
-    left: -10px;
-}
-
-#road::after {
-    right: -10px;
-}
-
-/* PLAYER */
-#player {
-    position: absolute;
-    width: 75px;
-    height: 110px;
-    left: 50%;
-    bottom: 55px;
-    transform: translateX(-50%);
-    z-index: 20;
-    transition: left .12s ease;
-}
-
-/* CAR BODY */
-.car-body {
-    position: absolute;
-    width: 70px;
-    height: 90px;
-    left: 3px;
-    top: 10px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #061a27,
-            #00c8ff,
-            #063247,
-            #00eaff
-        );
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 65%,
-        78% 100%,
-        22% 100%,
-        0 65%
-    );
-
-    box-shadow:
-        0 0 15px #00eaff,
-        0 0 35px rgba(0,220,255,.6);
-}
-
-/* CAR GLASS */
-.car-glass {
-    position: absolute;
-    width: 42px;
-    height: 35px;
-    left: 17px;
-    top: 18px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #b8f7ff,
-            #075d8a
-        );
-
-    clip-path: polygon(
-        15% 0,
-        85% 0,
-        100% 80%,
-        0 80%
-    );
-
-    box-shadow: 0 0 15px #00eaff;
-}
-
-/* CAR LIGHTS */
-.light {
-    position: absolute;
-    width: 10px;
-    height: 20px;
-    background: #ffffff;
-    box-shadow: 0 0 15px white;
-    bottom: 10px;
-}
-
-.light.left {
-    left: 12px;
-}
-
-.light.right {
-    right: 12px;
-}
-
-/* OBSTACLE */
-.obstacle {
-    position: absolute;
-    width: 65px;
-    height: 65px;
-    background:
-        linear-gradient(
-            135deg,
-            #ff1744,
-            #7a0018
-        );
-
-    border: 3px solid #ff5272;
-    box-shadow:
-        0 0 15px #ff1744,
-        0 0 40px rgba(255,0,60,.6);
-
-    transform: translate(-50%, -50%) rotate(45deg);
-    z-index: 10;
-}
-
-/* COIN */
-.coin {
-    position: absolute;
-    width: 35px;
-    height: 35px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            #fff7a0,
-            #ffd000 45%,
-            #ff8c00
-        );
-
-    border: 3px solid #fff4a3;
-
-    box-shadow:
-        0 0 15px #ffd000,
-        0 0 35px #ff9d00;
-
-    transform: translate(-50%, -50%);
-    z-index: 9;
-
-    animation: coinSpin .7s linear infinite;
-}
-
-@keyframes coinSpin {
-    0% {
-        transform: translate(-50%, -50%) rotateY(0deg);
-    }
-
-    50% {
-        transform: translate(-50%, -50%) rotateY(90deg);
-    }
-
-    100% {
-        transform: translate(-50%, -50%) rotateY(180deg);
-    }
-}
-
-/* START SCREEN */
-#startScreen,
-#gameOver {
-    position: absolute;
-    inset: 0;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(0,100,180,.3),
-            rgba(0,0,0,.85)
-        );
-
-    z-index: 200;
-}
-
-.panel {
-    width: min(500px, 90%);
-    padding: 45px;
-    text-align: center;
-
-    border: 1px solid rgba(0,234,255,.4);
-    border-radius: 25px;
-
-    background: rgba(2,8,25,.75);
-    backdrop-filter: blur(20px);
-
-    box-shadow:
-        0 0 50px rgba(0,200,255,.2);
-}
-
-h1 {
-    font-size: clamp(40px, 7vw, 75px);
-    color: #00eaff;
-    text-shadow:
-        0 0 10px #00eaff,
-        0 0 30px #008cff;
-    margin-bottom: 15px;
-}
-
-.panel p {
-    color: #b9c9e8;
-    margin: 10px 0;
-    line-height: 1.6;
-}
-
-button {
-    margin-top: 25px;
-    padding: 15px 35px;
-
-    border: none;
-    border-radius: 50px;
-
-    background: linear-gradient(
-        90deg,
-        #00eaff,
-        #0066ff
-    );
-
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 0 20px rgba(0,220,255,.5);
-
-    transition: .2s;
-}
-
-button:hover {
-    transform: scale(1.08);
-    box-shadow:
-        0 0 35px rgba(0,220,255,.9);
-}
-
-/* GAME OVER */
-#gameOver {
-    display: none;
-}
-
-/* MOBILE CONTROLS */
-#controls {
-    position: absolute;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 150;
-
-    display: flex;
-    gap: 20px;
-}
-
-.control {
-    width: 65px;
-    height: 65px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border-radius: 50%;
-
-    background: rgba(0,220,255,.12);
-    border: 1px solid rgba(0,220,255,.4);
-
-    color: #00eaff;
-    font-size: 28px;
-
-    cursor: pointer;
-
-    backdrop-filter: blur(10px);
-}
-
-.control:active {
-    transform: scale(.9);
-}
-
-/* RESPONSIVE */
-@media(max-width:600px) {
-
-    #road {
-        width: 120vw;
-    }
-
-    .box {
-        padding: 8px 12px;
-        font-size: 13px;
-    }
-
-    #player {
-        transform: translateX(-50%) scale(.85);
-    }
-}
+@media(prefers-reduced-motion:reduce){.board{transform:none}.cell{transition:none}}
 </style>
 </head>
-
 <body>
+<main class="game" id="game">
+<header class="top">
+ <div>
+  <div class="brand">NEON // GRID</div>
+  <div class="subtitle">LOGIC PROTOCOL · OFFLINE</div>
+ </div>
+ <div class="stats">
+  <div class="stat"><b id="score">0</b><span>SCORE</span></div>
+  <div class="stat"><b id="moves">0</b><span>MOVES</span></div>
+  <div class="stat"><b id="lives">3</b><span>LIVES</span></div>
+ </div>
+</header>
 
-<div id="game">
+<section class="layout">
+ <section class="board-panel">
+  <div class="levelbar">
+   <span><strong id="level">LEVEL 01</strong> · <span id="objective">Activate the core</span></span>
+   <span id="progress">0 / 3</span>
+  </div>
+  <div class="board" id="board" aria-label="5 by 5 logic puzzle"></div>
+  <div class="message" id="message" aria-live="polite">Turn on every target cell.</div>
+ </section>
 
-    <!-- HUD -->
-    <div id="hud">
-        <div class="box">
-            SCORE:
-            <span id="score">0</span>
-        </div>
+ <aside class="side">
+  <div class="card">
+   <h3>CORE STATUS</h3>
+   <div class="meter"><i id="meter"></i></div>
+   <p id="status">System locked.</p>
+  </div>
 
-        <div class="box">
-            COINS:
-            <span id="coins">0</span>
-        </div>
+  <div class="card">
+   <h3>RULES</h3>
+   <p>Click a cell to toggle it and its four neighbors. Red cells are blocked. Activate every target using as few moves as possible.</p>
+   <div class="legend">
+    <div><i class="dot cyan"></i>active</div>
+    <div><i class="dot gray"></i>target</div>
+    <div><i class="dot red"></i>blocked</div>
+   </div>
+  </div>
 
-        <div class="box">
-            SPEED:
-            <span id="speed">1</span>
-        </div>
-    </div>
+  <div class="card">
+   <h3>EFFICIENCY</h3>
+   <p>Par moves: <b id="par">0</b></p>
+   <p>Combo: <b id="combo">x1</b></p>
+  </div>
 
-    <!-- ROAD -->
-    <div id="road"></div>
+  <div class="actions">
+   <button class="action" id="reset" type="button">RESET</button>
+   <button class="action primary" id="hint" type="button">HINT</button>
+  </div>
+ </aside>
+</section>
+</main>
 
-    <!-- PLAYER -->
-    <div id="player">
-
-        <div class="car-body"></div>
-
-        <div class="car-glass"></div>
-
-        <div class="light left"></div>
-        <div class="light right"></div>
-
-    </div>
-
-    <!-- MOBILE CONTROLS -->
-    <div id="controls">
-
-        <div class="control" id="leftBtn">
-            ◀
-        </div>
-
-        <div class="control" id="rightBtn">
-            ▶
-        </div>
-
-    </div>
-
-    <!-- START -->
-    <div id="startScreen">
-
-        <div class="panel">
-
-            <h1>NEON RUSH</h1>
-
-            <p>
-                Enter the futuristic highway.
-            </p>
-
-            <p>
-                Dodge obstacles • Collect coins • Survive
-            </p>
-
-            <p>
-                <b>Keyboard:</b> ← → or A / D
-            </p>
-
-            <button onclick="startGame()">
-                START GAME
-            </button>
-
-        </div>
-
-    </div>
-
-    <!-- GAME OVER -->
-    <div id="gameOver">
-
-        <div class="panel">
-
-            <h1>GAME OVER</h1>
-
-            <p>
-                Your Score:
-                <b id="finalScore">0</b>
-            </p>
-
-            <p>
-                Coins:
-                <b id="finalCoins">0</b>
-            </p>
-
-            <button onclick="restartGame()">
-                PLAY AGAIN
-            </button>
-
-        </div>
-
-    </div>
-
+<div class="overlay" id="overlay">
+ <div class="modal">
+  <h2 id="modalTitle">SYSTEM CLEAR</h2>
+  <p id="modalText"></p>
+  <button class="action primary" id="next" type="button">NEXT LEVEL</button>
+ </div>
 </div>
 
-
 <script>
-
-/* =========================
-   GAME VARIABLES
-========================= */
-
-const game = document.getElementById("game");
-const player = document.getElementById("player");
-
-const scoreText = document.getElementById("score");
-const coinsText = document.getElementById("coins");
-const speedText = document.getElementById("speed");
-
-const gameOverScreen = document.getElementById("gameOver");
-const startScreen = document.getElementById("startScreen");
-
-const finalScore = document.getElementById("finalScore");
-const finalCoins = document.getElementById("finalCoins");
-
-let playerLane = 1;
-
-let lanes = [35, 50, 65];
-
-let score = 0;
-let coins = 0;
-
-let speed = 5;
-
-let running = false;
-
-let obstacles = [];
-let coinObjects = [];
-
-let spawnTimer;
-let coinTimer;
-let gameLoop;
-
-
-/* =========================
-   CREATE STARS
-========================= */
-
-for(let i = 0; i < 100; i++){
-
-    const star = document.createElement("div");
-
-    star.className = "star";
-
-    star.style.left = Math.random() * 100 + "%";
-    star.style.top = Math.random() * 100 + "%";
-
-    star.style.opacity =
-        Math.random() * .8 + .2;
-
-    star.style.transform =
-        `scale(${Math.random() * 2 + .5})`;
-
-    game.appendChild(star);
-}
-
-
-/* =========================
-   PLAYER MOVEMENT
-========================= */
-
-function moveLeft(){
-
-    if(!running) return;
-
-    if(playerLane > 0){
-
-        playerLane--;
-
-        updatePlayerPosition();
-    }
-}
-
-
-function moveRight(){
-
-    if(!running) return;
-
-    if(playerLane < 2){
-
-        playerLane++;
-
-        updatePlayerPosition();
-    }
-}
-
-
-function updatePlayerPosition(){
-
-    player.style.left =
-        lanes[playerLane] + "%";
-}
-
-
-/* =========================
-   KEYBOARD
-========================= */
-
-document.addEventListener("keydown", function(e){
-
-    if(
-        e.key === "ArrowLeft" ||
-        e.key.toLowerCase() === "a"
-    ){
-
-        moveLeft();
-
-    }
-
-    if(
-        e.key === "ArrowRight" ||
-        e.key.toLowerCase() === "d"
-    ){
-
-        moveRight();
-
-    }
-
-});
-
-
-/* =========================
-   MOBILE BUTTONS
-========================= */
-
-document.getElementById("leftBtn")
-.addEventListener("click", moveLeft);
-
-document.getElementById("rightBtn")
-.addEventListener("click", moveRight);
-
-
-/* =========================
-   START GAME
-========================= */
-
-function startGame(){
-
-    startScreen.style.display = "none";
-
-    running = true;
-
-    score = 0;
-    coins = 0;
-
-    speed = 5;
-
-    playerLane = 1;
-
-    updatePlayerPosition();
-
-    scoreText.textContent = 0;
-    coinsText.textContent = 0;
-    speedText.textContent = 1;
-
-    spawnTimer =
-        setInterval(createObstacle, 900);
-
-    coinTimer =
-        setInterval(createCoin, 700);
-
-    gameLoop =
-        requestAnimationFrame(updateGame);
-}
-
-
-/* =========================
-   CREATE OBSTACLE
-========================= */
-
-function createObstacle(){
-
-    if(!running) return;
-
-    const obstacle =
-        document.createElement("div");
-
-    obstacle.className = "obstacle";
-
-    const lane =
-        Math.floor(Math.random() * 3);
-
-    obstacle.dataset.lane = lane;
-
-    obstacle.style.left =
-        lanes[lane] + "%";
-
-    obstacle.style.top = "-100px";
-
-    game.appendChild(obstacle);
-
-    obstacles.push({
-        element: obstacle,
-        y: -100,
-        lane: lane
-    });
-}
-
-
-/* =========================
-   CREATE COIN
-========================= */
-
-function createCoin(){
-
-    if(!running) return;
-
-    const coin =
-        document.createElement("div");
-
-    coin.className = "coin";
-
-    const lane =
-        Math.floor(Math.random() * 3);
-
-    coin.style.left =
-        lanes[lane] + "%";
-
-    coin.style.top = "-50px";
-
-    game.appendChild(coin);
-
-    coinObjects.push({
-        element: coin,
-        y: -50,
-        lane: lane
-    });
-}
-
-
-/* =========================
-   GAME LOOP
-========================= */
-
-function updateGame(){
-
-    if(!running) return;
-
-    /* SCORE */
-
-    score += 0.03;
-
-    scoreText.textContent =
-        Math.floor(score);
-
-
-    /* SPEED */
-
-    speed =
-        5 + Math.floor(score / 100);
-
-    speedText.textContent =
-        Math.floor(speed / 5);
-
-
-    /* OBSTACLES */
-
-    obstacles.forEach((obj, index) => {
-
-        obj.y += speed;
-
-        obj.element.style.top =
-            obj.y + "px";
-
-        /* COLLISION */
-
-        if(
-            obj.y > window.innerHeight - 180 &&
-            obj.y < window.innerHeight - 60 &&
-            obj.lane === playerLane
-        ){
-
-            endGame();
-
-        }
-
-
-        /* REMOVE */
-
-        if(obj.y > window.innerHeight + 100){
-
-            obj.element.remove();
-
-            obstacles.splice(index, 1);
-
-        }
-
-    });
-
-
-    /* COINS */
-
-    coinObjects.forEach((obj, index) => {
-
-        obj.y += speed;
-
-        obj.element.style.top =
-            obj.y + "px";
-
-
-        /* COLLECT */
-
-        if(
-            obj.y > window.innerHeight - 190 &&
-            obj.y < window.innerHeight - 50 &&
-            obj.lane === playerLane
-        ){
-
-            coins++;
-
-            coinsText.textContent =
-                coins;
-
-            obj.element.remove();
-
-            coinObjects.splice(index, 1);
-
-        }
-
-
-        /* REMOVE */
-
-        if(obj.y > window.innerHeight + 100){
-
-            obj.element.remove();
-
-            coinObjects.splice(index, 1);
-
-        }
-
-    });
-
-
-    gameLoop =
-        requestAnimationFrame(updateGame);
-}
-
-
-/* =========================
-   GAME OVER
-========================= */
-
-function endGame(){
-
-    if(!running) return;
-
-    running = false;
-
-    clearInterval(spawnTimer);
-    clearInterval(coinTimer);
-
-    cancelAnimationFrame(gameLoop);
-
-    finalScore.textContent =
-        Math.floor(score);
-
-    finalCoins.textContent =
-        coins;
-
-    gameOverScreen.style.display =
-        "flex";
-}
-
-
-/* =========================
-   RESTART
-========================= */
-
-function restartGame(){
-
-    obstacles.forEach(obj =>
-        obj.element.remove()
-    );
-
-    coinObjects.forEach(obj =>
-        obj.element.remove()
-    );
-
-    obstacles = [];
-    coinObjects = [];
-
-    gameOverScreen.style.display =
-        "none";
-
-    startGame();
-}
-
-
-/* =========================
-   INITIAL POSITION
-========================= */
-
-updatePlayerPosition();
-
+(() => {
+ const N = 5;
+
+ const levels = [
+  {targets:[6,8,12],blocked:[0,24],seed:[6,8,12],par:5},
+  {targets:[6,7,11,13,18],blocked:[0,4,20,24],seed:[6,7,11,13,18],par:8},
+  {targets:[1,3,7,11,13,17,21,23],blocked:[0,4,20,24,2,22],seed:[1,7,13,17,23],par:11},
+  {targets:[0,2,6,8,12,16,18,22,24],blocked:[4,20,10,14],seed:[0,2,8,16,18,22,24],par:14}
+ ];
+
+ const board = document.getElementById("board");
+ const scoreEl = document.getElementById("score");
+ const movesEl = document.getElementById("moves");
+ const livesEl = document.getElementById("lives");
+ const levelEl = document.getElementById("level");
+ const progressEl = document.getElementById("progress");
+ const meterEl = document.getElementById("meter");
+ const statusEl = document.getElementById("status");
+ const messageEl = document.getElementById("message");
+ const parEl = document.getElementById("par");
+ const comboEl = document.getElementById("combo");
+ const overlay = document.getElementById("overlay");
+ const modalTitle = document.getElementById("modalTitle");
+ const modalText = document.getElementById("modalText");
+ const nextBtn = document.getElementById("next");
+
+ let level = 0;
+ let state = [];
+ let targets = [];
+ let blocked = [];
+ let moves = 0;
+ let score = 0;
+ let lives = 3;
+ let combo = 1;
+ let hintUsed = false;
+
+ function neighbors(index) {
+  const row = Math.floor(index / N);
+  const col = index % N;
+  return [
+   index,
+   row > 0 ? index - N : -1,
+   row < N - 1 ? index + N : -1,
+   col > 0 ? index - 1 : -1,
+   col < N - 1 ? index + 1 : -1
+  ].filter(i => i >= 0);
+ }
+
+ function toggle(index) {
+  if (blocked.includes(index)) return;
+
+  neighbors(index).forEach(i => {
+   if (!blocked.includes(i)) state[i] = !state[i];
+  });
+
+  moves++;
+  render();
+  checkWin();
+ }
+
+ function render() {
+  board.innerHTML = "";
+
+  for (let i = 0; i < N * N; i++) {
+   const cell = document.createElement("button");
+   cell.type = "button";
+   cell.className =
+    "cell" +
+    (state[i] ? " on" : "") +
+    (targets.includes(i) ? " target" : "") +
+    (blocked.includes(i) ? " enemy" : "");
+
+   cell.disabled = blocked.includes(i);
+   cell.setAttribute(
+    "aria-label",
+    blocked.includes(i)
+     ? "Blocked cell"
+     : targets.includes(i)
+       ? "Target cell"
+       : "Puzzle cell"
+   );
+
+   cell.addEventListener("click", () => toggle(i));
+   board.appendChild(cell);
+  }
+
+  const done = targets.filter(i => state[i]).length;
+  const percent = Math.round((done / targets.length) * 100);
+
+  progressEl.textContent = `${done} / ${targets.length}`;
+  meterEl.style.width = percent + "%";
+  statusEl.textContent =
+   done === targets.length
+    ? "Core synchronized."
+    : `Synchronization ${percent}%`;
+
+  scoreEl.textContent = score;
+  movesEl.textContent = moves;
+  livesEl.textContent = lives;
+  levelEl.textContent = "LEVEL " + String(level + 1).padStart(2, "0");
+  parEl.textContent = levels[level].par;
+  comboEl.textContent = "x" + combo;
+ }
+
+ function setupLevel() {
+  const data = levels[level];
+
+  state = Array(N * N).fill(false);
+  targets = [...data.targets];
+  blocked = [...data.blocked];
+  moves = 0;
+  hintUsed = false;
+
+  data.seed.forEach(seed => {
+   neighbors(seed).forEach(i => {
+    if (!blocked.includes(i)) state[i] = !state[i];
+   });
+  });
+
+  messageEl.className = "message";
+  messageEl.textContent = "Turn on every target cell.";
+  render();
+ }
+
+ function checkWin() {
+  const won = targets.every(i => state[i]);
+
+  if (won) {
+   const efficiency = Math.max(100, 700 - moves * 35);
+   score += efficiency + combo * 100 + (hintUsed ? 0 : 150);
+   combo = Math.min(9, combo + 1);
+
+   messageEl.className = "message good";
+   messageEl.textContent = "CORE SYNCHRONIZED. Level cleared.";
+
+   setTimeout(() => {
+    modalTitle.textContent = "SYSTEM CLEAR";
+    modalText.textContent =
+     `Level ${level + 1} completed in ${moves} moves. ` +
+     `Efficiency bonus: ${efficiency}.`;
+    nextBtn.textContent = "NEXT LEVEL";
+    overlay.classList.add("show");
+   }, 250);
+
+  } else if (moves > levels[level].par + 6) {
+   lives--;
+   combo = 1;
+
+   messageEl.className = "message bad";
+   messageEl.textContent =
+    lives > 0
+     ? "Too many moves. One life lost."
+     : "System overload.";
+
+   if (lives <= 0) {
+    modalTitle.textContent = "SYSTEM LOCKED";
+    modalText.textContent =
+     `Final score: ${score}. Restart the protocol and try a cleaner solution.`;
+    nextBtn.textContent = "RESTART";
+    overlay.classList.add("show");
+   }
+  }
+
+  render();
+ }
+
+ document.getElementById("reset").addEventListener("click", () => {
+  if (lives <= 0) lives = 3;
+  setupLevel();
+ });
+
+ document.getElementById("hint").addEventListener("click", () => {
+  if (hintUsed) {
+   messageEl.textContent = "Hint already used on this level.";
+   return;
+  }
+
+  hintUsed = true;
+
+  const missing = targets.find(i => !state[i]);
+
+  if (missing !== undefined) {
+   const cell = board.children[missing];
+
+   cell.animate(
+    [
+     {transform:"scale(1)"},
+     {transform:"scale(1.08)"},
+     {transform:"scale(1)"}
+    ],
+    {duration:500}
+   );
+
+   messageEl.textContent =
+    `Hint: start near target cell ${missing + 1}.`;
+  }
+ });
+
+ nextBtn.addEventListener("click", () => {
+  overlay.classList.remove("show");
+
+  if (lives <= 0) {
+   lives = 3;
+   score = 0;
+   combo = 1;
+   level = 0;
+  } else {
+   level = (level + 1) % levels.length;
+  }
+
+  setupLevel();
+ });
+
+ setupLevel();
+})();
 </script>
-
 </body>
 </html>
-```
