@@ -1,364 +1,1590 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEON // GRID — 3D Logic Game</title>
+
+<title>HTML Universe - Learn HTML by Playing</title>
+
 <style>
-*{box-sizing:border-box}
-:root{
- --bg:#050812;--panel:#0c1320;--card:#111b2b;--line:#26364d;
- --text:#eef7ff;--muted:#7e8da6;--accent:#56e6ff;--good:#70ff9f;
- --bad:#ff617b;--gold:#ffd66b
+
+/* =========================================================
+   1. BASIC PAGE
+========================================================= */
+
+* {
+    box-sizing: border-box;
 }
-html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0%,#13213a,#050812 55%);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif}
-body{display:flex;justify-content:center;padding:24px}
-.game{width:min(1050px,100%)}
-.top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:14px}
-.brand{font-weight:900;letter-spacing:.18em;font-size:22px}
-.subtitle{font-size:10px;color:var(--muted);letter-spacing:.2em;margin-top:4px}
-.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.stat{background:rgba(17,27,43,.9);border:1px solid var(--line);border-radius:11px;padding:8px 13px;text-align:center;min-width:70px}
-.stat b{display:block;font-size:17px}.stat span{font-size:9px;color:var(--muted);letter-spacing:.1em}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:14px}
-.board-panel,.card{background:rgba(12,19,32,.94);border:1px solid var(--line);border-radius:18px}
-.board-panel{padding:18px}
-.levelbar{display:flex;justify-content:space-between;gap:12px;margin-bottom:14px;color:var(--muted);font-size:12px}
-.levelbar strong{color:var(--text);font-size:14px}
-.board{
- width:min(620px,100%);aspect-ratio:1;margin:auto;padding:10px;
- display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
- background:#070c15;border:1px solid #34465f;border-radius:16px;
- transform:perspective(850px) rotateX(7deg);
- box-shadow:inset 0 0 45px #02040a,0 18px 50px rgba(0,0,0,.3)
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(circle at 50% 30%, #182b55, #070b18 55%, #02030a);
+
+    color: white;
+
+    font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+    overflow-x: hidden;
 }
-.cell{
- position:relative;border:1px solid #26364d;border-radius:9px;
- background:linear-gradient(145deg,#172337,#0d1523);
- cursor:pointer;min-width:0;transition:.12s;
- box-shadow:inset 0 -7px 14px rgba(0,0,0,.25)
+
+
+/* =========================================================
+   2. HEADER
+========================================================= */
+
+header {
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 25px;
+
+    background: rgba(5, 9, 20, 0.85);
+
+    border-bottom: 1px solid rgba(255,255,255,.12);
+
+    backdrop-filter: blur(15px);
+
+    position: relative;
+
+    z-index: 100;
 }
-.cell:hover{border-color:#5c7696;transform:translateY(-1px)}
-.cell:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.cell.on{
- background:radial-gradient(circle at 35% 28%,#d8ffff,#38d8ee 30%,#08677f 72%,#052e3a);
- border-color:#8af7ff;
- box-shadow:0 0 18px rgba(86,230,255,.6),inset 0 -8px 15px rgba(0,0,0,.25)
+
+.logo {
+    font-size: 21px;
+
+    font-weight: 900;
+
+    letter-spacing: 3px;
+
+    color: #63e8ff;
+
+    text-shadow:
+        0 0 10px #63e8ff;
 }
-.cell.on:after{content:"";position:absolute;inset:29%;border-radius:50%;background:white;box-shadow:0 0 15px white}
-.cell.target{border-color:#627895}
-.cell.target:before{content:"";position:absolute;inset:31%;border:2px dashed #70839e;border-radius:50%}
-.cell.enemy{background:linear-gradient(145deg,#3a1723,#190d15);border-color:#813548;cursor:not-allowed}
-.cell.enemy:after{content:"×";position:absolute;inset:0;display:grid;place-items:center;color:#ff617b;font-weight:900;font-size:25px}
-.message{min-height:24px;text-align:center;margin-top:13px;color:var(--muted);font-size:12px}
-.message.good{color:var(--good)}.message.bad{color:var(--bad)}
-.side{display:flex;flex-direction:column;gap:10px}
-.card{padding:13px}
-.card h3{font-size:10px;letter-spacing:.14em;margin:0 0 9px}
-.card p{font-size:11px;color:var(--muted);line-height:1.55;margin:5px 0}
-.meter{height:7px;background:#070c14;border-radius:99px;overflow:hidden;margin:9px 0 6px}
-.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#7b8cff);border-radius:99px;transition:.2s}
-.legend{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px;font-size:10px;color:var(--muted)}
-.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-.cyan{background:var(--accent)}.red{background:var(--bad)}.gray{border:1px dashed #71849e}
-.actions{display:flex;gap:8px}
-button.action{border:1px solid var(--line);background:#142033;color:var(--text);padding:10px;border-radius:10px;cursor:pointer;flex:1;font-weight:700;font-size:11px}
-button.action:hover{border-color:#5b7595}
-button.primary{background:var(--accent);color:#031015;border-color:var(--accent)}
-.overlay{position:fixed;inset:0;background:rgba(2,5,10,.86);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
-.overlay.show{display:flex}
-.modal{background:#101a2a;border:1px solid #3b4e68;border-radius:18px;padding:26px;text-align:center;max-width:370px;width:100%;box-shadow:0 25px 90px rgba(0,0,0,.6)}
-.modal h2{margin:0 0 8px;font-size:26px}.modal p{color:var(--muted);font-size:12px;line-height:1.6}
-@media(max-width:760px){
- body{padding:12px}.top{align-items:flex-start;flex-direction:column}.stats{justify-content:flex-start}
- .layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.actions{grid-column:1/-1}
+
+.logo span {
+    color: white;
 }
-@media(max-width:480px){
- .board-panel{padding:10px}.board{gap:5px;padding:7px}.side{display:flex}
- .brand{font-size:18px}.stat{min-width:60px;padding:7px 9px}
+
+.stats {
+    display: flex;
+
+    gap: 10px;
 }
-@media(prefers-reduced-motion:reduce){.board{transform:none}.cell{transition:none}}
+
+.stat {
+    min-width: 80px;
+
+    padding: 7px 12px;
+
+    text-align: center;
+
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.05);
+
+    border: 1px solid rgba(255,255,255,.1);
+}
+
+.stat small {
+    display: block;
+
+    color: #8291ae;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+.stat b {
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   3. MAIN WORLD
+========================================================= */
+
+.world {
+    position: relative;
+
+    min-height: calc(100vh - 70px);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   4. STARS
+========================================================= */
+
+.star {
+    position: absolute;
+
+    width: 3px;
+    height: 3px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow:
+        0 0 10px white;
+
+    opacity: .7;
+}
+
+
+/* =========================================================
+   5. 3D FLOOR
+========================================================= */
+
+.floor {
+    position: absolute;
+
+    left: 50%;
+
+    bottom: -15%;
+
+    width: 110%;
+
+    height: 75%;
+
+    transform:
+        translateX(-50%)
+        perspective(600px)
+        rotateX(62deg);
+
+    transform-origin: center bottom;
+
+    background:
+        linear-gradient(
+            rgba(40,220,255,.08) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(40,220,255,.08) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        60px 60px;
+
+    border-top:
+        2px solid rgba(80,230,255,.4);
+
+    box-shadow:
+        0 -20px 80px rgba(0,200,255,.12);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   6. CENTER MESSAGE
+========================================================= */
+
+.intro {
+    position: absolute;
+
+    top: 35px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: min(650px, 90%);
+
+    text-align: center;
+
+    z-index: 20;
+}
+
+.intro h1 {
+    margin: 0;
+
+    font-size: clamp(28px, 5vw, 55px);
+
+    letter-spacing: 2px;
+
+    color: #69eaff;
+
+    text-shadow:
+        0 0 15px #00d9ff,
+        0 0 40px rgba(0,200,255,.5);
+}
+
+.intro p {
+    color: #9daac0;
+
+    line-height: 1.6;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   7. HTML OBJECTS
+========================================================= */
+
+.objects {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 30;
+
+    pointer-events: none;
+}
+
+.html-object {
+    position: absolute;
+
+    width: 130px;
+    height: 110px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    flex-direction: column;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25,40,70,.95),
+            rgba(7,14,30,.95)
+        );
+
+    border:
+        1px solid rgba(90,220,255,.4);
+
+    box-shadow:
+        0 0 25px rgba(0,180,255,.15),
+        inset 0 0 25px rgba(0,180,255,.05);
+
+    transition:
+        transform .25s,
+        border-color .25s,
+        box-shadow .25s;
+}
+
+.html-object:hover {
+    transform:
+        translateY(-10px)
+        scale(1.06);
+
+    border-color: #64eaff;
+
+    box-shadow:
+        0 0 35px rgba(0,220,255,.55);
+}
+
+.html-object .icon {
+    font-size: 32px;
+
+    margin-bottom: 7px;
+}
+
+.html-object strong {
+    color: #68eaff;
+
+    font-size: 17px;
+}
+
+.html-object small {
+    color: #8493aa;
+
+    margin-top: 5px;
+
+    font-size: 10px;
+}
+
+
+/* OBJECT POSITIONS */
+
+.object-h1 {
+    left: 12%;
+    top: 38%;
+}
+
+.object-p {
+    right: 12%;
+    top: 38%;
+}
+
+.object-a {
+    left: 27%;
+    top: 60%;
+}
+
+.object-img {
+    right: 27%;
+    top: 60%;
+}
+
+.object-button {
+    left: 50%;
+    top: 72%;
+
+    transform: translateX(-50%);
+}
+
+.object-button:hover {
+    transform:
+        translateX(-50%)
+        translateY(-10px)
+        scale(1.06);
+}
+
+
+/* =========================================================
+   8. ROBOT PLAYER
+========================================================= */
+
+.player {
+    position: absolute;
+
+    left: 50%;
+
+    bottom: 70px;
+
+    width: 80px;
+    height: 100px;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 50;
+
+    transition:
+        left .25s ease;
+}
+
+
+/* ROBOT BODY */
+
+.robot-body {
+    position: absolute;
+
+    width: 58px;
+    height: 62px;
+
+    left: 11px;
+    top: 28px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dffcff,
+            #54dfff 45%,
+            #126681
+        );
+
+    border:
+        2px solid #9df5ff;
+
+    box-shadow:
+        0 0 25px rgba(0,220,255,.65);
+}
+
+
+/* ROBOT HEAD */
+
+.robot-head {
+    position: absolute;
+
+    width: 65px;
+    height: 43px;
+
+    left: 7px;
+    top: 0;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #efffff,
+            #48d9f4
+        );
+
+    border:
+        2px solid white;
+
+    box-shadow:
+        0 0 25px #00ddff;
+}
+
+
+/* ROBOT EYES */
+
+.eye {
+    position: absolute;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #05283b;
+
+    box-shadow:
+        0 0 8px #003a55;
+}
+
+.eye.one {
+    left: 17px;
+    top: 17px;
+}
+
+.eye.two {
+    right: 17px;
+    top: 17px;
+}
+
+
+/* ROBOT ANTENNA */
+
+.antenna {
+    position: absolute;
+
+    width: 4px;
+    height: 14px;
+
+    left: 38px;
+    top: -12px;
+
+    background: #6eeeff;
+}
+
+.antenna::after {
+    content: "";
+
+    position: absolute;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #ff647f;
+
+    left: -2px;
+    top: -6px;
+
+    box-shadow:
+        0 0 10px #ff647f;
+}
+
+
+/* ROBOT LEGS */
+
+.leg {
+    position: absolute;
+
+    width: 14px;
+    height: 18px;
+
+    background: #2a7187;
+
+    bottom: -15px;
+
+    border-radius: 0 0 7px 7px;
+}
+
+.leg.left {
+    left: 18px;
+}
+
+.leg.right {
+    right: 18px;
+}
+
+
+/* =========================================================
+   9. SIDE INSTRUCTION PANEL
+========================================================= */
+
+.panel {
+    position: absolute;
+
+    right: 20px;
+    top: 100px;
+
+    width: 230px;
+
+    padding: 17px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(8,14,27,.82);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:
+        blur(15px);
+
+    z-index: 80;
+}
+
+.panel h3 {
+    margin: 0 0 10px;
+
+    color: #64eaff;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+}
+
+.panel p {
+    color: #8997ad;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+.keys {
+    display: flex;
+
+    gap: 6px;
+
+    margin-top: 10px;
+}
+
+.key {
+    width: 30px;
+    height: 30px;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid #344963;
+
+    border-radius: 7px;
+
+    background: #101b2c;
+
+    color: #9eefff;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   10. INFORMATION MODAL
+========================================================= */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(0,0,0,.72);
+
+    backdrop-filter:
+        blur(10px);
+
+    z-index: 500;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: min(520px, 95%);
+
+    padding: 28px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111e32,
+            #070c17
+        );
+
+    border:
+        1px solid #3e6680;
+
+    box-shadow:
+        0 0 60px rgba(0,200,255,.2);
+}
+
+.modal-icon {
+    font-size: 45px;
+}
+
+.modal h2 {
+    margin:
+        10px 0;
+
+    color: #6deaff;
+}
+
+.modal p {
+    color: #aab7ca;
+
+    line-height: 1.7;
+
+    font-size: 14px;
+}
+
+.code {
+    padding: 16px;
+
+    border-radius: 10px;
+
+    background: #03070d;
+
+    border:
+        1px solid #26374e;
+
+    color: #70e9ff;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    overflow-x: auto;
+
+    margin: 15px 0;
+}
+
+.close {
+    padding: 11px 22px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #5be6ff;
+
+    color: #031016;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   11. CHALLENGE
+========================================================= */
+
+.challenge {
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 20px;
+
+    transform: translateX(-50%);
+
+    width: min(600px, 90%);
+
+    padding: 13px 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(10,18,32,.92);
+
+    border:
+        1px solid rgba(90,220,255,.3);
+
+    z-index: 100;
+}
+
+.challenge-text {
+    font-size: 11px;
+
+    color: #aab7ca;
+}
+
+.challenge-text b {
+    color: white;
+}
+
+.challenge button {
+    border: none;
+
+    background: #5be6ff;
+
+    color: #031016;
+
+    padding: 9px 15px;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   12. RESPONSIVE
+========================================================= */
+
+@media(max-width:800px) {
+
+    .panel {
+        display: none;
+    }
+
+    .object-h1 {
+        left: 5%;
+    }
+
+    .object-p {
+        right: 5%;
+    }
+
+    .object-a {
+        left: 8%;
+    }
+
+    .object-img {
+        right: 8%;
+    }
+
+}
+
+@media(max-width:600px) {
+
+    header {
+        padding: 0 12px;
+    }
+
+    .stats {
+        gap: 5px;
+    }
+
+    .stat {
+        min-width: 58px;
+
+        padding:
+            6px 8px;
+    }
+
+    .html-object {
+        width: 105px;
+        height: 90px;
+    }
+
+    .html-object .icon {
+        font-size: 25px;
+    }
+
+    .html-object strong {
+        font-size: 14px;
+    }
+
+    .object-h1 {
+        top: 38%;
+    }
+
+    .object-p {
+        top: 38%;
+    }
+
+    .object-a {
+        top: 57%;
+    }
+
+    .object-img {
+        top: 57%;
+    }
+
+    .object-button {
+        top: 70%;
+    }
+
+    .challenge {
+        bottom: 8px;
+    }
+
+}
+
+
+/* =========================================================
+   13. DISCOVERY ANIMATION
+========================================================= */
+
+@keyframes float {
+
+    0% {
+        margin-top: 0;
+    }
+
+    50% {
+        margin-top: -8px;
+    }
+
+    100% {
+        margin-top: 0;
+    }
+
+}
+
+.html-object {
+    animation:
+        float 3s ease-in-out infinite;
+}
+
+.object-p {
+    animation-delay: .5s;
+}
+
+.object-a {
+    animation-delay: 1s;
+}
+
+.object-img {
+    animation-delay: 1.5s;
+}
+
 </style>
 </head>
+
+
 <body>
-<main class="game" id="game">
-<header class="top">
- <div>
-  <div class="brand">NEON // GRID</div>
-  <div class="subtitle">LOGIC PROTOCOL · OFFLINE</div>
- </div>
- <div class="stats">
-  <div class="stat"><b id="score">0</b><span>SCORE</span></div>
-  <div class="stat"><b id="moves">0</b><span>MOVES</span></div>
-  <div class="stat"><b id="lives">3</b><span>LIVES</span></div>
- </div>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <div class="logo">
+        HTML <span>UNIVERSE</span>
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            <small>XP</small>
+            <b id="xp">0</b>
+        </div>
+
+        <div class="stat">
+            <small>LEVEL</small>
+            <b id="level">1</b>
+        </div>
+
+        <div class="stat">
+            <small>DISCOVERED</small>
+            <b id="discovered">0</b>
+        </div>
+
+    </div>
+
 </header>
 
-<section class="layout">
- <section class="board-panel">
-  <div class="levelbar">
-   <span><strong id="level">LEVEL 01</strong> · <span id="objective">Activate the core</span></span>
-   <span id="progress">0 / 3</span>
-  </div>
-  <div class="board" id="board" aria-label="5 by 5 logic puzzle"></div>
-  <div class="message" id="message" aria-live="polite">Turn on every target cell.</div>
- </section>
 
- <aside class="side">
-  <div class="card">
-   <h3>CORE STATUS</h3>
-   <div class="meter"><i id="meter"></i></div>
-   <p id="status">System locked.</p>
-  </div>
+<!-- =====================================================
+     WORLD
+===================================================== -->
 
-  <div class="card">
-   <h3>RULES</h3>
-   <p>Click a cell to toggle it and its four neighbors. Red cells are blocked. Activate every target using as few moves as possible.</p>
-   <div class="legend">
-    <div><i class="dot cyan"></i>active</div>
-    <div><i class="dot gray"></i>target</div>
-    <div><i class="dot red"></i>blocked</div>
-   </div>
-  </div>
+<main class="world" id="world">
 
-  <div class="card">
-   <h3>EFFICIENCY</h3>
-   <p>Par moves: <b id="par">0</b></p>
-   <p>Combo: <b id="combo">x1</b></p>
-  </div>
 
-  <div class="actions">
-   <button class="action" id="reset" type="button">RESET</button>
-   <button class="action primary" id="hint" type="button">HINT</button>
-  </div>
- </aside>
-</section>
+    <!-- STARS -->
+
+    <div id="stars"></div>
+
+
+    <!-- FLOOR -->
+
+    <div class="floor"></div>
+
+
+    <!-- INTRO -->
+
+    <section class="intro">
+
+        <h1>ENTER THE HTML UNIVERSE</h1>
+
+        <p>
+            Walk through the world of HTML.
+            Click objects, discover tags,
+            and complete challenges to gain XP.
+        </p>
+
+    </section>
+
+
+    <!-- =================================================
+         HTML OBJECTS
+    ================================================= -->
+
+    <section class="objects">
+
+
+        <!-- H1 -->
+
+        <div
+            class="html-object object-h1"
+            data-tag="h1"
+        >
+
+            <div class="icon">
+                🏷️
+            </div>
+
+            <strong>&lt;h1&gt;</strong>
+
+            <small>
+                Heading
+            </small>
+
+        </div>
+
+
+        <!-- P -->
+
+        <div
+            class="html-object object-p"
+            data-tag="p"
+        >
+
+            <div class="icon">
+                📄
+            </div>
+
+            <strong>&lt;p&gt;</strong>
+
+            <small>
+                Paragraph
+            </small>
+
+        </div>
+
+
+        <!-- A -->
+
+        <div
+            class="html-object object-a"
+            data-tag="a"
+        >
+
+            <div class="icon">
+                🔗
+            </div>
+
+            <strong>&lt;a&gt;</strong>
+
+            <small>
+                Link
+            </small>
+
+        </div>
+
+
+        <!-- IMAGE -->
+
+        <div
+            class="html-object object-img"
+            data-tag="img"
+        >
+
+            <div class="icon">
+                🖼️
+            </div>
+
+            <strong>&lt;img&gt;</strong>
+
+            <small>
+                Image
+            </small>
+
+        </div>
+
+
+        <!-- BUTTON -->
+
+        <div
+            class="html-object object-button"
+            data-tag="button"
+        >
+
+            <div class="icon">
+                ⚡
+            </div>
+
+            <strong>&lt;button&gt;</strong>
+
+            <small>
+                Interaction
+            </small>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================================
+         ROBOT
+    ================================================= -->
+
+    <div class="player" id="player">
+
+        <div class="robot-head">
+
+            <div class="antenna"></div>
+
+            <div class="eye one"></div>
+
+            <div class="eye two"></div>
+
+        </div>
+
+
+        <div class="robot-body"></div>
+
+        <div class="leg left"></div>
+
+        <div class="leg right"></div>
+
+    </div>
+
+
+    <!-- =================================================
+         INSTRUCTIONS
+    ================================================= -->
+
+    <aside class="panel">
+
+        <h3>
+            MISSION CONTROL
+        </h3>
+
+        <p>
+            Explore the objects around you.
+            Each object represents an HTML element.
+        </p>
+
+        <p>
+            Click an object to inspect its
+            HTML structure and learn what it does.
+        </p>
+
+        <p>
+            Move the robot with:
+        </p>
+
+        <div class="keys">
+
+            <div class="key">A</div>
+
+            <div class="key">D</div>
+
+            <div class="key">←</div>
+
+            <div class="key">→</div>
+
+        </div>
+
+    </aside>
+
+
 </main>
 
-<div class="overlay" id="overlay">
- <div class="modal">
-  <h2 id="modalTitle">SYSTEM CLEAR</h2>
-  <p id="modalText"></p>
-  <button class="action primary" id="next" type="button">NEXT LEVEL</button>
- </div>
+
+<!-- =====================================================
+     CHALLENGE
+===================================================== -->
+
+<div class="challenge">
+
+    <div class="challenge-text">
+
+        <b>MISSION:</b>
+
+        Discover all 5 HTML elements.
+
+    </div>
+
+    <button id="challengeButton">
+
+        CHECK
+
+    </button>
+
 </div>
 
+
+<!-- =====================================================
+     MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="modal"
+>
+
+    <div class="modal-box">
+
+        <div
+            class="modal-icon"
+            id="modalIcon"
+        >
+            🏷️
+        </div>
+
+        <h2 id="modalTitle">
+            HTML Element
+        </h2>
+
+        <p id="modalDescription">
+            Description
+        </p>
+
+        <div
+            class="code"
+            id="modalCode"
+        >
+            &lt;h1&gt;Hello World&lt;/h1&gt;
+        </div>
+
+        <button
+            class="close"
+            id="closeModal"
+        >
+            CONTINUE EXPLORING
+        </button>
+
+    </div>
+
+</div>
+
+
 <script>
-(() => {
- const N = 5;
 
- const levels = [
-  {targets:[6,8,12],blocked:[0,24],seed:[6,8,12],par:5},
-  {targets:[6,7,11,13,18],blocked:[0,4,20,24],seed:[6,7,11,13,18],par:8},
-  {targets:[1,3,7,11,13,17,21,23],blocked:[0,4,20,24,2,22],seed:[1,7,13,17,23],par:11},
-  {targets:[0,2,6,8,12,16,18,22,24],blocked:[4,20,10,14],seed:[0,2,8,16,18,22,24],par:14}
- ];
+/* =========================================================
+   GAME DATA
+========================================================= */
 
- const board = document.getElementById("board");
- const scoreEl = document.getElementById("score");
- const movesEl = document.getElementById("moves");
- const livesEl = document.getElementById("lives");
- const levelEl = document.getElementById("level");
- const progressEl = document.getElementById("progress");
- const meterEl = document.getElementById("meter");
- const statusEl = document.getElementById("status");
- const messageEl = document.getElementById("message");
- const parEl = document.getElementById("par");
- const comboEl = document.getElementById("combo");
- const overlay = document.getElementById("overlay");
- const modalTitle = document.getElementById("modalTitle");
- const modalText = document.getElementById("modalText");
- const nextBtn = document.getElementById("next");
+const htmlData = {
 
- let level = 0;
- let state = [];
- let targets = [];
- let blocked = [];
- let moves = 0;
- let score = 0;
- let lives = 3;
- let combo = 1;
- let hintUsed = false;
+    h1: {
 
- function neighbors(index) {
-  const row = Math.floor(index / N);
-  const col = index % N;
-  return [
-   index,
-   row > 0 ? index - N : -1,
-   row < N - 1 ? index + N : -1,
-   col > 0 ? index - 1 : -1,
-   col < N - 1 ? index + 1 : -1
-  ].filter(i => i >= 0);
- }
+        icon: "🏷️",
 
- function toggle(index) {
-  if (blocked.includes(index)) return;
+        title: "<h1> — Main Heading",
 
-  neighbors(index).forEach(i => {
-   if (!blocked.includes(i)) state[i] = !state[i];
-  });
+        description:
+            "The h1 element represents the most important heading on a page. It is normally used for the main title of your page or section.",
 
-  moves++;
-  render();
-  checkWin();
- }
+        code:
+            "<h1>My Website</h1>",
 
- function render() {
-  board.innerHTML = "";
+        xp: 20
 
-  for (let i = 0; i < N * N; i++) {
-   const cell = document.createElement("button");
-   cell.type = "button";
-   cell.className =
-    "cell" +
-    (state[i] ? " on" : "") +
-    (targets.includes(i) ? " target" : "") +
-    (blocked.includes(i) ? " enemy" : "");
+    },
 
-   cell.disabled = blocked.includes(i);
-   cell.setAttribute(
-    "aria-label",
-    blocked.includes(i)
-     ? "Blocked cell"
-     : targets.includes(i)
-       ? "Target cell"
-       : "Puzzle cell"
-   );
 
-   cell.addEventListener("click", () => toggle(i));
-   board.appendChild(cell);
-  }
+    p: {
 
-  const done = targets.filter(i => state[i]).length;
-  const percent = Math.round((done / targets.length) * 100);
+        icon: "📄",
 
-  progressEl.textContent = `${done} / ${targets.length}`;
-  meterEl.style.width = percent + "%";
-  statusEl.textContent =
-   done === targets.length
-    ? "Core synchronized."
-    : `Synchronization ${percent}%`;
+        title: "<p> — Paragraph",
 
-  scoreEl.textContent = score;
-  movesEl.textContent = moves;
-  livesEl.textContent = lives;
-  levelEl.textContent = "LEVEL " + String(level + 1).padStart(2, "0");
-  parEl.textContent = levels[level].par;
-  comboEl.textContent = "x" + combo;
- }
+        description:
+            "The p element is used for normal blocks of text. Whenever you want to write a paragraph, you can use the p element.",
 
- function setupLevel() {
-  const data = levels[level];
+        code:
+            "<p>This is my first paragraph.</p>",
 
-  state = Array(N * N).fill(false);
-  targets = [...data.targets];
-  blocked = [...data.blocked];
-  moves = 0;
-  hintUsed = false;
+        xp: 20
 
-  data.seed.forEach(seed => {
-   neighbors(seed).forEach(i => {
-    if (!blocked.includes(i)) state[i] = !state[i];
-   });
-  });
+    },
 
-  messageEl.className = "message";
-  messageEl.textContent = "Turn on every target cell.";
-  render();
- }
 
- function checkWin() {
-  const won = targets.every(i => state[i]);
+    a: {
 
-  if (won) {
-   const efficiency = Math.max(100, 700 - moves * 35);
-   score += efficiency + combo * 100 + (hintUsed ? 0 : 150);
-   combo = Math.min(9, combo + 1);
+        icon: "🔗",
 
-   messageEl.className = "message good";
-   messageEl.textContent = "CORE SYNCHRONIZED. Level cleared.";
+        title: "<a> — Anchor / Link",
 
-   setTimeout(() => {
-    modalTitle.textContent = "SYSTEM CLEAR";
-    modalText.textContent =
-     `Level ${level + 1} completed in ${moves} moves. ` +
-     `Efficiency bonus: ${efficiency}.`;
-    nextBtn.textContent = "NEXT LEVEL";
-    overlay.classList.add("show");
-   }, 250);
+        description:
+            "The a element creates links. The href attribute tells the browser where the link should take the user.",
 
-  } else if (moves > levels[level].par + 6) {
-   lives--;
-   combo = 1;
+        code:
+            '<a href="https://example.com">Visit</a>',
 
-   messageEl.className = "message bad";
-   messageEl.textContent =
-    lives > 0
-     ? "Too many moves. One life lost."
-     : "System overload.";
+        xp: 30
 
-   if (lives <= 0) {
-    modalTitle.textContent = "SYSTEM LOCKED";
-    modalText.textContent =
-     `Final score: ${score}. Restart the protocol and try a cleaner solution.`;
-    nextBtn.textContent = "RESTART";
-    overlay.classList.add("show");
-   }
-  }
+    },
 
-  render();
- }
 
- document.getElementById("reset").addEventListener("click", () => {
-  if (lives <= 0) lives = 3;
-  setupLevel();
- });
+    img: {
 
- document.getElementById("hint").addEventListener("click", () => {
-  if (hintUsed) {
-   messageEl.textContent = "Hint already used on this level.";
-   return;
-  }
+        icon: "🖼️",
 
-  hintUsed = true;
+        title: "<img> — Image",
 
-  const missing = targets.find(i => !state[i]);
+        description:
+            "The img element displays an image. The src attribute tells the browser which image to load and alt provides alternative text.",
 
-  if (missing !== undefined) {
-   const cell = board.children[missing];
+        code:
+            '<img src="flower.jpg" alt="Beautiful flower">',
 
-   cell.animate(
-    [
-     {transform:"scale(1)"},
-     {transform:"scale(1.08)"},
-     {transform:"scale(1)"}
-    ],
-    {duration:500}
-   );
+        xp: 30
 
-   messageEl.textContent =
-    `Hint: start near target cell ${missing + 1}.`;
-  }
- });
+    },
 
- nextBtn.addEventListener("click", () => {
-  overlay.classList.remove("show");
 
-  if (lives <= 0) {
-   lives = 3;
-   score = 0;
-   combo = 1;
-   level = 0;
-  } else {
-   level = (level + 1) % levels.length;
-  }
+    button: {
 
-  setupLevel();
- });
+        icon: "⚡",
 
- setupLevel();
-})();
+        title: "<button> — Button",
+
+        description:
+            "The button element creates an interactive button. JavaScript can later be used to make the button perform an action.",
+
+        code:
+            "<button>Click Me</button>",
+
+        xp: 40
+
+    }
+
+};
+
+
+/* =========================================================
+   GAME STATE
+========================================================= */
+
+let xp = 0;
+
+let discovered = [];
+
+let robotPosition = 50;
+
+
+/* =========================================================
+   CREATE STARS
+========================================================= */
+
+const stars =
+    document.getElementById("stars");
+
+for(let i = 0; i < 100; i++){
+
+    const star =
+        document.createElement("div");
+
+    star.className =
+        "star";
+
+    star.style.left =
+        Math.random() * 100 + "%";
+
+    star.style.top =
+        Math.random() * 80 + "%";
+
+    star.style.opacity =
+        Math.random() * .8 + .2;
+
+    stars.appendChild(star);
+
+}
+
+
+/* =========================================================
+   OBJECT CLICK SYSTEM
+========================================================= */
+
+const objects =
+    document.querySelectorAll(".html-object");
+
+
+objects.forEach(object => {
+
+    object.addEventListener(
+        "click",
+        () => {
+
+            const tag =
+                object.dataset.tag;
+
+            openHTMLInfo(tag);
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   OPEN HTML INFORMATION
+========================================================= */
+
+function openHTMLInfo(tag){
+
+    const data =
+        htmlData[tag];
+
+    document.getElementById(
+        "modalIcon"
+    ).textContent =
+        data.icon;
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        data.title;
+
+
+    document.getElementById(
+        "modalDescription"
+    ).textContent =
+        data.description;
+
+
+    document.getElementById(
+        "modalCode"
+    ).textContent =
+        data.code;
+
+
+    document.getElementById(
+        "modal"
+    ).classList.add("show");
+
+
+    /* XP ONLY ON FIRST DISCOVERY */
+
+    if(!discovered.includes(tag)){
+
+        discovered.push(tag);
+
+        xp += data.xp;
+
+        updateStats();
+
+    }
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+document.getElementById(
+    "closeModal"
+).addEventListener(
+    "click",
+    () => {
+
+        document.getElementById(
+            "modal"
+        ).classList.remove("show");
+
+    }
+);
+
+
+/* =========================================================
+   CLICK OUTSIDE MODAL
+========================================================= */
+
+document.getElementById(
+    "modal"
+).addEventListener(
+    "click",
+    event => {
+
+        if(
+            event.target.id === "modal"
+        ){
+
+            event.currentTarget
+                .classList
+                .remove("show");
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   UPDATE STATS
+========================================================= */
+
+function updateStats(){
+
+    document.getElementById(
+        "xp"
+    ).textContent =
+        xp;
+
+
+    document.getElementById(
+        "discovered"
+    ).textContent =
+        discovered.length;
+
+
+    document.getElementById(
+        "level"
+    ).textContent =
+        Math.floor(xp / 50) + 1;
+
+}
+
+
+/* =========================================================
+   ROBOT MOVEMENT
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "ArrowLeft" ||
+            event.key.toLowerCase() === "a"
+        ){
+
+            robotPosition -= 4;
+
+        }
+
+
+        if(
+            event.key === "ArrowRight" ||
+            event.key.toLowerCase() === "d"
+        ){
+
+            robotPosition += 4;
+
+        }
+
+
+        robotPosition =
+            Math.max(
+                8,
+                Math.min(
+                    92,
+                    robotPosition
+                )
+            );
+
+
+        document.getElementById(
+            "player"
+        ).style.left =
+            robotPosition + "%";
+
+    }
+);
+
+
+/* =========================================================
+   CHALLENGE
+========================================================= */
+
+document.getElementById(
+    "challengeButton"
+).addEventListener(
+    "click",
+    () => {
+
+        if(
+            discovered.length ===
+            Object.keys(htmlData).length
+        ){
+
+            xp += 100;
+
+            updateStats();
+
+            alert(
+                "MISSION COMPLETE! 🎉\n\n" +
+                "+100 XP\n\n" +
+                "You discovered all 5 HTML elements."
+            );
+
+        }
+        else{
+
+            alert(
+                "Not completed yet.\n\n" +
+                "Explore every HTML object first."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+updateStats();
+
 </script>
+
 </body>
 </html>
+```
