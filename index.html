@@ -1,1209 +1,418 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>HTML Universe - Learn HTML by Playing</title>
-
-<style>
-
-/* =========================================================
-   1. BASIC PAGE
-========================================================= */
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-
-    background:
-        radial-gradient(circle at 50% 30%, #182b55, #070b18 55%, #02030a);
-
-    color: white;
-
-    font-family:
-        Inter,
-        Arial,
-        sans-serif;
-
-    overflow-x: hidden;
-}
-
-
-/* =========================================================
-   2. HEADER
-========================================================= */
-
-header {
-    height: 70px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 25px;
-
-    background: rgba(5, 9, 20, 0.85);
-
-    border-bottom: 1px solid rgba(255,255,255,.12);
-
-    backdrop-filter: blur(15px);
-
-    position: relative;
-
-    z-index: 100;
-}
-
-.logo {
-    font-size: 21px;
-
-    font-weight: 900;
-
-    letter-spacing: 3px;
-
-    color: #63e8ff;
-
-    text-shadow:
-        0 0 10px #63e8ff;
-}
-
-.logo span {
-    color: white;
-}
-
-.stats {
-    display: flex;
-
-    gap: 10px;
-}
-
-.stat {
-    min-width: 80px;
-
-    padding: 7px 12px;
-
-    text-align: center;
-
-    border-radius: 10px;
-
-    background: rgba(255,255,255,.05);
-
-    border: 1px solid rgba(255,255,255,.1);
-}
-
-.stat small {
-    display: block;
-
-    color: #8291ae;
-
-    font-size: 9px;
-
-    letter-spacing: 1px;
-}
-
-.stat b {
-    font-size: 16px;
-}
-
-
-/* =========================================================
-   3. MAIN WORLD
-========================================================= */
-
-.world {
-    position: relative;
-
-    min-height: calc(100vh - 70px);
-
-    overflow: hidden;
-}
-
-
-/* =========================================================
-   4. STARS
-========================================================= */
-
-.star {
-    position: absolute;
-
-    width: 3px;
-    height: 3px;
-
-    border-radius: 50%;
-
-    background: white;
-
-    box-shadow:
-        0 0 10px white;
-
-    opacity: .7;
-}
-
-
-/* =========================================================
-   5. 3D FLOOR
-========================================================= */
-
-.floor {
-    position: absolute;
-
-    left: 50%;
-
-    bottom: -15%;
-
-    width: 110%;
-
-    height: 75%;
-
-    transform:
-        translateX(-50%)
-        perspective(600px)
-        rotateX(62deg);
-
-    transform-origin: center bottom;
-
-    background:
-        linear-gradient(
-            rgba(40,220,255,.08) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(40,220,255,.08) 1px,
-            transparent 1px
-        );
-
-    background-size:
-        60px 60px;
-
-    border-top:
-        2px solid rgba(80,230,255,.4);
-
-    box-shadow:
-        0 -20px 80px rgba(0,200,255,.12);
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   6. CENTER MESSAGE
-========================================================= */
-
-.intro {
-    position: absolute;
-
-    top: 35px;
-
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    width: min(650px, 90%);
-
-    text-align: center;
-
-    z-index: 20;
-}
-
-.intro h1 {
-    margin: 0;
-
-    font-size: clamp(28px, 5vw, 55px);
-
-    letter-spacing: 2px;
-
-    color: #69eaff;
-
-    text-shadow:
-        0 0 15px #00d9ff,
-        0 0 40px rgba(0,200,255,.5);
-}
-
-.intro p {
-    color: #9daac0;
-
-    line-height: 1.6;
-
-    font-size: 14px;
-}
-
-
-/* =========================================================
-   7. HTML OBJECTS
-========================================================= */
-
-.objects {
-    position: absolute;
-
-    inset: 0;
-
-    z-index: 30;
-
-    pointer-events: none;
-}
-
-.html-object {
-    position: absolute;
-
-    width: 130px;
-    height: 110px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-
-    flex-direction: column;
-
-    cursor: pointer;
-
-    pointer-events: auto;
-
-    border-radius: 18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(25,40,70,.95),
-            rgba(7,14,30,.95)
-        );
-
-    border:
-        1px solid rgba(90,220,255,.4);
-
-    box-shadow:
-        0 0 25px rgba(0,180,255,.15),
-        inset 0 0 25px rgba(0,180,255,.05);
-
-    transition:
-        transform .25s,
-        border-color .25s,
-        box-shadow .25s;
-}
-
-.html-object:hover {
-    transform:
-        translateY(-10px)
-        scale(1.06);
-
-    border-color: #64eaff;
-
-    box-shadow:
-        0 0 35px rgba(0,220,255,.55);
-}
-
-.html-object .icon {
-    font-size: 32px;
-
-    margin-bottom: 7px;
-}
-
-.html-object strong {
-    color: #68eaff;
-
-    font-size: 17px;
-}
-
-.html-object small {
-    color: #8493aa;
-
-    margin-top: 5px;
-
-    font-size: 10px;
-}
-
-
-/* OBJECT POSITIONS */
-
-.object-h1 {
-    left: 12%;
-    top: 38%;
-}
-
-.object-p {
-    right: 12%;
-    top: 38%;
-}
-
-.object-a {
-    left: 27%;
-    top: 60%;
-}
-
-.object-img {
-    right: 27%;
-    top: 60%;
-}
-
-.object-button {
-    left: 50%;
-    top: 72%;
-
-    transform: translateX(-50%);
-}
-
-.object-button:hover {
-    transform:
-        translateX(-50%)
-        translateY(-10px)
-        scale(1.06);
-}
-
-
-/* =========================================================
-   8. ROBOT PLAYER
-========================================================= */
-
-.player {
-    position: absolute;
-
-    left: 50%;
-
-    bottom: 70px;
-
-    width: 80px;
-    height: 100px;
-
-    transform:
-        translateX(-50%);
-
-    z-index: 50;
-
-    transition:
-        left .25s ease;
-}
-
-
-/* ROBOT BODY */
-
-.robot-body {
-    position: absolute;
-
-    width: 58px;
-    height: 62px;
-
-    left: 11px;
-    top: 28px;
-
-    border-radius: 14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #dffcff,
-            #54dfff 45%,
-            #126681
-        );
-
-    border:
-        2px solid #9df5ff;
-
-    box-shadow:
-        0 0 25px rgba(0,220,255,.65);
-}
-
-
-/* ROBOT HEAD */
-
-.robot-head {
-    position: absolute;
-
-    width: 65px;
-    height: 43px;
-
-    left: 7px;
-    top: 0;
-
-    border-radius: 13px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #efffff,
-            #48d9f4
-        );
-
-    border:
-        2px solid white;
-
-    box-shadow:
-        0 0 25px #00ddff;
-}
-
-
-/* ROBOT EYES */
-
-.eye {
-    position: absolute;
-
-    width: 8px;
-    height: 8px;
-
-    border-radius: 50%;
-
-    background: #05283b;
-
-    box-shadow:
-        0 0 8px #003a55;
-}
-
-.eye.one {
-    left: 17px;
-    top: 17px;
-}
-
-.eye.two {
-    right: 17px;
-    top: 17px;
-}
-
-
-/* ROBOT ANTENNA */
-
-.antenna {
-    position: absolute;
-
-    width: 4px;
-    height: 14px;
-
-    left: 38px;
-    top: -12px;
-
-    background: #6eeeff;
-}
-
-.antenna::after {
-    content: "";
-
-    position: absolute;
-
-    width: 8px;
-    height: 8px;
-
-    border-radius: 50%;
-
-    background: #ff647f;
-
-    left: -2px;
-    top: -6px;
-
-    box-shadow:
-        0 0 10px #ff647f;
-}
-
-
-/* ROBOT LEGS */
-
-.leg {
-    position: absolute;
-
-    width: 14px;
-    height: 18px;
-
-    background: #2a7187;
-
-    bottom: -15px;
-
-    border-radius: 0 0 7px 7px;
-}
-
-.leg.left {
-    left: 18px;
-}
-
-.leg.right {
-    right: 18px;
-}
-
-
-/* =========================================================
-   9. SIDE INSTRUCTION PANEL
-========================================================= */
-
-.panel {
-    position: absolute;
-
-    right: 20px;
-    top: 100px;
-
-    width: 230px;
-
-    padding: 17px;
-
-    border-radius: 16px;
-
-    background:
-        rgba(8,14,27,.82);
-
-    border:
-        1px solid rgba(255,255,255,.12);
-
-    backdrop-filter:
-        blur(15px);
-
-    z-index: 80;
-}
-
-.panel h3 {
-    margin: 0 0 10px;
-
-    color: #64eaff;
-
-    font-size: 12px;
-
-    letter-spacing: 2px;
-}
-
-.panel p {
-    color: #8997ad;
-
-    font-size: 11px;
-
-    line-height: 1.6;
-}
-
-.keys {
-    display: flex;
-
-    gap: 6px;
-
-    margin-top: 10px;
-}
-
-.key {
-    width: 30px;
-    height: 30px;
-
-    display: grid;
-
-    place-items: center;
-
-    border:
-        1px solid #344963;
-
-    border-radius: 7px;
-
-    background: #101b2c;
-
-    color: #9eefff;
-
-    font-size: 11px;
-}
-
-
-/* =========================================================
-   10. INFORMATION MODAL
-========================================================= */
-
-.modal {
-    position: fixed;
-
-    inset: 0;
-
-    display: none;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-
-    background:
-        rgba(0,0,0,.72);
-
-    backdrop-filter:
-        blur(10px);
-
-    z-index: 500;
-}
-
-.modal.show {
-    display: flex;
-}
-
-.modal-box {
-    width: min(520px, 95%);
-
-    padding: 28px;
-
-    border-radius: 22px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #111e32,
-            #070c17
-        );
-
-    border:
-        1px solid #3e6680;
-
-    box-shadow:
-        0 0 60px rgba(0,200,255,.2);
-}
-
-.modal-icon {
-    font-size: 45px;
-}
-
-.modal h2 {
-    margin:
-        10px 0;
-
-    color: #6deaff;
-}
-
-.modal p {
-    color: #aab7ca;
-
-    line-height: 1.7;
-
-    font-size: 14px;
-}
-
-.code {
-    padding: 16px;
-
-    border-radius: 10px;
-
-    background: #03070d;
-
-    border:
-        1px solid #26374e;
-
-    color: #70e9ff;
-
-    font-family:
-        Consolas,
-        monospace;
-
-    overflow-x: auto;
-
-    margin: 15px 0;
-}
-
-.close {
-    padding: 11px 22px;
-
-    border: none;
-
-    border-radius: 9px;
-
-    background: #5be6ff;
-
-    color: #031016;
-
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-
-/* =========================================================
-   11. CHALLENGE
-========================================================= */
-
-.challenge {
-    position: fixed;
-
-    left: 50%;
-
-    bottom: 20px;
-
-    transform: translateX(-50%);
-
-    width: min(600px, 90%);
-
-    padding: 13px 18px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 15px;
-
-    border-radius: 13px;
-
-    background:
-        rgba(10,18,32,.92);
-
-    border:
-        1px solid rgba(90,220,255,.3);
-
-    z-index: 100;
-}
-
-.challenge-text {
-    font-size: 11px;
-
-    color: #aab7ca;
-}
-
-.challenge-text b {
-    color: white;
-}
-
-.challenge button {
-    border: none;
-
-    background: #5be6ff;
-
-    color: #031016;
-
-    padding: 9px 15px;
-
-    border-radius: 8px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-
-/* =========================================================
-   12. RESPONSIVE
-========================================================= */
-
-@media(max-width:800px) {
-
-    .panel {
-        display: none;
-    }
-
-    .object-h1 {
-        left: 5%;
-    }
-
-    .object-p {
-        right: 5%;
-    }
-
-    .object-a {
-        left: 8%;
-    }
-
-    .object-img {
-        right: 8%;
-    }
-
-}
-
-@media(max-width:600px) {
-
-    header {
-        padding: 0 12px;
-    }
-
-    .stats {
-        gap: 5px;
-    }
-
-    .stat {
-        min-width: 58px;
-
-        padding:
-            6px 8px;
-    }
-
-    .html-object {
-        width: 105px;
-        height: 90px;
-    }
-
-    .html-object .icon {
-        font-size: 25px;
-    }
-
-    .html-object strong {
-        font-size: 14px;
-    }
-
-    .object-h1 {
-        top: 38%;
-    }
-
-    .object-p {
-        top: 38%;
-    }
-
-    .object-a {
-        top: 57%;
-    }
-
-    .object-img {
-        top: 57%;
-    }
-
-    .object-button {
-        top: 70%;
-    }
-
-    .challenge {
-        bottom: 8px;
-    }
-
-}
-
-
-/* =========================================================
-   13. DISCOVERY ANIMATION
-========================================================= */
-
-@keyframes float {
-
-    0% {
-        margin-top: 0;
-    }
-
-    50% {
-        margin-top: -8px;
-    }
-
-    100% {
-        margin-top: 0;
-    }
-
-}
-
-.html-object {
-    animation:
-        float 3s ease-in-out infinite;
-}
-
-.object-p {
-    animation-delay: .5s;
-}
-
-.object-a {
-    animation-delay: 1s;
-}
-
-.object-img {
-    animation-delay: 1.5s;
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Code Simulator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #111827;
+            padding: 20px;
+            border-bottom: 1px solid #334155;
+        }
+
+        header h1 {
+            color: #facc15;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            color: #94a3b8;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 25px auto;
+        }
+
+        .learning-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .topic {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .topic:hover {
+            background: #334155;
+        }
+
+        .topic.active {
+            background: #facc15;
+            color: #111827;
+            font-weight: bold;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 15px 18px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header h2 {
+            font-size: 18px;
+        }
+
+        .editor {
+            width: 100%;
+            min-height: 330px;
+            resize: vertical;
+            border: none;
+            outline: none;
+            padding: 20px;
+            background: #020617;
+            color: #e2e8f0;
+            font-family: Consolas, monospace;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .controls {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            border-top: 1px solid #334155;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 18px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .run {
+            background: #22c55e;
+            color: white;
+        }
+
+        .step {
+            background: #38bdf8;
+            color: #082f49;
+        }
+
+        .reset {
+            background: #475569;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .output {
+            min-height: 150px;
+            background: #020617;
+            padding: 20px;
+            font-family: Consolas, monospace;
+            white-space: pre-wrap;
+            color: #4ade80;
+        }
+
+        .visual-area {
+            padding: 20px;
+        }
+
+        .execution-status {
+            padding: 12px;
+            background: #172554;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: #93c5fd;
+        }
+
+        .variables {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .variable {
+            background: #1e293b;
+            border: 1px solid #475569;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .variable-name {
+            color: #facc15;
+            font-family: Consolas, monospace;
+            font-weight: bold;
+        }
+
+        .variable-value {
+            margin-top: 8px;
+            color: #4ade80;
+            font-family: Consolas, monospace;
+            word-break: break-word;
+        }
+
+        .variable-type {
+            margin-top: 5px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .execution {
+            margin-top: 20px;
+        }
+
+        .line {
+            padding: 12px;
+            margin-bottom: 7px;
+            background: #1e293b;
+            border-radius: 7px;
+            font-family: Consolas, monospace;
+            color: #94a3b8;
+        }
+
+        .line.current {
+            background: #713f12;
+            color: #fef08a;
+            border-left: 4px solid #facc15;
+        }
+
+        .line.done {
+            border-left: 4px solid #22c55e;
+            color: #86efac;
+        }
+
+        .lesson {
+            margin-top: 20px;
+            background: #111827;
+            border: 1px solid #334155;
+            padding: 20px;
+            border-radius: 14px;
+        }
+
+        .lesson h2 {
+            color: #facc15;
+            margin-bottom: 10px;
+        }
+
+        .lesson p {
+            color: #cbd5e1;
+            line-height: 1.7;
+        }
+
+        .example {
+            margin-top: 15px;
+            background: #020617;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: Consolas, monospace;
+            color: #67e8f9;
+            white-space: pre-wrap;
+        }
+
+        .error {
+            color: #f87171;
+        }
+
+        @media (max-width: 850px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .editor {
+                min-height: 250px;
+            }
+        }
+    </style>
 </head>
-
 
 <body>
 
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
 <header>
-
-    <div class="logo">
-        HTML <span>UNIVERSE</span>
-    </div>
-
-    <div class="stats">
-
-        <div class="stat">
-            <small>XP</small>
-            <b id="xp">0</b>
-        </div>
-
-        <div class="stat">
-            <small>LEVEL</small>
-            <b id="level">1</b>
-        </div>
-
-        <div class="stat">
-            <small>DISCOVERED</small>
-            <b id="discovered">0</b>
-        </div>
-
-    </div>
-
+    <h1>🐍 Python Visual Simulator</h1>
+    <p>Learn Python by changing code and watching what happens.</p>
 </header>
 
+<div class="container">
 
-<!-- =====================================================
-     WORLD
-===================================================== -->
+    <!-- TOPICS -->
+    <div class="learning-bar">
 
-<main class="world" id="world">
-
-
-    <!-- STARS -->
-
-    <div id="stars"></div>
-
-
-    <!-- FLOOR -->
-
-    <div class="floor"></div>
-
-
-    <!-- INTRO -->
-
-    <section class="intro">
-
-        <h1>ENTER THE HTML UNIVERSE</h1>
-
-        <p>
-            Walk through the world of HTML.
-            Click objects, discover tags,
-            and complete challenges to gain XP.
-        </p>
-
-    </section>
-
-
-    <!-- =================================================
-         HTML OBJECTS
-    ================================================= -->
-
-    <section class="objects">
-
-
-        <!-- H1 -->
-
-        <div
-            class="html-object object-h1"
-            data-tag="h1"
-        >
-
-            <div class="icon">
-                🏷️
-            </div>
-
-            <strong>&lt;h1&gt;</strong>
-
-            <small>
-                Heading
-            </small>
-
+        <div class="topic active" data-topic="variables">
+            Variables
         </div>
 
-
-        <!-- P -->
-
-        <div
-            class="html-object object-p"
-            data-tag="p"
-        >
-
-            <div class="icon">
-                📄
-            </div>
-
-            <strong>&lt;p&gt;</strong>
-
-            <small>
-                Paragraph
-            </small>
-
+        <div class="topic" data-topic="operators">
+            Operators
         </div>
 
-
-        <!-- A -->
-
-        <div
-            class="html-object object-a"
-            data-tag="a"
-        >
-
-            <div class="icon">
-                🔗
-            </div>
-
-            <strong>&lt;a&gt;</strong>
-
-            <small>
-                Link
-            </small>
-
+        <div class="topic" data-topic="condition">
+            If / Else
         </div>
 
-
-        <!-- IMAGE -->
-
-        <div
-            class="html-object object-img"
-            data-tag="img"
-        >
-
-            <div class="icon">
-                🖼️
-            </div>
-
-            <strong>&lt;img&gt;</strong>
-
-            <small>
-                Image
-            </small>
-
+        <div class="topic" data-topic="loop">
+            Loops
         </div>
 
-
-        <!-- BUTTON -->
-
-        <div
-            class="html-object object-button"
-            data-tag="button"
-        >
-
-            <div class="icon">
-                ⚡
-            </div>
-
-            <strong>&lt;button&gt;</strong>
-
-            <small>
-                Interaction
-            </small>
-
+        <div class="topic" data-topic="list">
+            Lists
         </div>
 
-
-    </section>
-
-
-    <!-- =================================================
-         ROBOT
-    ================================================= -->
-
-    <div class="player" id="player">
-
-        <div class="robot-head">
-
-            <div class="antenna"></div>
-
-            <div class="eye one"></div>
-
-            <div class="eye two"></div>
-
+        <div class="topic" data-topic="function">
+            Functions
         </div>
-
-
-        <div class="robot-body"></div>
-
-        <div class="leg left"></div>
-
-        <div class="leg right"></div>
 
     </div>
 
 
-    <!-- =================================================
-         INSTRUCTIONS
-    ================================================= -->
+    <div class="main-grid">
 
-    <aside class="panel">
+        <!-- CODE EDITOR -->
+        <div class="panel">
 
-        <h3>
-            MISSION CONTROL
-        </h3>
+            <div class="panel-header">
+                <h2>💻 Python Code</h2>
+                <span>Editor</span>
+            </div>
 
-        <p>
-            Explore the objects around you.
-            Each object represents an HTML element.
-        </p>
+            <textarea id="code" class="editor">name = "Ritik"
+age = 20
 
-        <p>
-            Click an object to inspect its
-            HTML structure and learn what it does.
-        </p>
+print(name)
+print(age)</textarea>
 
-        <p>
-            Move the robot with:
-        </p>
+            <div class="controls">
 
-        <div class="keys">
+                <button class="run" id="runBtn">
+                    ▶ Run Code
+                </button>
 
-            <div class="key">A</div>
+                <button class="step" id="stepBtn">
+                    ⏭ Step
+                </button>
 
-            <div class="key">D</div>
+                <button class="reset" id="resetBtn">
+                    ↻ Reset
+                </button>
 
-            <div class="key">←</div>
-
-            <div class="key">→</div>
+            </div>
 
         </div>
 
-    </aside>
 
+        <!-- VISUALIZER -->
+        <div class="panel">
 
-</main>
+            <div class="panel-header">
+                <h2>🔬 Visual Simulation</h2>
+                <span id="status">Ready</span>
+            </div>
 
+            <div class="visual-area">
 
-<!-- =====================================================
-     CHALLENGE
-===================================================== -->
+                <div class="execution-status" id="executionStatus">
+                    Press "Run Code" to start the simulation.
+                </div>
 
-<div class="challenge">
+                <h3 style="margin-bottom:12px;">
+                    📦 Variables
+                </h3>
 
-    <div class="challenge-text">
+                <div class="variables" id="variables">
+                    <div class="variable">
+                        <div class="variable-name">
+                            No variables yet
+                        </div>
+                    </div>
+                </div>
 
-        <b>MISSION:</b>
+                <div class="execution">
 
-        Discover all 5 HTML elements.
+                    <h3 style="margin-bottom:12px;">
+                        ⚙️ Execution
+                    </h3>
+
+                    <div id="executionLines">
+                        Run your Python code to see each line.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
-    <button id="challengeButton">
 
-        CHECK
+    <!-- OUTPUT -->
+    <div class="panel" style="margin-top:20px;">
 
-    </button>
-
-</div>
-
-
-<!-- =====================================================
-     MODAL
-===================================================== -->
-
-<div
-    class="modal"
-    id="modal"
->
-
-    <div class="modal-box">
-
-        <div
-            class="modal-icon"
-            id="modalIcon"
-        >
-            🏷️
+        <div class="panel-header">
+            <h2>🖥️ Python Output</h2>
         </div>
 
-        <h2 id="modalTitle">
-            HTML Element
+        <div id="output" class="output">
+            Program output will appear here...
+        </div>
+
+    </div>
+
+
+    <!-- LESSON -->
+    <div class="lesson">
+
+        <h2 id="lessonTitle">
+            📚 Variables
         </h2>
 
-        <p id="modalDescription">
-            Description
+        <p id="lessonText">
+            A variable is a name used to store data.
+            Try changing the values in the editor and run the program.
         </p>
 
-        <div
-            class="code"
-            id="modalCode"
-        >
-            &lt;h1&gt;Hello World&lt;/h1&gt;
-        </div>
+        <div class="example" id="lessonExample">name = "Ritik"
+age = 20
 
-        <button
-            class="close"
-            id="closeModal"
-        >
-            CONTINUE EXPLORING
-        </button>
+print(name)
+print(age)</div>
 
     </div>
 
@@ -1212,379 +421,734 @@ header {
 
 <script>
 
-/* =========================================================
-   GAME DATA
-========================================================= */
+const codeEditor = document.getElementById("code");
+const output = document.getElementById("output");
+const variablesBox = document.getElementById("variables");
+const executionLines = document.getElementById("executionLines");
+const executionStatus = document.getElementById("executionStatus");
+const status = document.getElementById("status");
 
-const htmlData = {
+const runBtn = document.getElementById("runBtn");
+const stepBtn = document.getElementById("stepBtn");
+const resetBtn = document.getElementById("resetBtn");
 
-    h1: {
+let lines = [];
+let currentLine = 0;
 
-        icon: "🏷️",
+let variables = {};
 
-        title: "<h1> — Main Heading",
 
-        description:
-            "The h1 element represents the most important heading on a page. It is normally used for the main title of your page or section.",
+// -----------------------------
+// PARSE VALUE
+// -----------------------------
+
+function parseValue(value) {
+
+    value = value.trim();
+
+    if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+    ) {
+        return value.slice(1, -1);
+    }
+
+    if (value === "True") {
+        return true;
+    }
+
+    if (value === "False") {
+        return false;
+    }
+
+    if (value === "None") {
+        return null;
+    }
+
+    if (!isNaN(value) && value !== "") {
+        return Number(value);
+    }
+
+    // Simple list support
+    if (value.startsWith("[") && value.endsWith("]")) {
+
+        let inside = value.slice(1, -1);
+
+        if (inside.trim() === "") {
+            return [];
+        }
+
+        return inside.split(",").map(item => parseValue(item));
+    }
+
+    return value;
+}
+
+
+// -----------------------------
+// VARIABLE DISPLAY
+// -----------------------------
+
+function updateVariables() {
+
+    variablesBox.innerHTML = "";
+
+    const names = Object.keys(variables);
+
+    if (names.length === 0) {
+
+        variablesBox.innerHTML = `
+            <div class="variable">
+                <div class="variable-name">
+                    No variables yet
+                </div>
+            </div>
+        `;
+
+        return;
+    }
+
+    names.forEach(name => {
+
+        const value = variables[name];
+
+        let type = typeof value;
+
+        if (Array.isArray(value)) {
+            type = "list";
+        }
+
+        const card = document.createElement("div");
+
+        card.className = "variable";
+
+        card.innerHTML = `
+            <div class="variable-name">
+                ${name}
+            </div>
+
+            <div class="variable-value">
+                ${formatValue(value)}
+            </div>
+
+            <div class="variable-type">
+                type: ${type}
+            </div>
+        `;
+
+        variablesBox.appendChild(card);
+
+    });
+
+}
+
+
+// -----------------------------
+// FORMAT VALUE
+// -----------------------------
+
+function formatValue(value) {
+
+    if (typeof value === "string") {
+        return `"${value}"`;
+    }
+
+    if (Array.isArray(value)) {
+        return "[" + value.map(formatValue).join(", ") + "]";
+    }
+
+    if (value === null) {
+        return "None";
+    }
+
+    return String(value);
+}
+
+
+// -----------------------------
+// SIMPLE EXPRESSION
+// -----------------------------
+
+function evaluateExpression(expression) {
+
+    expression = expression.trim();
+
+    // direct variable
+    if (variables.hasOwnProperty(expression)) {
+        return variables[expression];
+    }
+
+    // string
+    if (
+        (expression.startsWith('"') && expression.endsWith('"')) ||
+        (expression.startsWith("'") && expression.endsWith("'"))
+    ) {
+        return expression.slice(1, -1);
+    }
+
+    // boolean
+    if (expression === "True") return true;
+    if (expression === "False") return false;
+
+    // number
+    if (!isNaN(expression)) {
+        return Number(expression);
+    }
+
+    // arithmetic
+    try {
+
+        let jsExpression = expression;
+
+        Object.keys(variables).forEach(name => {
+
+            const value = variables[name];
+
+            if (
+                typeof value === "number"
+            ) {
+                const regex = new RegExp(
+                    "\\b" + name + "\\b",
+                    "g"
+                );
+
+                jsExpression =
+                    jsExpression.replace(regex, value);
+            }
+
+        });
+
+        if (/^[0-9+\-*/().\s]+$/.test(jsExpression)) {
+            return Function(
+                "return " + jsExpression
+            )();
+        }
+
+    } catch (error) {
+        return expression;
+    }
+
+    return expression;
+}
+
+
+// -----------------------------
+// RUN PYTHON-LIKE CODE
+// -----------------------------
+
+function runCode() {
+
+    const code = codeEditor.value;
+
+    lines = code.split("\n");
+
+    variables = {};
+
+    currentLine = lines.length;
+
+    let result = [];
+
+    executionLines.innerHTML = "";
+
+    lines.forEach((line, index) => {
+
+        const trimmed = line.trim();
+
+        const lineDiv =
+            document.createElement("div");
+
+        lineDiv.className = "line";
+
+        lineDiv.textContent =
+            `${index + 1}  ${line}`;
+
+        executionLines.appendChild(lineDiv);
+
+
+        if (trimmed === "") {
+            return;
+        }
+
+
+        // COMMENT
+        if (trimmed.startsWith("#")) {
+            return;
+        }
+
+
+        // VARIABLE ASSIGNMENT
+        const assignment =
+            trimmed.match(
+                /^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)$/
+            );
+
+
+        if (assignment) {
+
+            const variableName =
+                assignment[1];
+
+            const expression =
+                assignment[2];
+
+            variables[variableName] =
+                evaluateExpression(expression);
+
+            return;
+        }
+
+
+        // PRINT
+        const printMatch =
+            trimmed.match(
+                /^print\s*\((.*)\)$/
+            );
+
+
+        if (printMatch) {
+
+            let expression =
+                printMatch[1];
+
+            // Multiple values
+            const parts =
+                expression.split(",");
+
+            const values =
+                parts.map(part =>
+                    evaluateExpression(part)
+                );
+
+            result.push(
+                values.map(formatValue).join(" ")
+            );
+
+            return;
+        }
+
+
+        // Unsupported
+        result.push(
+            "⚠️ Simulator cannot execute: " +
+            trimmed
+        );
+
+    });
+
+
+    output.textContent =
+        result.join("\n") ||
+        "(No output)";
+
+    updateVariables();
+
+    executionStatus.textContent =
+        "✅ Program executed successfully.";
+
+    status.textContent =
+        "Completed";
+
+}
+
+
+// -----------------------------
+// STEP MODE
+// -----------------------------
+
+function startStepMode() {
+
+    lines = codeEditor.value.split("\n");
+
+    currentLine = 0;
+
+    variables = {};
+
+    output.textContent = "";
+
+    executionLines.innerHTML = "";
+
+    lines.forEach((line, index) => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "line";
+
+        div.textContent =
+            `${index + 1}  ${line}`;
+
+        executionLines.appendChild(div);
+
+    });
+
+    updateVariables();
+
+    status.textContent = "Step Mode";
+
+    executionStatus.textContent =
+        "Press Step to execute one line at a time.";
+
+    highlightLine();
+
+}
+
+
+// -----------------------------
+// EXECUTE ONE LINE
+// -----------------------------
+
+function executeCurrentLine() {
+
+    if (currentLine >= lines.length) {
+
+        executionStatus.textContent =
+            "🎉 Program finished.";
+
+        status.textContent =
+            "Finished";
+
+        return;
+    }
+
+    const rawLine =
+        lines[currentLine];
+
+    const trimmed =
+        rawLine.trim();
+
+
+    // Skip blank/comment
+    if (
+        trimmed === "" ||
+        trimmed.startsWith("#")
+    ) {
+
+        currentLine++;
+
+        highlightLine();
+
+        return;
+    }
+
+
+    // assignment
+    const assignment =
+        trimmed.match(
+            /^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)$/
+        );
+
+
+    if (assignment) {
+
+        const name =
+            assignment[1];
+
+        const expression =
+            assignment[2];
+
+        variables[name] =
+            evaluateExpression(expression);
+
+        updateVariables();
+
+    }
+
+
+    // print
+    const printMatch =
+        trimmed.match(
+            /^print\s*\((.*)\)$/
+        );
+
+
+    if (printMatch) {
+
+        const expression =
+            printMatch[1];
+
+        const parts =
+            expression.split(",");
+
+        const values =
+            parts.map(part =>
+                evaluateExpression(part)
+            );
+
+        output.textContent +=
+            values.map(formatValue).join(" ") +
+            "\n";
+
+    }
+
+
+    currentLine++;
+
+    highlightLine();
+
+}
+
+
+// -----------------------------
+// HIGHLIGHT CURRENT LINE
+// -----------------------------
+
+function highlightLine() {
+
+    const allLines =
+        executionLines.querySelectorAll(".line");
+
+    allLines.forEach((line, index) => {
+
+        line.classList.remove(
+            "current",
+            "done"
+        );
+
+        if (index < currentLine) {
+            line.classList.add("done");
+        }
+
+        if (index === currentLine) {
+            line.classList.add("current");
+        }
+
+    });
+
+
+    if (currentLine < lines.length) {
+
+        executionStatus.textContent =
+            `Executing line ${currentLine + 1}...`;
+
+    }
+
+}
+
+
+// -----------------------------
+// RESET
+// -----------------------------
+
+function resetSimulator() {
+
+    variables = {};
+
+    lines = [];
+
+    currentLine = 0;
+
+    output.textContent =
+        "Program output will appear here...";
+
+    variablesBox.innerHTML = `
+        <div class="variable">
+            <div class="variable-name">
+                No variables yet
+            </div>
+        </div>
+    `;
+
+    executionLines.innerHTML =
+        "Run your Python code to see each line.";
+
+    executionStatus.textContent =
+        "Press Run Code to start the simulation.";
+
+    status.textContent =
+        "Ready";
+
+}
+
+
+// -----------------------------
+// BUTTON EVENTS
+// -----------------------------
+
+runBtn.addEventListener(
+    "click",
+    runCode
+);
+
+
+stepBtn.addEventListener(
+    "click",
+    function () {
+
+        if (currentLine === 0) {
+            startStepMode();
+            return;
+        }
+
+        executeCurrentLine();
+
+    }
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    resetSimulator
+);
+
+
+// -----------------------------
+// TOPIC SYSTEM
+// -----------------------------
+
+const topics = {
+
+    variables: {
+
+        title: "📚 Variables",
+
+        text:
+            "A variable stores a value. " +
+            "Try changing name, age or adding another variable.",
 
         code:
-            "<h1>My Website</h1>",
+`name = "Ritik"
+age = 20
 
-        xp: 20
+print(name)
+print(age)`
 
     },
 
 
-    p: {
+    operators: {
 
-        icon: "📄",
+        title: "➗ Operators",
 
-        title: "<p> — Paragraph",
-
-        description:
-            "The p element is used for normal blocks of text. Whenever you want to write a paragraph, you can use the p element.",
+        text:
+            "Operators allow Python to perform calculations.",
 
         code:
-            "<p>This is my first paragraph.</p>",
+`a = 10
+b = 5
 
-        xp: 20
+sum = a + b
+multiply = a * b
+
+print(sum)
+print(multiply)`
 
     },
 
 
-    a: {
+    condition: {
 
-        icon: "🔗",
+        title: "🔀 If / Else",
 
-        title: "<a> — Anchor / Link",
-
-        description:
-            "The a element creates links. The href attribute tells the browser where the link should take the user.",
+        text:
+            "Conditions allow your program to make decisions.",
 
         code:
-            '<a href="https://example.com">Visit</a>',
+`age = 20
 
-        xp: 30
+if age >= 18:
+    print("Adult")
+else:
+    print("Minor")`
 
     },
 
 
-    img: {
+    loop: {
 
-        icon: "🖼️",
+        title: "🔁 Loops",
 
-        title: "<img> — Image",
-
-        description:
-            "The img element displays an image. The src attribute tells the browser which image to load and alt provides alternative text.",
+        text:
+            "Loops repeat instructions. This simulator focuses on understanding the values and execution flow.",
 
         code:
-            '<img src="flower.jpg" alt="Beautiful flower">',
+`number = 1
+print(number)
 
-        xp: 30
+number = 2
+print(number)
+
+number = 3
+print(number)`
 
     },
 
 
-    button: {
+    list: {
 
-        icon: "⚡",
+        title: "📋 Lists",
 
-        title: "<button> — Button",
-
-        description:
-            "The button element creates an interactive button. JavaScript can later be used to make the button perform an action.",
+        text:
+            "A list can store multiple values inside one variable.",
 
         code:
-            "<button>Click Me</button>",
+`fruits = ["Apple", "Banana", "Mango"]
 
-        xp: 40
+print(fruits)`
+
+    },
+
+
+    function: {
+
+        title: "⚙️ Functions",
+
+        text:
+            "Functions allow you to group reusable instructions.",
+
+        code:
+`name = "Ritik"
+
+print(name)`
 
     }
 
 };
 
 
-/* =========================================================
-   GAME STATE
-========================================================= */
+document
+    .querySelectorAll(".topic")
+    .forEach(topic => {
 
-let xp = 0;
+        topic.addEventListener(
+            "click",
+            function () {
 
-let discovered = [];
+                document
+                    .querySelectorAll(".topic")
+                    .forEach(item =>
+                        item.classList.remove("active")
+                    );
 
-let robotPosition = 50;
+                this.classList.add("active");
 
+                const topicName =
+                    this.dataset.topic;
 
-/* =========================================================
-   CREATE STARS
-========================================================= */
+                const data =
+                    topics[topicName];
 
-const stars =
-    document.getElementById("stars");
+                document.getElementById(
+                    "lessonTitle"
+                ).textContent = data.title;
 
-for(let i = 0; i < 100; i++){
+                document.getElementById(
+                    "lessonText"
+                ).textContent = data.text;
 
-    const star =
-        document.createElement("div");
+                document.getElementById(
+                    "lessonExample"
+                ).textContent = data.code;
 
-    star.className =
-        "star";
+                codeEditor.value =
+                    data.code;
 
-    star.style.left =
-        Math.random() * 100 + "%";
+                resetSimulator();
 
-    star.style.top =
-        Math.random() * 80 + "%";
+            });
 
-    star.style.opacity =
-        Math.random() * .8 + .2;
-
-    stars.appendChild(star);
-
-}
-
-
-/* =========================================================
-   OBJECT CLICK SYSTEM
-========================================================= */
-
-const objects =
-    document.querySelectorAll(".html-object");
-
-
-objects.forEach(object => {
-
-    object.addEventListener(
-        "click",
-        () => {
-
-            const tag =
-                object.dataset.tag;
-
-            openHTMLInfo(tag);
-
-        }
-    );
-
-});
-
-
-/* =========================================================
-   OPEN HTML INFORMATION
-========================================================= */
-
-function openHTMLInfo(tag){
-
-    const data =
-        htmlData[tag];
-
-    document.getElementById(
-        "modalIcon"
-    ).textContent =
-        data.icon;
-
-
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
-        data.title;
-
-
-    document.getElementById(
-        "modalDescription"
-    ).textContent =
-        data.description;
-
-
-    document.getElementById(
-        "modalCode"
-    ).textContent =
-        data.code;
-
-
-    document.getElementById(
-        "modal"
-    ).classList.add("show");
-
-
-    /* XP ONLY ON FIRST DISCOVERY */
-
-    if(!discovered.includes(tag)){
-
-        discovered.push(tag);
-
-        xp += data.xp;
-
-        updateStats();
-
-    }
-
-}
-
-
-/* =========================================================
-   CLOSE MODAL
-========================================================= */
-
-document.getElementById(
-    "closeModal"
-).addEventListener(
-    "click",
-    () => {
-
-        document.getElementById(
-            "modal"
-        ).classList.remove("show");
-
-    }
-);
-
-
-/* =========================================================
-   CLICK OUTSIDE MODAL
-========================================================= */
-
-document.getElementById(
-    "modal"
-).addEventListener(
-    "click",
-    event => {
-
-        if(
-            event.target.id === "modal"
-        ){
-
-            event.currentTarget
-                .classList
-                .remove("show");
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   UPDATE STATS
-========================================================= */
-
-function updateStats(){
-
-    document.getElementById(
-        "xp"
-    ).textContent =
-        xp;
-
-
-    document.getElementById(
-        "discovered"
-    ).textContent =
-        discovered.length;
-
-
-    document.getElementById(
-        "level"
-    ).textContent =
-        Math.floor(xp / 50) + 1;
-
-}
-
-
-/* =========================================================
-   ROBOT MOVEMENT
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if(
-            event.key === "ArrowLeft" ||
-            event.key.toLowerCase() === "a"
-        ){
-
-            robotPosition -= 4;
-
-        }
-
-
-        if(
-            event.key === "ArrowRight" ||
-            event.key.toLowerCase() === "d"
-        ){
-
-            robotPosition += 4;
-
-        }
-
-
-        robotPosition =
-            Math.max(
-                8,
-                Math.min(
-                    92,
-                    robotPosition
-                )
-            );
-
-
-        document.getElementById(
-            "player"
-        ).style.left =
-            robotPosition + "%";
-
-    }
-);
-
-
-/* =========================================================
-   CHALLENGE
-========================================================= */
-
-document.getElementById(
-    "challengeButton"
-).addEventListener(
-    "click",
-    () => {
-
-        if(
-            discovered.length ===
-            Object.keys(htmlData).length
-        ){
-
-            xp += 100;
-
-            updateStats();
-
-            alert(
-                "MISSION COMPLETE! 🎉\n\n" +
-                "+100 XP\n\n" +
-                "You discovered all 5 HTML elements."
-            );
-
-        }
-        else{
-
-            alert(
-                "Not completed yet.\n\n" +
-                "Explore every HTML object first."
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   START
-========================================================= */
-
-updateStats();
+    });
 
 </script>
 
 </body>
 </html>
-```
