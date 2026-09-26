@@ -1,0 +1,2602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Python Learning Playground</title>
+
+<style>
+
+/* =========================
+   BASIC RESET
+========================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+
+    /* Eye-friendly background */
+    background: #f4f5f7;
+
+    color: #273142;
+
+    min-height: 100vh;
+}
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.app {
+    width: 94%;
+    max-width: 1250px;
+    margin: auto;
+    padding: 25px 0 40px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.logo-area h1 {
+    font-size: 26px;
+    color: #303846;
+}
+
+.logo-area h1 span {
+    color: #6875f5;
+}
+
+.logo-area p {
+    margin-top: 5px;
+    color: #7b8494;
+    font-size: 14px;
+}
+
+.stats {
+    display: flex;
+    gap: 8px;
+}
+
+.stat {
+    background: #ffffff;
+
+    border: 1px solid #e2e5ea;
+
+    border-radius: 10px;
+
+    padding: 9px 13px;
+
+    font-size: 13px;
+
+    color: #596273;
+}
+
+.stat strong {
+    color: #4f5bd5;
+}
+
+
+/* =========================
+   TOPIC BAR
+========================= */
+
+.topic-bar {
+    display: flex;
+
+    gap: 8px;
+
+    overflow-x: auto;
+
+    padding-bottom: 10px;
+
+    margin-bottom: 15px;
+}
+
+.topic-bar::-webkit-scrollbar {
+    height: 4px;
+}
+
+.topic-bar::-webkit-scrollbar-thumb {
+    background: #d3d7df;
+    border-radius: 10px;
+}
+
+.topic {
+    white-space: nowrap;
+
+    border: 1px solid #dfe3e9;
+
+    background: #ffffff;
+
+    color: #687181;
+
+    border-radius: 20px;
+
+    padding: 9px 15px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    transition: 0.2s;
+}
+
+.topic:hover {
+    background: #f0f1f5;
+}
+
+.topic.active {
+    background: #6875f5;
+
+    color: white;
+
+    border-color: #6875f5;
+}
+
+
+/* =========================
+   MAIN WORKSPACE
+========================= */
+
+.workspace {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.card {
+    background: #ffffff;
+
+    border: 1px solid #e1e4e9;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   CARD HEADER
+========================= */
+
+.card-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 13px 15px;
+
+    border-bottom: 1px solid #edf0f3;
+}
+
+.card-title {
+    font-weight: bold;
+
+    font-size: 14px;
+}
+
+.status {
+    font-size: 12px;
+
+    color: #7d8695;
+}
+
+
+/* =========================
+   CODE EDITOR
+========================= */
+
+.editor-wrapper {
+    position: relative;
+}
+
+.line-numbers {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 40px;
+
+    padding-top: 16px;
+
+    text-align: right;
+
+    padding-right: 8px;
+
+    color: #6e7785;
+
+    background: #eef0f3;
+
+    font: 13px/1.7 Consolas, monospace;
+
+    user-select: none;
+
+    height: 100%;
+}
+
+#code {
+    width: 100%;
+
+    min-height: 310px;
+
+    resize: vertical;
+
+    border: none;
+
+    outline: none;
+
+    padding: 16px 16px 16px 52px;
+
+    background: #fafbfc;
+
+    color: #273142;
+
+    font: 14px/1.7 Consolas, monospace;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.controls {
+    display: flex;
+
+    gap: 8px;
+
+    padding: 11px;
+
+    border-top: 1px solid #edf0f3;
+
+    flex-wrap: wrap;
+}
+
+button {
+    font-family: inherit;
+}
+
+.btn {
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 9px 14px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    font-size: 13px;
+
+    transition: 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.run {
+    background: #4caf7d;
+
+    color: white;
+}
+
+.step {
+    background: #e9efff;
+
+    color: #4d62b8;
+}
+
+.reset {
+    background: #f0f1f3;
+
+    color: #596273;
+}
+
+.random {
+    background: #fff3d8;
+
+    color: #956b13;
+}
+
+
+/* =========================
+   OUTPUT
+========================= */
+
+.result-area {
+    padding: 15px;
+}
+
+.output-title {
+    color: #7b8491;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+}
+
+.output {
+    min-height: 90px;
+
+    background: #f7f8fa;
+
+    border: 1px solid #e5e8ed;
+
+    border-radius: 9px;
+
+    padding: 13px;
+
+    font: 14px/1.6 Consolas, monospace;
+
+    color: #397451;
+
+    white-space: pre-wrap;
+
+    margin-bottom: 15px;
+}
+
+
+/* =========================
+   MEMORY
+========================= */
+
+.memory-title {
+    font-size: 11px;
+
+    font-weight: bold;
+
+    color: #7b8491;
+
+    margin-bottom: 8px;
+}
+
+.memory {
+    display: grid;
+
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(110px, 1fr)
+    );
+
+    gap: 8px;
+}
+
+.variable {
+    background: #f8f7ff;
+
+    border: 1px solid #e6e4f7;
+
+    border-radius: 9px;
+
+    padding: 10px;
+
+    transition: 0.3s;
+}
+
+.variable.changed {
+    animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.04);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.variable-name {
+    color: #5967ca;
+
+    font: bold 13px Consolas, monospace;
+}
+
+.variable-value {
+    margin-top: 5px;
+
+    font: 13px Consolas, monospace;
+
+    color: #354052;
+
+    word-break: break-word;
+}
+
+.variable-type {
+    margin-top: 5px;
+
+    color: #9299a5;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   SIMULATION
+========================= */
+
+.simulation {
+    margin-top: 14px;
+
+    padding: 13px;
+
+    background: #f8f9fb;
+
+    border: 1px solid #e5e8ed;
+
+    border-radius: 10px;
+}
+
+.simulation-title {
+    font-size: 12px;
+
+    font-weight: bold;
+
+    margin-bottom: 9px;
+
+    color: #687181;
+}
+
+.simulation-track {
+    display: flex;
+
+    gap: 7px;
+
+    flex-wrap: wrap;
+}
+
+.step-box {
+    padding: 7px 10px;
+
+    border-radius: 7px;
+
+    background: #e8ebef;
+
+    color: #747d8c;
+
+    font: 12px Consolas, monospace;
+}
+
+.step-box.active {
+    background: #dfe4ff;
+
+    color: #4d5fc8;
+}
+
+.step-box.completed {
+    background: #e2f2e9;
+
+    color: #3c805d;
+}
+
+
+/* =========================
+   LOWER AREA
+========================= */
+
+.lower {
+    display: grid;
+
+    grid-template-columns: 1.2fr 0.8fr;
+
+    gap: 15px;
+
+    margin-top: 15px;
+}
+
+
+/* =========================
+   CHALLENGE
+========================= */
+
+.challenge {
+    padding: 16px;
+}
+
+.challenge-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+.challenge-title {
+    font-size: 15px;
+
+    font-weight: bold;
+}
+
+.challenge-level {
+    font-size: 11px;
+
+    background: #f0f1f4;
+
+    padding: 5px 8px;
+
+    border-radius: 10px;
+
+    color: #737c8b;
+}
+
+.question {
+    background: #f8f9fb;
+
+    border: 1px solid #e5e8ed;
+
+    padding: 13px;
+
+    border-radius: 9px;
+
+    line-height: 1.6;
+
+    font-size: 14px;
+
+    margin-bottom: 10px;
+}
+
+.choices {
+    display: flex;
+
+    gap: 7px;
+
+    flex-wrap: wrap;
+}
+
+.choice {
+    background: #ffffff;
+
+    border: 1px solid #dfe3e8;
+
+    border-radius: 8px;
+
+    padding: 8px 12px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    color: #596273;
+}
+
+.choice:hover {
+    background: #f1f3f6;
+}
+
+.choice.correct {
+    background: #e4f4eb;
+
+    color: #337a54;
+
+    border-color: #b8dec8;
+}
+
+.choice.wrong {
+    background: #fae8e8;
+
+    color: #a45151;
+
+    border-color: #edc3c3;
+}
+
+
+/* =========================
+   LEARNING CARD
+========================= */
+
+.learning {
+    padding: 16px;
+}
+
+.learning h3 {
+    font-size: 15px;
+
+    margin-bottom: 8px;
+}
+
+.learning p {
+    color: #697386;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+.example {
+    background: #f7f8fa;
+
+    border: 1px solid #e5e8ed;
+
+    padding: 11px;
+
+    border-radius: 8px;
+
+    margin-top: 11px;
+
+    font: 12px/1.6 Consolas, monospace;
+
+    white-space: pre-wrap;
+
+    color: #475267;
+}
+
+
+/* =========================
+   FEEDBACK
+========================= */
+
+.feedback {
+    margin-top: 10px;
+
+    min-height: 20px;
+
+    font-size: 13px;
+
+    color: #647084;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:850px) {
+
+    .workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .lower {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media(max-width:600px) {
+
+    .app {
+        width: 96%;
+
+        padding-top: 16px;
+    }
+
+    .header {
+        align-items: flex-start;
+
+        gap: 10px;
+
+        flex-direction: column;
+    }
+
+    .stats {
+        width: 100%;
+    }
+
+    .stat {
+        flex: 1;
+
+        text-align: center;
+    }
+
+    #code {
+        min-height: 260px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <div class="logo-area">
+
+        <h1>
+            🐍 Python
+            <span>Playground</span>
+        </h1>
+
+        <p>
+            Learn Python by experimenting.
+        </p>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+            ⭐ XP:
+            <strong id="xp">
+                0
+            </strong>
+        </div>
+
+        <div class="stat">
+            🔥 Streak:
+            <strong id="streak">
+                0
+            </strong>
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+     TOPICS
+========================= -->
+
+<div class="topic-bar" id="topicBar">
+
+    <button
+        class="topic active"
+        data-topic="variables">
+
+        📦 Variables
+
+    </button>
+
+    <button
+        class="topic"
+        data-topic="math">
+
+        ➕ Math
+
+    </button>
+
+    <button
+        class="topic"
+        data-topic="condition">
+
+        🔀 If / Else
+
+    </button>
+
+    <button
+        class="topic"
+        data-topic="loops">
+
+        🔁 Loops
+
+    </button>
+
+    <button
+        class="topic"
+        data-topic="lists">
+
+        📋 Lists
+
+    </button>
+
+    <button
+        class="topic"
+        data-topic="functions">
+
+        ⚙️ Functions
+
+    </button>
+
+</div>
+
+
+
+<!-- =========================
+     MAIN WORKSPACE
+========================= -->
+
+<div class="workspace">
+
+
+<!-- =========================
+     CODE SIDE
+========================= -->
+
+<section class="card">
+
+
+    <div class="card-header">
+
+        <div class="card-title">
+            💻 Python Code
+        </div>
+
+        <div
+            class="status"
+            id="status">
+
+            Ready
+
+        </div>
+
+    </div>
+
+
+
+    <div class="editor-wrapper">
+
+        <div
+            class="line-numbers"
+            id="lineNumbers">
+
+            1
+
+        </div>
+
+
+        <textarea
+            id="code"
+            spellcheck="false">
+
+name = "Ritik"
+age = 20
+
+print(name)
+print(age)
+
+        </textarea>
+
+    </div>
+
+
+
+    <div class="controls">
+
+        <button
+            class="btn run"
+            id="runBtn">
+
+            ▶ Run
+
+        </button>
+
+
+        <button
+            class="btn step"
+            id="stepBtn">
+
+            👣 Step
+
+        </button>
+
+
+        <button
+            class="btn reset"
+            id="resetBtn">
+
+            ↻ Reset
+
+        </button>
+
+
+        <button
+            class="btn random"
+            id="randomBtn">
+
+            🎲 Example
+
+        </button>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =========================
+     RESULT SIDE
+========================= -->
+
+<section class="card">
+
+
+    <div class="card-header">
+
+        <div class="card-title">
+            🎮 Live Simulation
+        </div>
+
+        <div
+            class="status"
+            id="simulationStatus">
+
+            Waiting
+
+        </div>
+
+    </div>
+
+
+    <div class="result-area">
+
+
+        <!-- OUTPUT -->
+
+        <div class="output-title">
+            OUTPUT
+        </div>
+
+
+        <div
+            class="output"
+            id="output">
+
+            Run the program to see
+            what happens.
+
+        </div>
+
+
+
+        <!-- MEMORY -->
+
+        <div class="memory-title">
+
+            🧠 PYTHON MEMORY
+
+        </div>
+
+
+        <div
+            class="memory"
+            id="memory">
+
+            <div class="variable">
+
+                <div class="variable-name">
+                    memory
+                </div>
+
+                <div class="variable-value">
+                    empty
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- EXECUTION -->
+
+        <div class="simulation">
+
+            <div class="simulation-title">
+
+                ⚡ EXECUTION FLOW
+
+            </div>
+
+
+            <div
+                class="simulation-track"
+                id="executionTrack">
+
+                <div class="step-box">
+                    Ready
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+</div>
+
+
+
+<!-- =========================
+     LOWER SECTION
+========================= -->
+
+<div class="lower">
+
+
+<!-- =========================
+     CHALLENGE
+========================= -->
+
+<section class="card challenge">
+
+
+    <div class="challenge-top">
+
+        <div class="challenge-title">
+
+            🧠 Quick Challenge
+
+        </div>
+
+
+        <div class="challenge-level">
+
+            Beginner
+
+        </div>
+
+    </div>
+
+
+
+    <div
+        class="question"
+        id="question">
+
+        What will this code print?
+
+        <br><br>
+
+        <code>
+            print(10 + 5)
+        </code>
+
+    </div>
+
+
+
+    <div
+        class="choices"
+        id="choices">
+
+    </div>
+
+
+
+    <div
+        class="feedback"
+        id="feedback">
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =========================
+     LEARNING
+========================= -->
+
+<section class="card learning">
+
+
+    <h3 id="lessonTitle">
+
+        📦 Variables
+
+    </h3>
+
+
+    <p id="lessonText">
+
+        A variable is like a box that
+        stores information.
+
+        Change the values in the code
+        and watch Python memory change.
+
+    </p>
+
+
+    <div
+        class="example"
+        id="example">
+
+name = "Ritik"
+age = 20
+
+print(name)
+print(age)
+
+    </div>
+
+
+</section>
+
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* ==========================================
+   PYTHON PLAYGROUND
+========================================== */
+
+
+/* =========================
+   DOM ELEMENTS
+========================= */
+
+const code =
+    document.getElementById("code");
+
+const output =
+    document.getElementById("output");
+
+const memory =
+    document.getElementById("memory");
+
+const status =
+    document.getElementById("status");
+
+const simulationStatus =
+    document.getElementById(
+        "simulationStatus"
+    );
+
+const executionTrack =
+    document.getElementById(
+        "executionTrack"
+    );
+
+const xpElement =
+    document.getElementById("xp");
+
+const streakElement =
+    document.getElementById(
+        "streak"
+    );
+
+const lineNumbers =
+    document.getElementById(
+        "lineNumbers"
+    );
+
+
+
+/* =========================
+   GAME STATE
+========================= */
+
+let variables = {};
+
+let xp = 0;
+
+let streak = 0;
+
+let currentLine = 0;
+
+let stepMode = false;
+
+let executionTimer = null;
+
+
+
+/* =========================
+   LESSON DATA
+========================= */
+
+const lessons = {
+
+
+    variables: {
+
+        title: "📦 Variables",
+
+        text:
+            "A variable is like a box that stores information. Change the values and watch Python memory change.",
+
+        code:
+`name = "Ritik"
+age = 20
+
+print(name)
+print(age)`,
+
+        hint:
+            "Try changing age to 25 or the name to your own name."
+
+    },
+
+
+    math: {
+
+        title: "➕ Math & Operators",
+
+        text:
+            "Python can perform calculations using +, -, *, and /. Try changing the numbers.",
+
+        code:
+`a = 10
+b = 5
+
+total = a + b
+double = a * 2
+
+print(total)
+print(double)`,
+
+        hint:
+            "Can you make total equal to 100?"
+
+    },
+
+
+    condition: {
+
+        title: "🔀 If / Else",
+
+        text:
+            "Python can make decisions. Change age and observe which decision is selected.",
+
+        code:
+`age = 20
+
+if age >= 18:
+    print("Adult")
+else:
+    print("Minor")`,
+
+        hint:
+            "Change age to 15 and run again."
+
+    },
+
+
+    loops: {
+
+        title: "🔁 Loops",
+
+        text:
+            "Loops allow a program to repeat an action multiple times.",
+
+        code:
+`number = 1
+
+print(number)
+
+number = number + 1
+
+print(number)`,
+
+        hint:
+            "Change number and experiment with the calculation."
+
+    },
+
+
+    lists: {
+
+        title: "📋 Lists",
+
+        text:
+            "Lists store multiple values together.",
+
+        code:
+`fruits = ["Apple", "Banana", "Mango"]
+
+print(fruits)`,
+
+        hint:
+            "Add another fruit to the list."
+
+    },
+
+
+    functions: {
+
+        title: "⚙️ Functions",
+
+        text:
+            "Functions allow programmers to organize reusable instructions.",
+
+        code:
+`name = "Python"
+
+message = "Hello " + name
+
+print(message)`,
+
+        hint:
+            "Change Python to your own name."
+
+    }
+
+};
+
+
+
+/* =========================
+   TOPIC BUTTONS
+========================= */
+
+const topics =
+    document.querySelectorAll(
+        ".topic"
+    );
+
+
+topics.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            const topic =
+                button.dataset.topic;
+
+
+            topics.forEach(item => {
+
+                item.classList.remove(
+                    "active"
+                );
+
+            });
+
+
+            button.classList.add(
+                "active"
+            );
+
+
+            loadLesson(topic);
+
+        }
+    );
+
+});
+
+
+
+/* =========================
+   LOAD LESSON
+========================= */
+
+function loadLesson(topic) {
+
+    const lesson =
+        lessons[topic];
+
+
+    document.getElementById(
+        "lessonTitle"
+    ).textContent =
+        lesson.title;
+
+
+    document.getElementById(
+        "lessonText"
+    ).textContent =
+        lesson.text;
+
+
+    document.getElementById(
+        "example"
+    ).textContent =
+        lesson.code;
+
+
+    code.value =
+        lesson.code;
+
+
+    resetSimulation();
+
+
+    updateLineNumbers();
+
+}
+
+
+
+/* =========================
+   PARSE PYTHON VALUES
+========================= */
+
+function parseValue(value) {
+
+    value =
+        value.trim();
+
+
+    /* STRING */
+
+    if (
+        (
+            value.startsWith('"') &&
+            value.endsWith('"')
+        )
+        ||
+        (
+            value.startsWith("'") &&
+            value.endsWith("'")
+        )
+    ) {
+
+        return value.slice(
+            1,
+            -1
+        );
+
+    }
+
+
+    /* BOOLEAN */
+
+    if (value === "True") {
+
+        return true;
+
+    }
+
+
+    if (value === "False") {
+
+        return false;
+
+    }
+
+
+    /* NONE */
+
+    if (value === "None") {
+
+        return null;
+
+    }
+
+
+    /* LIST */
+
+    if (
+        value.startsWith("[") &&
+        value.endsWith("]")
+    ) {
+
+        const inside =
+            value.slice(
+                1,
+                -1
+            );
+
+
+        if (
+            inside.trim() === ""
+        ) {
+
+            return [];
+
+        }
+
+
+        return inside
+            .split(",")
+            .map(item =>
+                parseValue(item)
+            );
+
+    }
+
+
+    /* NUMBER */
+
+    if (
+        value !== "" &&
+        !isNaN(value)
+    ) {
+
+        return Number(value);
+
+    }
+
+
+    /* EXISTING VARIABLE */
+
+    if (
+        variables[value] !== undefined
+    ) {
+
+        return variables[value];
+
+    }
+
+
+    /* SIMPLE MATH */
+
+    let expression =
+        value;
+
+
+    Object.keys(
+        variables
+    ).forEach(name => {
+
+        const variableValue =
+            variables[name];
+
+
+        if (
+            typeof variableValue ===
+            "number"
+        ) {
+
+            expression =
+                expression.replace(
+                    new RegExp(
+                        "\\b" +
+                        name +
+                        "\\b",
+                        "g"
+                    ),
+                    variableValue
+                );
+
+        }
+
+    });
+
+
+    if (
+        /^[0-9+\-*/().\s]+$/
+            .test(expression)
+    ) {
+
+        try {
+
+            return Function(
+                "return " +
+                expression
+            )();
+
+        }
+
+        catch {
+
+            return value;
+
+        }
+
+    }
+
+
+    return value;
+
+}
+
+
+
+/* =========================
+   FORMAT VALUE
+========================= */
+
+function formatValue(value) {
+
+    if (
+        typeof value ===
+        "string"
+    ) {
+
+        return '"' +
+            value +
+            '"';
+
+    }
+
+
+    if (
+        Array.isArray(value)
+    ) {
+
+        return "[" +
+            value
+                .map(formatValue)
+                .join(", ") +
+            "]";
+
+    }
+
+
+    if (value === null) {
+
+        return "None";
+
+    }
+
+
+    return String(value);
+
+}
+
+
+
+/* =========================
+   MEMORY DISPLAY
+========================= */
+
+function updateMemory() {
+
+    memory.innerHTML = "";
+
+
+    const names =
+        Object.keys(
+            variables
+        );
+
+
+    if (
+        names.length === 0
+    ) {
+
+        memory.innerHTML = `
+
+            <div class="variable">
+
+                <div class="variable-name">
+                    memory
+                </div>
+
+                <div class="variable-value">
+                    empty
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    names.forEach(name => {
+
+        const value =
+            variables[name];
+
+
+        let type =
+            typeof value;
+
+
+        if (
+            Array.isArray(value)
+        ) {
+
+            type =
+                "list";
+
+        }
+
+
+        const box =
+            document.createElement(
+                "div"
+            );
+
+
+        box.className =
+            "variable changed";
+
+
+        box.innerHTML = `
+
+            <div class="variable-name">
+
+                ${name}
+
+            </div>
+
+
+            <div class="variable-value">
+
+                ${formatValue(value)}
+
+            </div>
+
+
+            <div class="variable-type">
+
+                ${type}
+
+            </div>
+
+        `;
+
+
+        memory.appendChild(
+            box
+        );
+
+    });
+
+}
+
+
+
+/* =========================
+   PRINT FUNCTION
+========================= */
+
+function executePrint(
+    expression
+) {
+
+    const parts =
+        expression.split(",");
+
+
+    return parts
+        .map(part =>
+            parseValue(part)
+        )
+        .map(value =>
+            formatValue(value)
+        )
+        .join(" ");
+
+}
+
+
+
+/* =========================
+   EXECUTE LINE
+========================= */
+
+function executeLine(
+    line,
+    outputArray
+) {
+
+    let text =
+        line.trim();
+
+
+    if (
+        text === "" ||
+        text.startsWith("#")
+    ) {
+
+        return;
+
+    }
+
+
+    /* IF / ELSE */
+
+    if (
+        text.startsWith("if ") ||
+        text === "else:"
+    ) {
+
+        return;
+
+    }
+
+
+    /* ASSIGNMENT */
+
+    const assignment =
+        text.match(
+            /^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+)$/
+        );
+
+
+    if (assignment) {
+
+        const name =
+            assignment[1];
+
+
+        const value =
+            assignment[2];
+
+
+        variables[name] =
+            parseValue(value);
+
+
+        updateMemory();
+
+
+        return;
+
+    }
+
+
+    /* PRINT */
+
+    const print =
+        text.match(
+            /^print\s*\((.*)\)$/
+        );
+
+
+    if (print) {
+
+        outputArray.push(
+            executePrint(
+                print[1]
+            )
+        );
+
+        return;
+
+    }
+
+
+    outputArray.push(
+        "⚠ Unsupported line: " +
+        text
+    );
+
+}
+
+
+
+/* =========================
+   RUN PROGRAM
+========================= */
+
+function runProgram() {
+
+    clearTimeout(
+        executionTimer
+    );
+
+
+    variables = {};
+
+
+    const lines =
+        code.value.split("\n");
+
+
+    const results = [];
+
+
+    status.textContent =
+        "Running";
+
+
+    simulationStatus.textContent =
+        "Running";
+
+
+    output.textContent =
+        "";
+
+
+    executionTrack.innerHTML =
+        "";
+
+
+    lines.forEach(
+        (line, index) => {
+
+
+            const box =
+                document.createElement(
+                    "div"
+                );
+
+
+            box.className =
+                "step-box";
+
+
+            box.textContent =
+                "Line " +
+                (index + 1);
+
+
+            executionTrack.appendChild(
+                box
+            );
+
+        }
+    );
+
+
+    let index = 0;
+
+
+    function nextLine() {
+
+        if (
+            index >=
+            lines.length
+        ) {
+
+            output.textContent =
+                results.join("\n") ||
+                "(No output)";
+
+
+            status.textContent =
+                "Finished ✓";
+
+
+            simulationStatus.textContent =
+                "Completed";
+
+
+            xp += 5;
+
+
+            updateXP();
+
+
+            return;
+
+        }
+
+
+        const boxes =
+            executionTrack
+                .querySelectorAll(
+                    ".step-box"
+                );
+
+
+        boxes.forEach(box => {
+
+            box.classList.remove(
+                "active"
+            );
+
+        });
+
+
+        if (boxes[index]) {
+
+            boxes[index]
+                .classList.add(
+                    "active"
+                );
+
+        }
+
+
+        executeLine(
+            lines[index],
+            results
+        );
+
+
+        output.textContent =
+            results.join("\n") ||
+            "(Running...)";
+
+
+        index++;
+
+
+        executionTimer =
+            setTimeout(
+                nextLine,
+                180
+            );
+
+    }
+
+
+    nextLine();
+
+}
+
+
+
+/* =========================
+   STEP MODE
+========================= */
+
+function stepProgram() {
+
+    const lines =
+        code.value.split("\n");
+
+
+    if (
+        currentLine >=
+        lines.length
+    ) {
+
+        simulationStatus.textContent =
+            "Finished";
+
+
+        return;
+
+    }
+
+
+    if (
+        currentLine === 0
+    ) {
+
+        variables = {};
+
+        output.textContent =
+            "";
+
+        executionTrack.innerHTML =
+            "";
+
+    }
+
+
+    const line =
+        lines[currentLine];
+
+
+    const results =
+        output.textContent ===
+        "(No output)"
+            ||
+        output.textContent ===
+        "Run the program to see what happens."
+            ?
+            []
+            :
+            output.textContent
+                .split("\n");
+
+
+    executeLine(
+        line,
+        results
+    );
+
+
+    output.textContent =
+        results.join("\n") ||
+        "(No output yet)";
+
+
+    const box =
+        document.createElement(
+            "div"
+        );
+
+
+    box.className =
+        "step-box completed";
+
+
+    box.textContent =
+        "✓ " +
+        (currentLine + 1);
+
+
+    executionTrack.appendChild(
+        box
+    );
+
+
+    currentLine++;
+
+
+    status.textContent =
+        "Line " +
+        currentLine;
+
+
+    simulationStatus.textContent =
+        "Stepping";
+
+}
+
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetSimulation() {
+
+    clearTimeout(
+        executionTimer
+    );
+
+
+    variables = {};
+
+    currentLine = 0;
+
+
+    output.textContent =
+        "Run the program to see what happens.";
+
+
+    status.textContent =
+        "Ready";
+
+
+    simulationStatus.textContent =
+        "Waiting";
+
+
+    executionTrack.innerHTML = `
+
+        <div class="step-box">
+            Ready
+        </div>
+
+    `;
+
+
+    updateMemory();
+
+}
+
+
+
+/* =========================
+   RANDOM EXAMPLE
+========================= */
+
+const examples = [
+
+`name = "Python"
+age = 10
+
+print(name)
+print(age)`,
+
+`a = 20
+b = 30
+
+total = a + b
+
+print(total)`,
+
+`price = 50
+quantity = 3
+
+total = price * quantity
+
+print(total)`,
+
+`number = 10
+double = number * 2
+
+print(double)`,
+
+`fruit = "Mango"
+
+print(fruit)`
+
+];
+
+
+function randomExample() {
+
+    const random =
+        Math.floor(
+            Math.random() *
+            examples.length
+        );
+
+
+    code.value =
+        examples[random];
+
+
+    resetSimulation();
+
+
+    updateLineNumbers();
+
+}
+
+
+
+/* =========================
+   XP
+========================= */
+
+function updateXP() {
+
+    xpElement.textContent =
+        xp;
+
+}
+
+
+
+/* =========================
+   LINE NUMBERS
+========================= */
+
+function updateLineNumbers() {
+
+    const count =
+        code.value
+            .split("\n")
+            .length;
+
+
+    let numbers = "";
+
+
+    for (
+        let i = 1;
+        i <= count;
+        i++
+    ) {
+
+        numbers +=
+            i +
+            "<br>";
+
+    }
+
+
+    lineNumbers.innerHTML =
+        numbers;
+
+}
+
+
+code.addEventListener(
+    "input",
+    updateLineNumbers
+);
+
+
+
+/* =========================
+   BUTTON EVENTS
+========================= */
+
+document
+    .getElementById("runBtn")
+    .addEventListener(
+        "click",
+        runProgram
+    );
+
+
+document
+    .getElementById("stepBtn")
+    .addEventListener(
+        "click",
+        stepProgram
+    );
+
+
+document
+    .getElementById("resetBtn")
+    .addEventListener(
+        "click",
+        resetSimulation
+    );
+
+
+document
+    .getElementById("randomBtn")
+    .addEventListener(
+        "click",
+        randomExample
+    );
+
+
+
+/* =========================
+   KEYBOARD SHORTCUT
+========================= */
+
+code.addEventListener(
+    "keydown",
+    function(event) {
+
+        /* Ctrl + Enter */
+
+        if (
+            event.ctrlKey &&
+            event.key === "Enter"
+        ) {
+
+            event.preventDefault();
+
+            runProgram();
+
+        }
+
+    }
+);
+
+
+
+/* =========================
+   CHALLENGE GAME
+========================= */
+
+const challenges = [
+
+    {
+        question:
+            `What will this print?<br><br>
+             <code>print(10 + 5)</code>`,
+
+        answers:
+            ["10", "15", "105"],
+
+        correct:
+            "15"
+
+    },
+
+
+    {
+        question:
+            `What is stored in x?<br><br>
+             <code>x = 25</code>`,
+
+        answers:
+            ["5", "25", "250"],
+
+        correct:
+            "25"
+
+    },
+
+
+    {
+        question:
+            `What will this print?<br><br>
+             <code>a = 5<br>
+             b = 2<br>
+             print(a * b)</code>`,
+
+        answers:
+            ["7", "10", "52"],
+
+        correct:
+            "10"
+
+    },
+
+
+    {
+        question:
+            `Which symbol adds two numbers?`,
+
+        answers:
+            ["+", "*", "/"],
+
+        correct:
+            "+"
+
+    },
+
+
+    {
+        question:
+            `Which one is a Python list?`,
+
+        answers:
+            ["10", `"Hello"`, `["A", "B"]`],
+
+        correct:
+            `["A", "B"]`
+
+    }
+
+];
+
+
+let challengeIndex = 0;
+
+
+
+function loadChallenge() {
+
+    const challenge =
+        challenges[
+            challengeIndex
+        ];
+
+
+    document
+        .getElementById(
+            "question"
+        )
+        .innerHTML =
+        challenge.question;
+
+
+    const choices =
+        document.getElementById(
+            "choices"
+        );
+
+
+    const feedback =
+        document.getElementById(
+            "feedback"
+        );
+
+
+    choices.innerHTML =
+        "";
+
+
+    feedback.textContent =
+        "";
+
+
+    challenge.answers.forEach(
+        answer => {
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "choice";
+
+
+            button.textContent =
+                answer;
+
+
+            button.addEventListener(
+                "click",
+                function() {
+
+
+                    if (
+                        answer ===
+                        challenge.correct
+                    ) {
+
+                        button.classList.add(
+                            "correct"
+                        );
+
+
+                        feedback.textContent =
+                            "🎉 Correct! +10 XP";
+
+
+                        xp += 10;
+
+                        streak++;
+
+
+                        xpElement.textContent =
+                            xp;
+
+
+                        streakElement.textContent =
+                            streak;
+
+
+                        setTimeout(
+                            nextChallenge,
+                            700
+                        );
+
+
+                    }
+
+                    else {
+
+                        button.classList.add(
+                            "wrong"
+                        );
+
+
+                        feedback.textContent =
+                            "Try again — think about how Python executes the code.";
+
+                    }
+
+                }
+            );
+
+
+            choices.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+
+function nextChallenge() {
+
+    challengeIndex++;
+
+
+    if (
+        challengeIndex >=
+        challenges.length
+    ) {
+
+        challengeIndex = 0;
+
+    }
+
+
+    loadChallenge();
+
+}
+
+
+
+/* =========================
+   INITIALIZE
+========================= */
+
+updateLineNumbers();
+
+updateMemory();
+
+loadChallenge();
+
+
+</script>
+
+</body>
+</html>
