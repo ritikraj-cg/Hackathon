@@ -1,387 +1,830 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Code Simulator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ritik's Python Lab</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
-            min-height: 100vh;
-        }
+:root{
+    --bg:#0d1117;
+    --panel:#151b24;
+    --panel2:#1b222d;
+    --editor:#10151d;
+    --output:#0b1016;
+    --border:#293241;
 
-        header {
-            background: #111827;
-            padding: 20px;
-            border-bottom: 1px solid #334155;
-        }
+    --text:#e6ebf2;
+    --muted:#8994a5;
 
-        header h1 {
-            color: #facc15;
-            margin-bottom: 6px;
-        }
+    --blue:#7aa2f7;
+    --green:#7bd88f;
+    --red:#f7768e;
+    --yellow:#e0af68;
+    --purple:#bb9af7;
+    --cyan:#73daca;
+}
 
-        header p {
-            color: #94a3b8;
-        }
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(122,162,247,.07),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 100%,
+            rgba(187,154,247,.05),
+            transparent 28%
+        ),
+        var(--bg);
 
-        .container {
-            width: 95%;
-            max-width: 1400px;
-            margin: 25px auto;
-        }
+    color:var(--text);
+    font-family:Inter,"Segoe UI",Arial,sans-serif;
+}
 
-        .learning-bar {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
+button,
+select,
+input,
+textarea{
+    font:inherit;
+}
 
-        .topic {
-            background: #1e293b;
-            border: 1px solid #334155;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+/* ================= HEADER ================= */
 
-        .topic:hover {
-            background: #334155;
-        }
+header{
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-        .topic.active {
-            background: #facc15;
-            color: #111827;
-            font-weight: bold;
-        }
+    padding:0 24px;
 
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+    background:rgba(13,17,23,.94);
+    border-bottom:1px solid var(--border);
 
-        .panel {
-            background: #111827;
-            border: 1px solid #334155;
-            border-radius: 14px;
-            overflow: hidden;
-        }
+    position:sticky;
+    top:0;
+    z-index:50;
+}
 
-        .panel-header {
-            padding: 15px 18px;
-            background: #1e293b;
-            border-bottom: 1px solid #334155;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
 
-        .panel-header h2 {
-            font-size: 18px;
-        }
+.logo{
+    width:36px;
+    height:36px;
 
-        .editor {
-            width: 100%;
-            min-height: 330px;
-            resize: vertical;
-            border: none;
-            outline: none;
-            padding: 20px;
-            background: #020617;
-            color: #e2e8f0;
-            font-family: Consolas, monospace;
-            font-size: 16px;
-            line-height: 1.7;
-        }
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-        .controls {
-            padding: 15px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            border-top: 1px solid #334155;
-        }
+    border-radius:10px;
 
-        button {
-            border: none;
-            border-radius: 8px;
-            padding: 11px 18px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-        }
+    background:#202938;
+    color:var(--yellow);
 
-        .run {
-            background: #22c55e;
-            color: white;
-        }
+    font:bold 16px monospace;
+}
 
-        .step {
-            background: #38bdf8;
-            color: #082f49;
-        }
+.brand h1{
+    font-size:16px;
+    font-weight:650;
+}
 
-        .reset {
-            background: #475569;
-            color: white;
-        }
+.brand p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:2px;
+}
 
-        button:hover {
-            opacity: 0.85;
-        }
+.status{
+    display:flex;
+    align-items:center;
+    gap:7px;
 
-        .output {
-            min-height: 150px;
-            background: #020617;
-            padding: 20px;
-            font-family: Consolas, monospace;
-            white-space: pre-wrap;
-            color: #4ade80;
-        }
+    color:var(--muted);
+    font-size:11px;
+}
 
-        .visual-area {
-            padding: 20px;
-        }
+.status-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 9px rgba(123,216,143,.5);
+}
 
-        .execution-status {
-            padding: 12px;
-            background: #172554;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            color: #93c5fd;
-        }
+/* ================= MAIN ================= */
 
-        .variables {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
-        }
+main{
+    width:min(1400px,94%);
+    margin:18px auto 25px;
+}
 
-        .variable {
-            background: #1e293b;
-            border: 1px solid #475569;
-            padding: 15px;
-            border-radius: 10px;
-        }
+.heading{
+    margin-bottom:13px;
+}
 
-        .variable-name {
-            color: #facc15;
-            font-family: Consolas, monospace;
-            font-weight: bold;
-        }
+.heading h2{
+    font-size:21px;
+    margin-bottom:3px;
+}
 
-        .variable-value {
-            margin-top: 8px;
-            color: #4ade80;
-            font-family: Consolas, monospace;
-            word-break: break-word;
-        }
+.heading p{
+    color:var(--muted);
+    font-size:12px;
+}
 
-        .variable-type {
-            margin-top: 5px;
-            color: #94a3b8;
-            font-size: 12px;
-        }
+/* ================= TOOLBAR ================= */
 
-        .execution {
-            margin-top: 20px;
-        }
+.toolbar{
+    height:45px;
 
-        .line {
-            padding: 12px;
-            margin-bottom: 7px;
-            background: #1e293b;
-            border-radius: 7px;
-            font-family: Consolas, monospace;
-            color: #94a3b8;
-        }
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-        .line.current {
-            background: #713f12;
-            color: #fef08a;
-            border-left: 4px solid #facc15;
-        }
+    padding:0 11px;
 
-        .line.done {
-            border-left: 4px solid #22c55e;
-            color: #86efac;
-        }
+    background:var(--panel);
 
-        .lesson {
-            margin-top: 20px;
-            background: #111827;
-            border: 1px solid #334155;
-            padding: 20px;
-            border-radius: 14px;
-        }
+    border:1px solid var(--border);
+    border-radius:10px;
 
-        .lesson h2 {
-            color: #facc15;
-            margin-bottom: 10px;
-        }
+    margin-bottom:10px;
+}
 
-        .lesson p {
-            color: #cbd5e1;
-            line-height: 1.7;
-        }
+.toolbar-group{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
 
-        .example {
-            margin-top: 15px;
-            background: #020617;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: Consolas, monospace;
-            color: #67e8f9;
-            white-space: pre-wrap;
-        }
+.label{
+    color:var(--muted);
+    font-size:11px;
+}
 
-        .error {
-            color: #f87171;
-        }
+select{
+    height:29px;
 
-        @media (max-width: 850px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
+    padding:0 9px;
 
-            .editor {
-                min-height: 250px;
-            }
-        }
+    background:#202733;
+    color:var(--text);
 
-        #link-next{
-            background-color: red;
-            border: 2px solid black;
-            border-radius: 8px;
-            color: white;
-            text-decoration: none;
-            padding: 8px 18px 8px 18px;
-        }
+    border:1px solid var(--border);
+    border-radius:7px;
 
-    </style>
+    outline:none;
+
+    font-size:11px;
+}
+
+select:focus{
+    border-color:var(--blue);
+}
+
+/* Toggle */
+
+.toggle{
+    position:relative;
+    width:34px;
+    height:19px;
+}
+
+.toggle input{
+    display:none;
+}
+
+.slider{
+    position:absolute;
+    inset:0;
+
+    background:#29313d;
+
+    border-radius:20px;
+
+    cursor:pointer;
+}
+
+.slider:before{
+    content:"";
+
+    position:absolute;
+
+    width:13px;
+    height:13px;
+
+    left:3px;
+    top:3px;
+
+    border-radius:50%;
+
+    background:#9da7b6;
+
+    transition:.18s;
+}
+
+.toggle input:checked + .slider{
+    background:#304a3a;
+}
+
+.toggle input:checked + .slider:before{
+    transform:translateX(15px);
+    background:var(--green);
+}
+
+/* ================= WORKSPACE ================= */
+
+.workspace{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.card{
+    min-width:0;
+
+    background:var(--panel);
+
+    border:1px solid var(--border);
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+/* ================= CARD HEADER ================= */
+
+.card-header{
+    height:39px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 12px;
+
+    background:var(--panel2);
+
+    border-bottom:1px solid var(--border);
+}
+
+.card-title{
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    font-size:11px;
+    font-weight:600;
+}
+
+.circle{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+}
+
+.blue{
+    background:var(--blue);
+}
+
+.green{
+    background:var(--green);
+}
+
+.file{
+    color:#657080;
+    font:10px monospace;
+}
+
+/* ================= EDITOR ================= */
+
+.editor{
+    height:390px;
+    position:relative;
+    background:var(--editor);
+}
+
+textarea{
+    width:100%;
+    height:100%;
+
+    padding:16px;
+
+    resize:none;
+    outline:none;
+    border:0;
+
+    background:transparent;
+    color:#dce4ef;
+
+    caret-color:var(--yellow);
+
+    font-family:
+        "Cascadia Code",
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size:13px;
+    line-height:1.65;
+
+    tab-size:4;
+}
+
+textarea::selection{
+    background:rgba(122,162,247,.22);
+}
+
+/* ================= AUTOCOMPLETE ================= */
+
+.autocomplete{
+    position:absolute;
+
+    display:none;
+
+    min-width:190px;
+    max-width:280px;
+
+    max-height:210px;
+
+    overflow-y:auto;
+
+    background:#1b222d;
+
+    border:1px solid #354052;
+
+    border-radius:8px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.45);
+
+    z-index:10;
+}
+
+.autocomplete.show{
+    display:block;
+}
+
+.suggestion{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:7px 9px;
+
+    cursor:pointer;
+
+    font-family:monospace;
+    font-size:11px;
+}
+
+.suggestion:hover,
+.suggestion.selected{
+    background:#273142;
+}
+
+.suggestion-name{
+    color:var(--cyan);
+}
+
+.suggestion-type{
+    color:#697588;
+    font-size:9px;
+}
+
+/* ================= OUTPUT ================= */
+
+.output{
+    height:390px;
+
+    padding:16px;
+
+    overflow-y:auto;
+
+    background:var(--output);
+
+    font-family:
+        "Cascadia Code",
+        Consolas,
+        monospace;
+
+    font-size:12px;
+    line-height:1.65;
+
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+
+.placeholder{
+    color:#4f5a69;
+}
+
+.normal{
+    color:#d9e1ed;
+}
+
+.system{
+    color:var(--cyan);
+}
+
+.success{
+    color:var(--green);
+}
+
+.error{
+    color:var(--red);
+}
+
+.warning{
+    color:var(--yellow);
+}
+
+.info{
+    color:var(--purple);
+}
+
+/* ================= INPUT ================= */
+
+.input-box{
+    display:none;
+
+    padding:8px;
+
+    border-top:1px solid var(--border);
+
+    background:#121821;
+
+    gap:7px;
+}
+
+.input-box.active{
+    display:flex;
+}
+
+.input-box input{
+    flex:1;
+
+    min-width:0;
+
+    height:31px;
+
+    padding:0 9px;
+
+    background:#1b222d;
+
+    border:1px solid var(--border);
+
+    border-radius:6px;
+
+    outline:none;
+
+    color:var(--text);
+
+    font:11px monospace;
+}
+
+.input-box input:focus{
+    border-color:var(--blue);
+}
+
+/* ================= CONTROLS ================= */
+
+.controls{
+    min-height:47px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:7px 10px;
+
+    background:var(--panel2);
+
+    border-top:1px solid var(--border);
+}
+
+.buttons{
+    display:flex;
+    gap:5px;
+}
+
+button{
+    height:29px;
+
+    padding:0 10px;
+
+    border-radius:6px;
+
+    border:1px solid var(--border);
+
+    background:#202733;
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    font-size:10px;
+    font-weight:600;
+
+    transition:.15s;
+}
+
+button:hover{
+    background:#2a3341;
+}
+
+.run{
+    color:var(--green);
+    background:#26392f;
+    border-color:#385647;
+}
+
+.stop{
+    color:var(--red);
+    background:#38262c;
+    border-color:#57363f;
+}
+
+.shortcut{
+    color:#5f6979;
+    font-size:9px;
+}
+
+kbd{
+    padding:2px 5px;
+
+    background:#202733;
+
+    border:1px solid var(--border);
+
+    border-radius:4px;
+}
+
+/* ================= FOOTER ================= */
+
+.footer{
+    display:flex;
+    justify-content:space-between;
+
+    margin-top:10px;
+
+    color:#596474;
+
+    font-size:10px;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:850px){
+
+    .workspace{
+        grid-template-columns:1fr;
+    }
+
+    .editor,
+    .output{
+        height:330px;
+    }
+
+    header{
+        padding:0 15px;
+    }
+
+    .status{
+        display:none;
+    }
+
+}
+
+@media(max-width:500px){
+
+    main{
+        width:95%;
+    }
+
+    .toolbar{
+        height:auto;
+        min-height:45px;
+        padding:7px 9px;
+        gap:8px;
+    }
+
+    .toolbar-group{
+        flex-wrap:wrap;
+    }
+
+    .footer{
+        flex-direction:column;
+        gap:4px;
+    }
+
+}
+
+</style>
 </head>
+
 
 <body>
 
 <header>
-    <h1>🐍 Python Visual Simulator</h1>
-    <p>Learn Python by changing code and watching what happens.</p>
-</header>
 
-<div class="container">
+    <div class="brand">
 
-    <!-- TOPICS -->
-    <div class="learning-bar">
-
-        <div class="topic active" data-topic="variables">
-            Variables
+        <div class="logo">
+            Py
         </div>
 
-        <div class="topic" data-topic="operators">
-            Operators
-        </div>
-
-        <div class="topic" data-topic="condition">
-            If / Else
-        </div>
-
-        <div class="topic" data-topic="loop">
-            Loops
-        </div>
-
-        <div class="topic" data-topic="list">
-            Lists
-        </div>
-
-        <div class="topic" data-topic="function">
-            Functions
+        <div>
+            <h1>Ritik's Python Lab</h1>
+            <p>Write Python. See it happen.</p>
         </div>
 
     </div>
 
 
-    <div class="main-grid">
+    <div class="status">
 
-        <!-- CODE EDITOR -->
-        <div class="panel">
+        <span
+            id="statusDot"
+            class="status-dot">
+        </span>
 
-            <div class="panel-header">
-                <h2>💻 Python Code</h2>
-                <span>Editor</span>
+        <span id="statusText">
+            Loading Python...
+        </span>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <div class="heading">
+
+        <h2>Python Playground</h2>
+
+        <p>
+            Write your program and experiment freely.
+        </p>
+
+    </div>
+
+
+    <!-- TOOLBAR -->
+
+    <div class="toolbar">
+
+        <div class="toolbar-group">
+
+            <span class="label">
+                Auto Run
+            </span>
+
+            <select id="autoRun">
+
+                <option value="0">
+                    Off
+                </option>
+
+                <option value="3000">
+                    3 seconds
+                </option>
+
+                <option value="5000" selected>
+                    5 seconds
+                </option>
+
+                <option value="8000">
+                    8 seconds
+                </option>
+
+                <option value="10000">
+                    10 seconds
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="toolbar-group">
+
+            <span class="label">
+                Suggestions
+            </span>
+
+            <label class="toggle">
+
+                <input
+                    type="checkbox"
+                    id="suggestions"
+                    checked
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+    </div>
+
+
+    <!-- WORKSPACE -->
+
+    <section class="workspace">
+
+
+        <!-- CODE -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div class="card-title">
+
+                    <span class="circle blue"></span>
+
+                    Python Code
+
+                </div>
+
+                <span class="file">
+                    main.py
+                </span>
+
             </div>
 
-            <textarea id="code" class="editor">name = "Ritik"
-age = 20
 
-print(name)
-print(age)</textarea>
+            <div class="editor">
+
+<textarea
+id="code"
+spellcheck="false"
+autocomplete="off"
+autocorrect="off"
+autocapitalize="off"
+>name = "Ritik"
+
+for i in range(5):
+    print("Hello", name)
+    print("Number:", i)</textarea>
+
+
+                <div
+                    id="autocomplete"
+                    class="autocomplete">
+                </div>
+
+            </div>
+
 
             <div class="controls">
 
-                <button class="run" id="runBtn">
-                    ▶ Run Code
-                </button>
+                <div class="buttons">
 
-                <button class="step" id="stepBtn">
-                    ⏭ Step
-                </button>
+                    <button
+                        id="run"
+                        class="run">
+                        ▶ Run
+                    </button>
 
-                <button class="reset" id="resetBtn">
-                    ↻ Reset
-                </button>
+                    <button
+                        id="stop"
+                        class="stop">
+                        ■ Stop
+                    </button>
 
-            </div>
+                    <button id="clearCode">
+                        Clear
+                    </button>
 
-        </div>
+                    <button id="copy">
+                        Copy
+                    </button>
 
-
-        <!-- VISUALIZER -->
-        <div class="panel">
-
-            <div class="panel-header">
-                <h2>🔬 Visual Simulation</h2>
-                <span id="status">Ready</span>
-            </div>
-
-            <div class="visual-area">
-
-                <div class="execution-status" id="executionStatus">
-                    Press "Run Code" to start the simulation.
                 </div>
 
-                <h3 style="margin-bottom:12px;">
-                    📦 Variables
-                </h3>
 
-                <div class="variables" id="variables">
-                    <div class="variable">
-                        <div class="variable-name">
-                            No variables yet
-                        </div>
-                    </div>
-                </div>
+                <div class="shortcut">
 
-                <div class="execution">
-
-                    <h3 style="margin-bottom:12px;">
-                        ⚙️ Execution
-                    </h3>
-
-                    <div id="executionLines">
-                        Run your Python code to see each line.
-                    </div>
+                    <kbd>Ctrl</kbd>
+                    +
+                    <kbd>Enter</kbd>
 
                 </div>
 
@@ -389,778 +832,2225 @@ print(age)</textarea>
 
         </div>
 
-    </div>
+
+        <!-- OUTPUT -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div class="card-title">
+
+                    <span class="circle green"></span>
+
+                    Live Output
+
+                </div>
 
 
-    <!-- OUTPUT -->
-    <div class="panel" style="margin-top:20px;">
+                <button id="clearOutput">
+                    Clear
+                </button>
 
-        <div class="panel-header">
-            <h2>🖥️ Python Output</h2>
+            </div>
+
+
+            <div
+                id="output"
+                class="output">
+
+                <div class="placeholder">
+                    Python output will appear here...
+                </div>
+
+            </div>
+
+
+            <div
+                id="inputBox"
+                class="input-box">
+
+                <input
+                    id="input"
+                    placeholder="Python is waiting for input..."
+                    autocomplete="off"
+                >
+
+                <button id="send">
+                    Enter
+                </button>
+
+            </div>
+
         </div>
 
-        <div id="output" class="output">
-            Program output will appear here...
-        </div>
+    </section>
+
+
+    <div class="footer">
+
+        <span>
+            Built by Ritik
+        </span>
+
+        <span>
+            Python runs in your browser
+        </span>
 
     </div>
 
-
-    <!-- LESSON -->
-    <div class="lesson">
-
-        <h2 id="lessonTitle">
-            📚 Variables
-        </h2>
-
-        <p id="lessonText">
-            A variable is a name used to store data.
-            Try changing the values in the editor and run the program.
-        </p>
-
-        <div class="example" id="lessonExample">name = "Ritik"
-age = 20
-
-print(name)
-print(age)
-<br>
-        <a href="/second.html" id="link-next">Goto Next Page</a>
-
-</div>
-
-    </div>
-
-</div>
+</main>
 
 
 <script>
 
-const codeEditor = document.getElementById("code");
-const output = document.getElementById("output");
-const variablesBox = document.getElementById("variables");
-const executionLines = document.getElementById("executionLines");
-const executionStatus = document.getElementById("executionStatus");
-const status = document.getElementById("status");
+/* =====================================================
+   SETTINGS
+===================================================== */
 
-const runBtn = document.getElementById("runBtn");
-const stepBtn = document.getElementById("stepBtn");
-const resetBtn = document.getElementById("resetBtn");
-
-let lines = [];
-let currentLine = 0;
-
-let variables = {};
+const MAX_RUNTIME = 10000;
 
 
-// -----------------------------
-// PARSE VALUE
-// -----------------------------
+/* =====================================================
+   STATE
+===================================================== */
 
-function parseValue(value) {
+let worker = null;
 
-    value = value.trim();
+let pythonReady = false;
 
-    if (
-        (value.startsWith('"') && value.endsWith('"')) ||
-        (value.startsWith("'") && value.endsWith("'"))
-    ) {
-        return value.slice(1, -1);
+let loading = false;
+
+let running = false;
+
+let waitingInput = false;
+
+let autoTimer = null;
+
+let safetyTimer = null;
+
+let executionId = 0;
+
+let workerStarting = false;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const code =
+    document.getElementById("code");
+
+const output =
+    document.getElementById("output");
+
+const inputBox =
+    document.getElementById("inputBox");
+
+const input =
+    document.getElementById("input");
+
+const autoRun =
+    document.getElementById("autoRun");
+
+const suggestionToggle =
+    document.getElementById("suggestions");
+
+const autocomplete =
+    document.getElementById("autocomplete");
+
+const statusText =
+    document.getElementById("statusText");
+
+const statusDot =
+    document.getElementById("statusDot");
+
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function status(
+    text,
+    type = "normal"
+){
+
+    statusText.textContent = text;
+
+
+    if(type === "error"){
+
+        statusDot.style.background =
+            "var(--red)";
+
+        statusDot.style.boxShadow =
+            "0 0 9px rgba(247,118,142,.5)";
+
     }
 
-    if (value === "True") {
-        return true;
+    else if(type === "waiting"){
+
+        statusDot.style.background =
+            "var(--yellow)";
+
+        statusDot.style.boxShadow =
+            "0 0 9px rgba(224,175,104,.5)";
+
     }
 
-    if (value === "False") {
-        return false;
+    else{
+
+        statusDot.style.background =
+            "var(--green)";
+
+        statusDot.style.boxShadow =
+            "0 0 9px rgba(123,216,143,.5)";
+
     }
 
-    if (value === "None") {
-        return null;
-    }
-
-    if (!isNaN(value) && value !== "") {
-        return Number(value);
-    }
-
-    // Simple list support
-    if (value.startsWith("[") && value.endsWith("]")) {
-
-        let inside = value.slice(1, -1);
-
-        if (inside.trim() === "") {
-            return [];
-        }
-
-        return inside.split(",").map(item => parseValue(item));
-    }
-
-    return value;
 }
 
 
-// -----------------------------
-// VARIABLE DISPLAY
-// -----------------------------
 
-function updateVariables() {
+/* =====================================================
+   OUTPUT
+===================================================== */
 
-    variablesBox.innerHTML = "";
+function clearOutput(){
 
-    const names = Object.keys(variables);
+    output.innerHTML =
+        `<div class="placeholder">
+            Python output will appear here...
+        </div>`;
 
-    if (names.length === 0) {
+}
 
-        variablesBox.innerHTML = `
-            <div class="variable">
-                <div class="variable-name">
-                    No variables yet
-                </div>
-            </div>
-        `;
+
+function printOutput(
+    text,
+    type = "normal"
+){
+
+    const placeholder =
+        output.querySelector(".placeholder");
+
+    if(placeholder){
+        placeholder.remove();
+    }
+
+
+    const line =
+        document.createElement("div");
+
+    line.className = type;
+
+    line.textContent = text;
+
+    output.appendChild(line);
+
+
+    output.scrollTop =
+        output.scrollHeight;
+
+}
+
+
+
+/* =====================================================
+   ERROR EXPLANATION
+===================================================== */
+
+function explainError(error){
+
+    let title = "Python Error";
+
+    let why =
+        "Python could not complete your program.";
+
+    let fix =
+        "Read the line shown in the traceback and check the code around it.";
+
+
+    if(error.includes("SyntaxError")){
+
+        title = "Syntax Error";
+
+        why =
+            "Python found code that does not follow Python's syntax.";
+
+        fix =
+            "Check brackets, quotes, colons (:), spelling and indentation.";
+
+    }
+
+    else if(error.includes("IndentationError")){
+
+        title = "Indentation Error";
+
+        why =
+            "Python uses indentation to know which code belongs inside a block.";
+
+        fix =
+            "Use consistent indentation. Usually 4 spaces are used.";
+
+    }
+
+    else if(error.includes("NameError")){
+
+        title = "Name Error";
+
+        why =
+            "Python cannot find the variable or function name you used.";
+
+        fix =
+            "Check the spelling or create the variable before using it.";
+
+    }
+
+    else if(error.includes("TypeError")){
+
+        title = "Type Error";
+
+        why =
+            "Two values are being used in a way their data types do not allow.";
+
+        fix =
+            "Check the types. You may need int(), float(), str() or another conversion.";
+
+    }
+
+    else if(error.includes("ValueError")){
+
+        title = "Value Error";
+
+        why =
+            "The value has the wrong form for the operation.";
+
+        fix =
+            "Check the value before converting or processing it.";
+
+    }
+
+    else if(error.includes("ZeroDivisionError")){
+
+        title = "Division by Zero";
+
+        why =
+            "Your program tried to divide a number by zero.";
+
+        fix =
+            "Make sure the value you divide by is not 0.";
+
+    }
+
+    else if(error.includes("IndexError")){
+
+        title = "Index Error";
+
+        why =
+            "You tried to access a list or string position that does not exist.";
+
+        fix =
+            "Check the length of the list and use a valid index.";
+
+    }
+
+    else if(error.includes("KeyError")){
+
+        title = "Key Error";
+
+        why =
+            "The dictionary key you requested does not exist.";
+
+        fix =
+            "Check the key spelling or use dictionary.get(key).";
+
+    }
+
+    else if(error.includes("AttributeError")){
+
+        title = "Attribute Error";
+
+        why =
+            "The object does not have the method or property you requested.";
+
+        fix =
+            "Check the object's type and the spelling of the method.";
+
+    }
+
+
+    printOutput(
+        "",
+        "error"
+    );
+
+    printOutput(
+        "❌ " + title,
+        "error"
+    );
+
+    printOutput(
+        "Why:",
+        "warning"
+    );
+
+    printOutput(
+        why
+    );
+
+    printOutput(
+        "How to fix:",
+        "warning"
+    );
+
+    printOutput(
+        fix
+    );
+
+}
+
+
+
+/* =====================================================
+   PYTHON WORKER
+===================================================== */
+
+function createWorker(){
+
+    if(worker){
+        worker.terminate();
+    }
+
+
+    pythonReady = false;
+
+    workerStarting = true;
+
+
+    const workerCode = `
+
+        let pyodide = null;
+
+        let inputResolver = null;
+
+
+        async function start(){
+
+            try{
+
+                self.postMessage({
+                    type:"loading"
+                });
+
+
+                const py =
+                    await import(
+                        "https://cdn.jsdelivr.net/pyodide/v0.27.2/full/pyodide.mjs"
+                    );
+
+
+                pyodide =
+                    await py.loadPyodide();
+
+
+                self.postMessage({
+                    type:"ready"
+                });
+
+            }
+
+            catch(error){
+
+                self.postMessage({
+                    type:"loadError",
+                    message:String(error)
+                });
+
+            }
+
+        }
+
+
+        self.onmessage =
+        async function(event){
+
+            const data =
+                event.data;
+
+
+            /* -----------------
+               INPUT
+            ----------------- */
+
+            if(
+                data.type === "input"
+            ){
+
+                if(inputResolver){
+
+                    inputResolver(
+                        data.value
+                    );
+
+                    inputResolver = null;
+
+                }
+
+                return;
+
+            }
+
+
+            /* -----------------
+               RUN
+            ----------------- */
+
+            if(
+                data.type === "run"
+            ){
+
+                if(!pyodide){
+
+                    self.postMessage({
+                        type:"error",
+                        message:
+                        "Python is still loading."
+                    });
+
+                    return;
+
+                }
+
+
+                try{
+
+                    pyodide.setStdout({
+
+                        batched(message){
+
+                            self.postMessage({
+                                type:"stdout",
+                                message:message
+                            });
+
+                        }
+
+                    });
+
+
+                    pyodide.setStderr({
+
+                        batched(message){
+
+                            self.postMessage({
+                                type:"stderr",
+                                message:message
+                            });
+
+                        }
+
+                    });
+
+
+                    /*
+                       Custom input()
+                    */
+
+                    globalThis.pythonInput =
+                    function(prompt){
+
+                        self.postMessage({
+                            type:"inputRequest",
+                            prompt:prompt || ""
+                        });
+
+
+                        return new Promise(
+                            resolve => {
+
+                                inputResolver =
+                                    resolve;
+
+                            }
+                        );
+
+                    };
+
+
+                    /*
+                       Install custom input
+                    */
+
+                    await pyodide.runPythonAsync(\`
+
+import builtins
+from js import pythonInput
+
+async def custom_input(prompt=""):
+    return await pythonInput(prompt)
+
+builtins.input = custom_input
+
+                    \`);
+
+
+                    await pyodide.runPythonAsync(
+                        data.code
+                    );
+
+
+                    self.postMessage({
+                        type:"finished"
+                    });
+
+                }
+
+                catch(error){
+
+                    self.postMessage({
+                        type:"pythonError",
+                        message:String(error)
+                    });
+
+                }
+
+            }
+
+        };
+
+
+        start();
+
+    `;
+
+
+    const blob =
+        new Blob(
+            [workerCode],
+            {
+                type:
+                "application/javascript"
+            }
+        );
+
+
+    worker =
+        new Worker(
+            URL.createObjectURL(blob),
+            {
+                type:"module"
+            }
+        );
+
+
+    worker.onmessage =
+        handleWorkerMessage;
+
+
+    worker.onerror =
+        function(error){
+
+            running = false;
+
+            status(
+                "Worker Error",
+                "error"
+            );
+
+            printOutput(
+                "Python worker stopped unexpectedly.",
+                "error"
+            );
+
+        };
+
+}
+
+
+
+/* =====================================================
+   WORKER MESSAGES
+===================================================== */
+
+function handleWorkerMessage(event){
+
+    const data =
+        event.data;
+
+
+    if(data.type === "loading"){
+
+        loading = true;
+
+        status(
+            "Loading Python...",
+            "waiting"
+        );
 
         return;
     }
 
-    names.forEach(name => {
 
-        const value = variables[name];
+    if(data.type === "ready"){
 
-        let type = typeof value;
+        loading = false;
 
-        if (Array.isArray(value)) {
-            type = "list";
+        pythonReady = true;
+
+        workerStarting = false;
+
+        status("Ready");
+
+        return;
+    }
+
+
+    if(data.type === "loadError"){
+
+        loading = false;
+
+        pythonReady = false;
+
+        status(
+            "Load Error",
+            "error"
+        );
+
+        printOutput(
+            data.message,
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(data.type === "stdout"){
+
+        printOutput(
+            data.message,
+            "normal"
+        );
+
+        return;
+    }
+
+
+    if(data.type === "stderr"){
+
+        printOutput(
+            data.message,
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(data.type === "inputRequest"){
+
+        waitingInput = true;
+
+        inputBox.classList.add(
+            "active"
+        );
+
+        input.focus();
+
+
+        if(data.prompt){
+
+            printOutput(
+                data.prompt,
+                "system"
+            );
+
         }
 
-        const card = document.createElement("div");
+        return;
+    }
 
-        card.className = "variable";
 
-        card.innerHTML = `
-            <div class="variable-name">
-                ${name}
-            </div>
+    if(data.type === "finished"){
 
-            <div class="variable-value">
-                ${formatValue(value)}
-            </div>
+        running = false;
 
-            <div class="variable-type">
-                type: ${type}
-            </div>
-        `;
+        waitingInput = false;
 
-        variablesBox.appendChild(card);
+        inputBox.classList.remove(
+            "active"
+        );
+
+        clearSafetyTimer();
+
+        status("Finished");
+
+        printOutput(
+            "✓ Program finished.",
+            "success"
+        );
+
+        return;
+    }
+
+
+    if(data.type === "pythonError"){
+
+        running = false;
+
+        waitingInput = false;
+
+        inputBox.classList.remove(
+            "active"
+        );
+
+        clearSafetyTimer();
+
+        status(
+            "Error",
+            "error"
+        );
+
+        explainError(
+            data.message
+        );
+
+        return;
+    }
+
+
+    if(data.type === "error"){
+
+        running = false;
+
+        status(
+            "Error",
+            "error"
+        );
+
+        printOutput(
+            data.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   RUN
+===================================================== */
+
+async function runPython(){
+
+    executionId++;
+
+    const myExecution =
+        executionId;
+
+
+    clearSafetyTimer();
+
+
+    /*
+       Cancel old program
+    */
+
+    if(running){
+
+        running = false;
+
+        waitingInput = false;
+
+        inputBox.classList.remove(
+            "active"
+        );
+
+    }
+
+
+    const source =
+        code.value;
+
+
+    if(!source.trim()){
+
+        clearOutput();
+
+        printOutput(
+            "Write some Python code first.",
+            "warning"
+        );
+
+        return;
+
+    }
+
+
+    clearOutput();
+
+
+    status(
+        "Preparing...",
+        "waiting"
+    );
+
+
+    /*
+       Python is already loaded.
+       Therefore execution starts
+       immediately.
+    */
+
+    if(
+        !pythonReady
+    ){
+
+        printOutput(
+            "Python is still loading...",
+            "system"
+        );
+
+
+        /*
+           Wait until ready
+        */
+
+        await waitForPython();
+
+
+        if(
+            myExecution !== executionId
+        ){
+            return;
+        }
+
+    }
+
+
+    if(
+        !pythonReady ||
+        !worker
+    ){
+
+        printOutput(
+            "Python could not start.",
+            "error"
+        );
+
+        status(
+            "Error",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    running = true;
+
+
+    status(
+        "Running",
+        "waiting"
+    );
+
+
+    printOutput(
+        "▶ Running...",
+        "system"
+    );
+
+
+    worker.postMessage({
+
+        type:"run",
+
+        code:source
 
     });
 
+
+    startSafetyTimer();
+
 }
 
 
-// -----------------------------
-// FORMAT VALUE
-// -----------------------------
 
-function formatValue(value) {
+/* =====================================================
+   WAIT FOR PYTHON
+===================================================== */
 
-    if (typeof value === "string") {
-        return `"${value}"`;
-    }
+function waitForPython(){
 
-    if (Array.isArray(value)) {
-        return "[" + value.map(formatValue).join(", ") + "]";
-    }
+    return new Promise(
+        resolve => {
 
-    if (value === null) {
-        return "None";
-    }
-
-    return String(value);
-}
+            const start =
+                Date.now();
 
 
-// -----------------------------
-// SIMPLE EXPRESSION
-// -----------------------------
+            const timer =
+                setInterval(
+                    function(){
 
-function evaluateExpression(expression) {
+                        if(
+                            pythonReady
+                        ){
 
-    expression = expression.trim();
+                            clearInterval(
+                                timer
+                            );
 
-    // direct variable
-    if (variables.hasOwnProperty(expression)) {
-        return variables[expression];
-    }
+                            resolve();
 
-    // string
-    if (
-        (expression.startsWith('"') && expression.endsWith('"')) ||
-        (expression.startsWith("'") && expression.endsWith("'"))
-    ) {
-        return expression.slice(1, -1);
-    }
+                        }
 
-    // boolean
-    if (expression === "True") return true;
-    if (expression === "False") return false;
 
-    // number
-    if (!isNaN(expression)) {
-        return Number(expression);
-    }
+                        if(
+                            Date.now() -
+                            start >
+                            15000
+                        ){
 
-    // arithmetic
-    try {
+                            clearInterval(
+                                timer
+                            );
 
-        let jsExpression = expression;
+                            resolve();
 
-        Object.keys(variables).forEach(name => {
+                        }
 
-            const value = variables[name];
-
-            if (
-                typeof value === "number"
-            ) {
-                const regex = new RegExp(
-                    "\\b" + name + "\\b",
-                    "g"
+                    },
+                    50
                 );
 
-                jsExpression =
-                    jsExpression.replace(regex, value);
-            }
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   STOP
+===================================================== */
+
+function stopPython(
+    message = "■ Program stopped."
+){
+
+    executionId++;
+
+
+    clearSafetyTimer();
+
+
+    if(worker){
+
+        worker.terminate();
+
+        worker = null;
+
+    }
+
+
+    pythonReady = false;
+
+    running = false;
+
+    waitingInput = false;
+
+
+    inputBox.classList.remove(
+        "active"
+    );
+
+
+    status(
+        "Stopped",
+        "error"
+    );
+
+
+    printOutput(
+        message,
+        "error"
+    );
+
+
+    /*
+       IMPORTANT:
+       Start the Python engine again
+       immediately.
+
+       User doesn't have to press
+       anything.
+    */
+
+    createWorker();
+
+}
+
+
+
+/* =====================================================
+   SAFETY TIMER
+===================================================== */
+
+function startSafetyTimer(){
+
+    clearSafetyTimer();
+
+
+    safetyTimer =
+        setTimeout(
+            function(){
+
+                if(
+                    running
+                ){
+
+                    stopPython(
+                        "⚠ Program automatically stopped after 10 seconds."
+                    );
+
+                }
+
+            },
+            MAX_RUNTIME
+        );
+
+}
+
+
+function clearSafetyTimer(){
+
+    if(
+        safetyTimer
+    ){
+
+        clearTimeout(
+            safetyTimer
+        );
+
+        safetyTimer = null;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   AUTO RUN
+===================================================== */
+
+function scheduleAutoRun(){
+
+    if(autoTimer){
+
+        clearTimeout(
+            autoTimer
+        );
+
+        autoTimer = null;
+
+    }
+
+
+    const delay =
+        Number(
+            autoRun.value
+        );
+
+
+    if(
+        delay === 0
+    ){
+
+        status(
+            pythonReady ?
+            "Ready" :
+            "Loading Python...",
+            pythonReady ?
+            "normal" :
+            "waiting"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        !code.value.trim()
+    ){
+
+        return;
+
+    }
+
+
+    let remaining =
+        Math.ceil(
+            delay / 1000
+        );
+
+
+    status(
+        "Waiting " +
+        remaining +
+        "s...",
+        "waiting"
+    );
+
+
+    const started =
+        Date.now();
+
+
+    autoTimer =
+        setTimeout(
+            function(){
+
+                /*
+                   If user has changed the code,
+                   this timer would have already
+                   been cancelled.
+                */
+
+                if(
+                    code.value.trim()
+                ){
+
+                    runPython();
+
+                }
+
+            },
+            delay
+        );
+
+}
+
+
+
+/* =====================================================
+   CODE CHANGE
+===================================================== */
+
+code.addEventListener(
+    "input",
+    function(){
+
+        /*
+           If program is running,
+           automatically stop old execution.
+
+           User can simply continue typing.
+        */
+
+        if(running){
+
+            stopPython(
+                "Previous run stopped. Waiting for your new code..."
+            );
+
+        }
+
+
+        updateAutocomplete();
+
+
+        /*
+           Auto run
+        */
+
+        scheduleAutoRun();
+
+    }
+);
+
+
+
+/* =====================================================
+   AUTO RUN CHANGE
+===================================================== */
+
+autoRun.addEventListener(
+    "change",
+    function(){
+
+        if(autoTimer){
+
+            clearTimeout(
+                autoTimer
+            );
+
+            autoTimer = null;
+
+        }
+
+
+        scheduleAutoRun();
+
+    }
+);
+
+
+
+/* =====================================================
+   INPUT SEND
+===================================================== */
+
+function sendInput(){
+
+    if(
+        !waitingInput
+    ){
+
+        return;
+
+    }
+
+
+    const value =
+        input.value;
+
+
+    printOutput(
+        "> " + value,
+        "normal"
+    );
+
+
+    if(worker){
+
+        worker.postMessage({
+
+            type:"input",
+
+            value:value
 
         });
 
-        if (/^[0-9+\-*/().\s]+$/.test(jsExpression)) {
-            return Function(
-                "return " + jsExpression
-            )();
-        }
-
-    } catch (error) {
-        return expression;
     }
 
-    return expression;
-}
 
+    input.value = "";
 
-// -----------------------------
-// RUN PYTHON-LIKE CODE
-// -----------------------------
+    waitingInput = false;
 
-function runCode() {
-
-    const code = codeEditor.value;
-
-    lines = code.split("\n");
-
-    variables = {};
-
-    currentLine = lines.length;
-
-    let result = [];
-
-    executionLines.innerHTML = "";
-
-    lines.forEach((line, index) => {
-
-        const trimmed = line.trim();
-
-        const lineDiv =
-            document.createElement("div");
-
-        lineDiv.className = "line";
-
-        lineDiv.textContent =
-            `${index + 1}  ${line}`;
-
-        executionLines.appendChild(lineDiv);
-
-
-        if (trimmed === "") {
-            return;
-        }
-
-
-        // COMMENT
-        if (trimmed.startsWith("#")) {
-            return;
-        }
-
-
-        // VARIABLE ASSIGNMENT
-        const assignment =
-            trimmed.match(
-                /^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)$/
-            );
-
-
-        if (assignment) {
-
-            const variableName =
-                assignment[1];
-
-            const expression =
-                assignment[2];
-
-            variables[variableName] =
-                evaluateExpression(expression);
-
-            return;
-        }
-
-
-        // PRINT
-        const printMatch =
-            trimmed.match(
-                /^print\s*\((.*)\)$/
-            );
-
-
-        if (printMatch) {
-
-            let expression =
-                printMatch[1];
-
-            // Multiple values
-            const parts =
-                expression.split(",");
-
-            const values =
-                parts.map(part =>
-                    evaluateExpression(part)
-                );
-
-            result.push(
-                values.map(formatValue).join(" ")
-            );
-
-            return;
-        }
-
-
-        // Unsupported
-        result.push(
-            "⚠️ Simulator cannot execute: " +
-            trimmed
-        );
-
-    });
-
-
-    output.textContent =
-        result.join("\n") ||
-        "(No output)";
-
-    updateVariables();
-
-    executionStatus.textContent =
-        "✅ Program executed successfully.";
-
-    status.textContent =
-        "Completed";
+    inputBox.classList.remove(
+        "active"
+    );
 
 }
-
-
-// -----------------------------
-// STEP MODE
-// -----------------------------
-
-function startStepMode() {
-
-    lines = codeEditor.value.split("\n");
-
-    currentLine = 0;
-
-    variables = {};
-
-    output.textContent = "";
-
-    executionLines.innerHTML = "";
-
-    lines.forEach((line, index) => {
-
-        const div =
-            document.createElement("div");
-
-        div.className = "line";
-
-        div.textContent =
-            `${index + 1}  ${line}`;
-
-        executionLines.appendChild(div);
-
-    });
-
-    updateVariables();
-
-    status.textContent = "Step Mode";
-
-    executionStatus.textContent =
-        "Press Step to execute one line at a time.";
-
-    highlightLine();
-
-}
-
-
-// -----------------------------
-// EXECUTE ONE LINE
-// -----------------------------
-
-function executeCurrentLine() {
-
-    if (currentLine >= lines.length) {
-
-        executionStatus.textContent =
-            "🎉 Program finished.";
-
-        status.textContent =
-            "Finished";
-
-        return;
-    }
-
-    const rawLine =
-        lines[currentLine];
-
-    const trimmed =
-        rawLine.trim();
-
-
-    // Skip blank/comment
-    if (
-        trimmed === "" ||
-        trimmed.startsWith("#")
-    ) {
-
-        currentLine++;
-
-        highlightLine();
-
-        return;
-    }
-
-
-    // assignment
-    const assignment =
-        trimmed.match(
-            /^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)$/
-        );
-
-
-    if (assignment) {
-
-        const name =
-            assignment[1];
-
-        const expression =
-            assignment[2];
-
-        variables[name] =
-            evaluateExpression(expression);
-
-        updateVariables();
-
-    }
-
-
-    // print
-    const printMatch =
-        trimmed.match(
-            /^print\s*\((.*)\)$/
-        );
-
-
-    if (printMatch) {
-
-        const expression =
-            printMatch[1];
-
-        const parts =
-            expression.split(",");
-
-        const values =
-            parts.map(part =>
-                evaluateExpression(part)
-            );
-
-        output.textContent +=
-            values.map(formatValue).join(" ") +
-            "\n";
-
-    }
-
-
-    currentLine++;
-
-    highlightLine();
-
-}
-
-
-// -----------------------------
-// HIGHLIGHT CURRENT LINE
-// -----------------------------
-
-function highlightLine() {
-
-    const allLines =
-        executionLines.querySelectorAll(".line");
-
-    allLines.forEach((line, index) => {
-
-        line.classList.remove(
-            "current",
-            "done"
-        );
-
-        if (index < currentLine) {
-            line.classList.add("done");
-        }
-
-        if (index === currentLine) {
-            line.classList.add("current");
-        }
-
-    });
-
-
-    if (currentLine < lines.length) {
-
-        executionStatus.textContent =
-            `Executing line ${currentLine + 1}...`;
-
-    }
-
-}
-
-
-// -----------------------------
-// RESET
-// -----------------------------
-
-function resetSimulator() {
-
-    variables = {};
-
-    lines = [];
-
-    currentLine = 0;
-
-    output.textContent =
-        "Program output will appear here...";
-
-    variablesBox.innerHTML = `
-        <div class="variable">
-            <div class="variable-name">
-                No variables yet
-            </div>
-        </div>
-    `;
-
-    executionLines.innerHTML =
-        "Run your Python code to see each line.";
-
-    executionStatus.textContent =
-        "Press Run Code to start the simulation.";
-
-    status.textContent =
-        "Ready";
-
-}
-
-
-// -----------------------------
-// BUTTON EVENTS
-// -----------------------------
-
-runBtn.addEventListener(
-    "click",
-    runCode
-);
-
-
-stepBtn.addEventListener(
-    "click",
-    function () {
-
-        if (currentLine === 0) {
-            startStepMode();
-            return;
-        }
-
-        executeCurrentLine();
-
-    }
-);
-
-
-resetBtn.addEventListener(
-    "click",
-    resetSimulator
-);
-
-
-// -----------------------------
-// TOPIC SYSTEM
-// -----------------------------
-
-const topics = {
-
-    variables: {
-
-        title: "📚 Variables",
-
-        text:
-            "A variable stores a value. " +
-            "Try changing name, age or adding another variable.",
-
-        code:
-`name = "Ritik"
-age = 20
-
-print(name)
-print(age)`
-
-    },
-
-
-    operators: {
-
-        title: "➗ Operators",
-
-        text:
-            "Operators allow Python to perform calculations.",
-
-        code:
-`a = 10
-b = 5
-
-sum = a + b
-multiply = a * b
-
-print(sum)
-print(multiply)`
-
-    },
-
-
-    condition: {
-
-        title: "🔀 If / Else",
-
-        text:
-            "Conditions allow your program to make decisions.",
-
-        code:
-`age = 20
-
-if age >= 18:
-    print("Adult")
-else:
-    print("Minor")`
-
-    },
-
-
-    loop: {
-
-        title: "🔁 Loops",
-
-        text:
-            "Loops repeat instructions. This simulator focuses on understanding the values and execution flow.",
-
-        code:
-`number = 1
-print(number)
-
-number = 2
-print(number)
-
-number = 3
-print(number)`
-
-    },
-
-
-    list: {
-
-        title: "📋 Lists",
-
-        text:
-            "A list can store multiple values inside one variable.",
-
-        code:
-`fruits = ["Apple", "Banana", "Mango"]
-
-print(fruits)`
-
-    },
-
-
-    function: {
-
-        title: "⚙️ Functions",
-
-        text:
-            "Functions allow you to group reusable instructions.",
-
-        code:
-`name = "Ritik"
-
-print(name)`
-
-    }
-
-};
 
 
 document
-    .querySelectorAll(".topic")
-    .forEach(topic => {
+.getElementById("send")
+.addEventListener(
+    "click",
+    sendInput
+);
 
-        topic.addEventListener(
-            "click",
-            function () {
 
-                document
-                    .querySelectorAll(".topic")
-                    .forEach(item =>
-                        item.classList.remove("active")
+input.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Enter"
+        ){
+
+            event.preventDefault();
+
+            sendInput();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   PYTHON AUTOCOMPLETE
+===================================================== */
+
+const keywords = [
+
+    {
+        word:"print",
+        insert:"print()",
+        type:"function"
+    },
+
+    {
+        word:"input",
+        insert:"input()",
+        type:"function"
+    },
+
+    {
+        word:"range",
+        insert:"range()",
+        type:"function"
+    },
+
+    {
+        word:"len",
+        insert:"len()",
+        type:"function"
+    },
+
+    {
+        word:"str",
+        insert:"str()",
+        type:"function"
+    },
+
+    {
+        word:"int",
+        insert:"int()",
+        type:"function"
+    },
+
+    {
+        word:"float",
+        insert:"float()",
+        type:"function"
+    },
+
+    {
+        word:"list",
+        insert:"list()",
+        type:"function"
+    },
+
+    {
+        word:"dict",
+        insert:"dict()",
+        type:"function"
+    },
+
+    {
+        word:"sum",
+        insert:"sum()",
+        type:"function"
+    },
+
+    {
+        word:"max",
+        insert:"max()",
+        type:"function"
+    },
+
+    {
+        word:"min",
+        insert:"min()",
+        type:"function"
+    },
+
+    {
+        word:"for",
+        insert:"for ",
+        type:"keyword"
+    },
+
+    {
+        word:"while",
+        insert:"while ",
+        type:"keyword"
+    },
+
+    {
+        word:"if",
+        insert:"if ",
+        type:"keyword"
+    },
+
+    {
+        word:"elif",
+        insert:"elif ",
+        type:"keyword"
+    },
+
+    {
+        word:"else",
+        insert:"else:",
+        type:"keyword"
+    },
+
+    {
+        word:"def",
+        insert:"def ",
+        type:"keyword"
+    },
+
+    {
+        word:"return",
+        insert:"return ",
+        type:"keyword"
+    },
+
+    {
+        word:"class",
+        insert:"class ",
+        type:"keyword"
+    },
+
+    {
+        word:"import",
+        insert:"import ",
+        type:"keyword"
+    },
+
+    {
+        word:"from",
+        insert:"from ",
+        type:"keyword"
+    },
+
+    {
+        word:"True",
+        insert:"True",
+        type:"value"
+    },
+
+    {
+        word:"False",
+        insert:"False",
+        type:"value"
+    },
+
+    {
+        word:"None",
+        insert:"None",
+        type:"value"
+    },
+
+    {
+        word:"and",
+        insert:"and ",
+        type:"operator"
+    },
+
+    {
+        word:"or",
+        insert:"or ",
+        type:"operator"
+    },
+
+    {
+        word:"not",
+        insert:"not ",
+        type:"operator"
+    }
+
+];
+
+
+let suggestionItems = [];
+
+let selectedSuggestion = 0;
+
+
+
+/* =====================================================
+   GET CURRENT WORD
+===================================================== */
+
+function getCurrentWord(){
+
+    const cursor =
+        code.selectionStart;
+
+
+    const before =
+        code.value.slice(
+            0,
+            cursor
+        );
+
+
+    const match =
+        before.match(
+            /[A-Za-z_][A-Za-z0-9_]*$/
+        );
+
+
+    return {
+
+        word:
+            match ?
+            match[0] :
+            "",
+
+        start:
+            match ?
+            cursor -
+            match[0].length :
+            cursor
+
+    };
+
+}
+
+
+
+/* =====================================================
+   UPDATE AUTOCOMPLETE
+===================================================== */
+
+function updateAutocomplete(){
+
+    if(
+        !suggestionToggle.checked
+    ){
+
+        hideAutocomplete();
+
+        return;
+
+    }
+
+
+    const current =
+        getCurrentWord();
+
+
+    const word =
+        current.word.toLowerCase();
+
+
+    if(
+        word.length < 1
+    ){
+
+        hideAutocomplete();
+
+        return;
+
+    }
+
+
+    suggestionItems =
+        keywords.filter(
+            item =>
+                item.word
+                .toLowerCase()
+                .startsWith(word)
+        );
+
+
+    if(
+        suggestionItems.length === 0
+    ){
+
+        hideAutocomplete();
+
+        return;
+
+    }
+
+
+    selectedSuggestion = 0;
+
+
+    autocomplete.innerHTML = "";
+
+
+    suggestionItems
+    .forEach(
+        function(item,index){
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "suggestion" +
+                (
+                    index === 0 ?
+                    " selected" :
+                    ""
+                );
+
+
+            div.innerHTML = `
+                <span class="suggestion-name">
+                    ${item.insert}
+                </span>
+
+                <span class="suggestion-type">
+                    ${item.type}
+                </span>
+            `;
+
+
+            div.addEventListener(
+                "mousedown",
+                function(event){
+
+                    event.preventDefault();
+
+                    insertSuggestion(
+                        index
                     );
 
-                this.classList.add("active");
+                }
+            );
 
-                const topicName =
-                    this.dataset.topic;
 
-                const data =
-                    topics[topicName];
+            autocomplete.appendChild(
+                div
+            );
 
-                document.getElementById(
-                    "lessonTitle"
-                ).textContent = data.title;
+        }
+    );
 
-                document.getElementById(
-                    "lessonText"
-                ).textContent = data.text;
 
-                document.getElementById(
-                    "lessonExample"
-                ).textContent = data.code;
+    positionAutocomplete();
 
-                codeEditor.value =
-                    data.code;
+    autocomplete.classList.add(
+        "show"
+    );
 
-                resetSimulator();
+}
 
-            });
 
-    });
+
+/* =====================================================
+   POSITION AUTOCOMPLETE
+===================================================== */
+
+function positionAutocomplete(){
+
+    /*
+       Simple fixed position inside editor.
+       Keeps the popup visible without
+       interfering with typing.
+    */
+
+    autocomplete.style.left =
+        "16px";
+
+    autocomplete.style.bottom =
+        "12px";
+
+}
+
+
+
+/* =====================================================
+   HIDE
+===================================================== */
+
+function hideAutocomplete(){
+
+    autocomplete.classList.remove(
+        "show"
+    );
+
+}
+
+
+
+/* =====================================================
+   INSERT SUGGESTION
+===================================================== */
+
+function insertSuggestion(index){
+
+    const item =
+        suggestionItems[index];
+
+
+    if(!item){
+        return;
+    }
+
+
+    const current =
+        getCurrentWord();
+
+
+    const before =
+        code.value.slice(
+            0,
+            current.start
+        );
+
+
+    const after =
+        code.value.slice(
+            code.selectionStart
+        );
+
+
+    code.value =
+        before +
+        item.insert +
+        after;
+
+
+    const newCursor =
+        current.start +
+        item.insert.length;
+
+
+    code.selectionStart =
+        newCursor;
+
+    code.selectionEnd =
+        newCursor;
+
+
+    hideAutocomplete();
+
+
+    code.focus();
+
+
+    /*
+       Schedule auto-run again
+    */
+
+    scheduleAutoRun();
+
+}
+
+
+
+/* =====================================================
+   AUTOCOMPLETE KEYBOARD
+===================================================== */
+
+code.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            autocomplete.classList.contains(
+                "show"
+            )
+        ){
+
+            /*
+               DOWN
+            */
+
+            if(
+                event.key === "ArrowDown"
+            ){
+
+                event.preventDefault();
+
+
+                selectedSuggestion =
+                    (
+                        selectedSuggestion + 1
+                    ) %
+                    suggestionItems.length;
+
+
+                refreshSelection();
+
+                return;
+
+            }
+
+
+            /*
+               UP
+            */
+
+            if(
+                event.key === "ArrowUp"
+            ){
+
+                event.preventDefault();
+
+
+                selectedSuggestion =
+                    (
+                        selectedSuggestion -
+                        1 +
+                        suggestionItems.length
+                    ) %
+                    suggestionItems.length;
+
+
+                refreshSelection();
+
+                return;
+
+            }
+
+
+            /*
+               ENTER
+            */
+
+            if(
+                event.key === "Enter"
+            ){
+
+                event.preventDefault();
+
+                insertSuggestion(
+                    selectedSuggestion
+                );
+
+                return;
+
+            }
+
+
+            /*
+               TAB
+            */
+
+            if(
+                event.key === "Tab"
+            ){
+
+                event.preventDefault();
+
+                insertSuggestion(
+                    selectedSuggestion
+                );
+
+                return;
+
+            }
+
+
+            /*
+               ESC
+            */
+
+            if(
+                event.key === "Escape"
+            ){
+
+                hideAutocomplete();
+
+                return;
+
+            }
+
+        }
+
+
+        /*
+           Ctrl + Enter
+        */
+
+        if(
+            event.ctrlKey &&
+            event.key === "Enter"
+        ){
+
+            event.preventDefault();
+
+            if(autoTimer){
+
+                clearTimeout(
+                    autoTimer
+                );
+
+                autoTimer = null;
+
+            }
+
+            runPython();
+
+            return;
+
+        }
+
+
+        /*
+           TAB without suggestion
+        */
+
+        if(
+            event.key === "Tab"
+        ){
+
+            event.preventDefault();
+
+
+            const start =
+                this.selectionStart;
+
+            const end =
+                this.selectionEnd;
+
+
+            this.value =
+                this.value.slice(
+                    0,
+                    start
+                ) +
+                "    " +
+                this.value.slice(
+                    end
+                );
+
+
+            this.selectionStart =
+                this.selectionEnd =
+                start + 4;
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   REFRESH SELECTED SUGGESTION
+===================================================== */
+
+function refreshSelection(){
+
+    const items =
+        autocomplete.querySelectorAll(
+            ".suggestion"
+        );
+
+
+    items.forEach(
+        function(item,index){
+
+            item.classList.toggle(
+                "selected",
+                index ===
+                selectedSuggestion
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   SUGGESTION TOGGLE
+===================================================== */
+
+suggestionToggle.addEventListener(
+    "change",
+    function(){
+
+        if(
+            this.checked
+        ){
+
+            updateAutocomplete();
+
+        }
+        else{
+
+            hideAutocomplete();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   CLEAR CODE
+===================================================== */
+
+document
+.getElementById("clearCode")
+.addEventListener(
+    "click",
+    function(){
+
+        executionId++;
+
+
+        if(autoTimer){
+
+            clearTimeout(
+                autoTimer
+            );
+
+            autoTimer = null;
+
+        }
+
+
+        if(running){
+
+            stopPython(
+                "Program stopped."
+            );
+
+        }
+
+
+        code.value = "";
+
+        clearOutput();
+
+        hideAutocomplete();
+
+        code.focus();
+
+    }
+);
+
+
+
+/* =====================================================
+   CLEAR OUTPUT
+===================================================== */
+
+document
+.getElementById("clearOutput")
+.addEventListener(
+    "click",
+    clearOutput
+);
+
+
+
+/* =====================================================
+   COPY
+===================================================== */
+
+document
+.getElementById("copy")
+.addEventListener(
+    "click",
+    async function(){
+
+        try{
+
+            await navigator.clipboard.writeText(
+                code.value
+            );
+
+
+            const old =
+                this.textContent;
+
+
+            this.textContent =
+                "Copied ✓";
+
+
+            setTimeout(
+                () => {
+
+                    this.textContent =
+                        old;
+
+                },
+                1000
+            );
+
+        }
+        catch(error){
+
+            printOutput(
+                "Could not copy code.",
+                "error"
+            );
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+document
+.getElementById("run")
+.addEventListener(
+    "click",
+    function(){
+
+        if(autoTimer){
+
+            clearTimeout(
+                autoTimer
+            );
+
+            autoTimer = null;
+
+        }
+
+        runPython();
+
+    }
+);
+
+
+document
+.getElementById("stop")
+.addEventListener(
+    "click",
+    function(){
+
+        stopPython();
+
+    }
+);
+
+
+
+/* =====================================================
+   CLOSE AUTOCOMPLETE WHEN CLICKING OUTSIDE
+===================================================== */
+
+document.addEventListener(
+    "mousedown",
+    function(event){
+
+        if(
+            !event.target.closest(
+                ".editor"
+            )
+        ){
+
+            hideAutocomplete();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   START PYTHON ENGINE ONCE
+===================================================== */
+
+createWorker();
 
 </script>
 
