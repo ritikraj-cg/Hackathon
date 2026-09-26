@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Ritik's Python Lab</title>
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -13,11 +15,13 @@
 }
 
 :root{
+
     --bg:#0d1117;
     --panel:#151b24;
     --panel2:#1b222d;
     --editor:#10151d;
     --output:#0b1016;
+
     --border:#293241;
 
     --text:#e6ebf2;
@@ -29,10 +33,19 @@
     --yellow:#e0af68;
     --purple:#bb9af7;
     --cyan:#73daca;
+
+    --code-text:#dce4ef;
+    --output-text:#d9e1ed;
+    --input-text:#ffffff;
+
+    --code-size:13px;
+    --output-size:12px;
 }
 
 body{
+
     min-height:100vh;
+
     background:
         radial-gradient(
             circle at 10% 0%,
@@ -47,155 +60,264 @@ body{
         var(--bg);
 
     color:var(--text);
-    font-family:Inter,"Segoe UI",Arial,sans-serif;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
 }
 
-button,
-select,
-input,
-textarea{
-    font:inherit;
-}
 
-/* ================= HEADER ================= */
+/* =====================================================
+   HEADER
+===================================================== */
 
 header{
-    height:64px;
+
+    height:60px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
-    padding:0 24px;
+    padding:0 22px;
 
-    background:rgba(13,17,23,.94);
+    background:rgba(13,17,23,.96);
+
     border-bottom:1px solid var(--border);
 
     position:sticky;
+
     top:0;
-    z-index:50;
+
+    z-index:100;
+
 }
 
 .brand{
+
     display:flex;
+
     align-items:center;
-    gap:11px;
+
+    gap:10px;
+
 }
 
 .logo{
-    width:36px;
-    height:36px;
+
+    width:34px;
+    height:34px;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
-    border-radius:10px;
+    border-radius:9px;
 
     background:#202938;
+
     color:var(--yellow);
 
-    font:bold 16px monospace;
+    font:bold 15px monospace;
+
 }
 
 .brand h1{
-    font-size:16px;
+
+    font-size:15px;
+
     font-weight:650;
+
 }
 
 .brand p{
+
     color:var(--muted);
-    font-size:11px;
+
+    font-size:10px;
+
     margin-top:2px;
+
+}
+
+
+/* HEADER RIGHT */
+
+.header-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
 }
 
 .status{
+
     display:flex;
+
     align-items:center;
-    gap:7px;
+
+    gap:6px;
 
     color:var(--muted);
-    font-size:11px;
+
+    font-size:10px;
+
 }
 
 .status-dot{
+
     width:7px;
+
     height:7px;
+
     border-radius:50%;
+
     background:var(--green);
-    box-shadow:0 0 9px rgba(123,216,143,.5);
+
+    box-shadow:
+        0 0 9px rgba(123,216,143,.5);
+
 }
 
-/* ================= MAIN ================= */
 
-main{
-    width:min(1400px,94%);
-    margin:18px auto 25px;
-}
+/* SETTINGS BUTTON */
 
-/* ================= TOOLBAR ================= */
+.settings-btn{
 
-.toolbar{
-    height:45px;
+    width:32px;
+
+    height:32px;
+
+    padding:0;
 
     display:flex;
+
     align-items:center;
+
+    justify-content:center;
+
+    font-size:15px;
+
+    border-radius:7px;
+
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+main{
+
+    width:min(1450px,96%);
+
+    margin:12px auto 18px;
+
+}
+
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.toolbar{
+
+    height:43px;
+
+    display:flex;
+
+    align-items:center;
+
     justify-content:space-between;
 
-    padding:0 11px;
+    padding:0 10px;
 
     background:var(--panel);
 
     border:1px solid var(--border);
-    border-radius:10px;
 
-    margin-bottom:10px;
+    border-radius:9px;
+
+    margin-bottom:9px;
+
 }
 
 .toolbar-group{
+
     display:flex;
+
     align-items:center;
-    gap:8px;
+
+    gap:7px;
+
 }
 
 .label{
+
     color:var(--muted);
-    font-size:11px;
+
+    font-size:10px;
+
 }
 
 select{
-    height:29px;
 
-    padding:0 9px;
+    height:27px;
+
+    padding:0 8px;
 
     background:#202733;
+
     color:var(--text);
 
     border:1px solid var(--border);
-    border-radius:7px;
+
+    border-radius:6px;
 
     outline:none;
 
-    font-size:11px;
+    font-size:10px;
+
 }
 
 select:focus{
+
     border-color:var(--blue);
+
 }
 
-/* Toggle */
+
+/* TOGGLE */
 
 .toggle{
+
     position:relative;
-    width:34px;
-    height:19px;
+
+    width:33px;
+
+    height:18px;
+
 }
 
 .toggle input{
+
     display:none;
+
 }
 
 .slider{
+
     position:absolute;
+
     inset:0;
 
     background:#29313d;
@@ -203,17 +325,21 @@ select:focus{
     border-radius:20px;
 
     cursor:pointer;
+
 }
 
 .slider:before{
+
     content:"";
 
     position:absolute;
 
-    width:13px;
-    height:13px;
+    width:12px;
+
+    height:12px;
 
     left:3px;
+
     top:3px;
 
     border-radius:50%;
@@ -221,65 +347,97 @@ select:focus{
     background:#9da7b6;
 
     transition:.18s;
+
 }
 
 .toggle input:checked + .slider{
+
     background:#304a3a;
+
 }
 
 .toggle input:checked + .slider:before{
+
     transform:translateX(15px);
+
     background:var(--green);
+
 }
 
-/* ================= WORKSPACE ================= */
+
+/* =====================================================
+   WORKSPACE
+===================================================== */
 
 .workspace{
+
     display:grid;
+
     grid-template-columns:1fr 1fr;
-    gap:10px;
+
+    gap:9px;
+
 }
 
 .card{
+
     min-width:0;
 
     background:var(--panel);
 
     border:1px solid var(--border);
-    border-radius:12px;
+
+    border-radius:11px;
 
     overflow:hidden;
+
 }
 
-/* ================= CARD HEADER ================= */
+
+/* =====================================================
+   CARD HEADER
+===================================================== */
 
 .card-header{
-    height:39px;
+
+    height:37px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
-    padding:0 12px;
+    padding:0 11px;
 
     background:var(--panel2);
 
     border-bottom:1px solid var(--border);
+
 }
 
 .card-title{
+
     display:flex;
+
     align-items:center;
+
     gap:7px;
 
-    font-size:11px;
+    font-size:10px;
+
     font-weight:600;
+
 }
 
 .circle{
+
     width:7px;
+
     height:7px;
+
     border-radius:50%;
+
 }
 
 .blue{
@@ -291,30 +449,47 @@ select:focus{
 }
 
 .file{
+
     color:#657080;
-    font:10px monospace;
+
+    font:9px monospace;
+
 }
 
-/* ================= EDITOR ================= */
+
+/* =====================================================
+   EDITOR
+===================================================== */
 
 .editor{
-    height:390px;
+
+    height:calc(100vh - 245px);
+
+    min-height:390px;
+
     position:relative;
+
     background:var(--editor);
+
 }
 
 textarea{
+
     width:100%;
+
     height:100%;
 
-    padding:16px;
+    padding:14px;
 
     resize:none;
+
     outline:none;
+
     border:0;
 
     background:transparent;
-    color:#dce4ef;
+
+    color:var(--code-text);
 
     caret-color:var(--yellow);
 
@@ -324,25 +499,66 @@ textarea{
         Consolas,
         monospace;
 
-    font-size:13px;
+    font-size:var(--code-size);
+
     line-height:1.65;
 
     tab-size:4;
+
 }
 
 textarea::selection{
-    background:rgba(122,162,247,.22);
+
+    background:
+        rgba(122,162,247,.22);
+
 }
 
-/* ================= AUTOCOMPLETE ================= */
+
+/* =====================================================
+   CURSOR MIRROR
+===================================================== */
+
+.cursor-mirror{
+
+    position:absolute;
+
+    visibility:hidden;
+
+    white-space:pre-wrap;
+
+    overflow-wrap:break-word;
+
+    pointer-events:none;
+
+    font-family:
+        "Cascadia Code",
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size:var(--code-size);
+
+    line-height:1.65;
+
+    padding:14px;
+
+}
+
+
+/* =====================================================
+   AUTOCOMPLETE
+===================================================== */
 
 .autocomplete{
+
     position:absolute;
 
     display:none;
 
-    min-width:190px;
-    max-width:280px;
+    min-width:205px;
+
+    max-width:300px;
 
     max-height:210px;
 
@@ -350,124 +566,174 @@ textarea::selection{
 
     background:#1b222d;
 
-    border:1px solid #354052;
+    border:1px solid #3a4557;
 
-    border-radius:8px;
+    border-radius:7px;
 
     box-shadow:
-        0 12px 30px rgba(0,0,0,.45);
+        0 12px 30px rgba(0,0,0,.55);
 
-    z-index:10;
+    z-index:30;
+
 }
 
 .autocomplete.show{
+
     display:block;
+
 }
 
 .suggestion{
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
+    gap:12px;
 
     padding:7px 9px;
 
     cursor:pointer;
 
     font-family:monospace;
+
     font-size:11px;
+
 }
 
 .suggestion:hover,
 .suggestion.selected{
-    background:#273142;
+
+    background:#293344;
+
 }
 
 .suggestion-name{
+
     color:var(--cyan);
+
 }
 
 .suggestion-type{
+
     color:#697588;
+
     font-size:9px;
+
 }
 
-/* ================= OUTPUT ================= */
+
+/* =====================================================
+   OUTPUT
+===================================================== */
 
 .output{
-    height:390px;
 
-    padding:16px;
+    height:calc(100vh - 292px);
+
+    min-height:343px;
+
+    padding:14px;
 
     overflow-y:auto;
 
     background:var(--output);
+
+    color:var(--output-text);
 
     font-family:
         "Cascadia Code",
         Consolas,
         monospace;
 
-    font-size:12px;
+    font-size:var(--output-size);
+
     line-height:1.65;
 
     white-space:pre-wrap;
+
     word-break:break-word;
+
 }
 
 .placeholder{
+
     color:#4f5a69;
+
 }
 
 .normal{
-    color:#d9e1ed;
+
+    color:var(--output-text);
+
 }
 
 .system{
+
     color:var(--cyan);
+
 }
 
 .success{
+
     color:var(--green);
+
 }
 
 .error{
+
     color:var(--red);
+
 }
 
 .warning{
+
     color:var(--yellow);
+
 }
 
 .info{
+
     color:var(--purple);
+
 }
 
-/* ================= INPUT ================= */
+
+/* =====================================================
+   INPUT
+===================================================== */
 
 .input-box{
+
     display:none;
 
-    padding:8px;
+    padding:7px;
 
     border-top:1px solid var(--border);
 
     background:#121821;
 
-    gap:7px;
+    gap:6px;
+
 }
 
 .input-box.active{
+
     display:flex;
+
 }
 
 .input-box input{
+
     flex:1;
 
     min-width:0;
 
-    height:31px;
+    height:29px;
 
-    padding:0 9px;
+    padding:0 8px;
 
     background:#1b222d;
 
@@ -477,40 +743,54 @@ textarea::selection{
 
     outline:none;
 
-    color:var(--text);
+    color:var(--input-text);
 
     font:11px monospace;
+
 }
 
 .input-box input:focus{
+
     border-color:var(--blue);
+
 }
 
-/* ================= CONTROLS ================= */
+
+/* =====================================================
+   CONTROLS
+===================================================== */
 
 .controls{
-    min-height:47px;
+
+    min-height:44px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
-    padding:7px 10px;
+    padding:6px 9px;
 
     background:var(--panel2);
 
     border-top:1px solid var(--border);
+
 }
 
 .buttons{
+
     display:flex;
+
     gap:5px;
+
 }
 
 button{
-    height:29px;
 
-    padding:0 10px;
+    height:28px;
+
+    padding:0 9px;
 
     border-radius:6px;
 
@@ -523,98 +803,400 @@ button{
     cursor:pointer;
 
     font-size:10px;
+
     font-weight:600;
 
     transition:.15s;
+
 }
 
 button:hover{
+
     background:#2a3341;
+
+}
+
+button:active{
+
+    transform:translateY(1px);
+
 }
 
 .run{
+
     color:var(--green);
+
     background:#26392f;
+
     border-color:#385647;
+
 }
 
 .stop{
+
     color:var(--red);
+
     background:#38262c;
+
     border-color:#57363f;
+
 }
 
 .shortcut{
+
     color:#5f6979;
+
     font-size:9px;
+
 }
 
 kbd{
-    padding:2px 5px;
+
+    padding:2px 4px;
 
     background:#202733;
 
     border:1px solid var(--border);
 
     border-radius:4px;
+
 }
 
-/* ================= FOOTER ================= */
 
-.footer{
+/* =====================================================
+   OUTPUT CLEAR
+===================================================== */
+
+.output-clear{
+
+    font-size:9px;
+
+    height:25px;
+
+}
+
+
+/* =====================================================
+   SETTINGS PANEL
+===================================================== */
+
+.settings-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    backdrop-filter:blur(3px);
+
+    display:none;
+
+    align-items:flex-start;
+
+    justify-content:flex-end;
+
+    padding:70px 20px 20px;
+
+    z-index:200;
+
+}
+
+.settings-overlay.show{
+
     display:flex;
+
+}
+
+.settings-panel{
+
+    width:320px;
+
+    max-height:calc(100vh - 90px);
+
+    overflow-y:auto;
+
+    background:#151b24;
+
+    border:1px solid #344052;
+
+    border-radius:11px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.55);
+
+}
+
+.settings-header{
+
+    height:47px;
+
+    display:flex;
+
+    align-items:center;
+
     justify-content:space-between;
 
-    margin-top:10px;
+    padding:0 13px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.settings-header h2{
+
+    font-size:13px;
+
+}
+
+.close-settings{
+
+    width:27px;
+
+    height:27px;
+
+    padding:0;
+
+}
+
+.settings-body{
+
+    padding:13px;
+
+}
+
+.setting-section{
+
+    margin-bottom:18px;
+
+}
+
+.setting-section:last-child{
+
+    margin-bottom:0;
+
+}
+
+.setting-section h3{
+
+    color:var(--text);
+
+    font-size:10px;
+
+    margin-bottom:9px;
+
+}
+
+.setting-row{
+
+    min-height:37px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    border-bottom:1px solid rgba(255,255,255,.04);
+
+}
+
+.setting-row:last-child{
+
+    border-bottom:0;
+
+}
+
+.setting-name{
+
+    color:var(--muted);
+
+    font-size:10px;
+
+}
+
+.setting-control{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+}
+
+.color-input{
+
+    width:37px;
+
+    height:25px;
+
+    padding:2px;
+
+    background:#202733;
+
+    border:1px solid var(--border);
+
+    border-radius:5px;
+
+    cursor:pointer;
+
+}
+
+.number-input{
+
+    width:55px;
+
+    height:25px;
+
+    padding:0 5px;
+
+    background:#202733;
+
+    color:var(--text);
+
+    border:1px solid var(--border);
+
+    border-radius:5px;
+
+    outline:none;
+
+    font-size:10px;
+
+}
+
+.reset-btn{
+
+    width:100%;
+
+    margin-top:5px;
+
+}
+
+
+/* =====================================================
+   SHORTCUTS
+===================================================== */
+
+.shortcuts{
+
+    font-size:9px;
+
+    color:var(--muted);
+
+}
+
+.shortcut-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:4px 0;
+
+}
+
+.shortcut-row span:last-child{
+
+    color:var(--text);
+
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:7px;
 
     color:#596474;
 
-    font-size:10px;
+    font-size:9px;
+
 }
 
-/* ================= MOBILE ================= */
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media(max-width:850px){
 
     .workspace{
+
         grid-template-columns:1fr;
+
     }
 
     .editor,
     .output{
-        height:330px;
-    }
 
-    header{
-        padding:0 15px;
+        height:350px;
+
+        min-height:350px;
+
     }
 
     .status{
+
         display:none;
+
     }
 
 }
 
 @media(max-width:500px){
 
+    header{
+
+        padding:0 12px;
+
+    }
+
     main{
-        width:95%;
+
+        width:96%;
+
     }
 
     .toolbar{
+
         height:auto;
-        min-height:45px;
-        padding:7px 9px;
+
+        min-height:43px;
+
+        padding:6px 8px;
+
         gap:8px;
+
     }
 
-    .toolbar-group{
-        flex-wrap:wrap;
+    .settings-overlay{
+
+        padding:65px 8px 10px;
+
+    }
+
+    .settings-panel{
+
+        width:100%;
+
     }
 
     .footer{
+
         flex-direction:column;
-        gap:4px;
+
+        gap:3px;
+
     }
 
 }
@@ -625,6 +1207,11 @@ kbd{
 
 <body>
 
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
 <header>
 
     <div class="brand">
@@ -634,118 +1221,146 @@ kbd{
         </div>
 
         <div>
+
             <h1>Ritik's Python Lab</h1>
+
             <p>Write Python. See it happen.</p>
+
         </div>
 
     </div>
 
 
-    <div class="status">
+    <div class="header-actions">
 
-        <span
-            id="statusDot"
-            class="status-dot">
-        </span>
+        <div class="status">
 
-        <span id="statusText">
-            Loading Python...
-        </span>
+            <span
+                id="statusDot"
+                class="status-dot">
+            </span>
+
+            <span id="statusText">
+                Loading Python...
+            </span>
+
+        </div>
+
+
+        <button
+            id="settingsButton"
+            class="settings-btn"
+            title="Settings">
+
+            ⚙
+
+        </button>
 
     </div>
 
 </header>
 
 
+
 <main>
 
-    <!-- TOOLBAR -->
 
-    <div class="toolbar">
+<!-- =====================================================
+     TOOLBAR
+===================================================== -->
 
-        <div class="toolbar-group">
+<div class="toolbar">
 
-            <span class="label">
-                Auto Run
-            </span>
+    <div class="toolbar-group">
 
-            <select id="autoRun">
+        <span class="label">
+            Auto Run
+        </span>
 
-                <option value="0">
-                    Off
-                </option>
+        <select id="autoRun">
 
-                <option value="3000">
-                    3 seconds
-                </option>
+            <option value="0">
+                Off
+            </option>
 
-                <option value="5000" selected>
-                    5 seconds
-                </option>
+            <option value="3000">
+                3 seconds
+            </option>
 
-                <option value="8000">
-                    8 seconds
-                </option>
+            <option value="5000" selected>
+                5 seconds
+            </option>
 
-                <option value="10000">
-                    10 seconds
-                </option>
+            <option value="8000">
+                8 seconds
+            </option>
 
-            </select>
+            <option value="10000">
+                10 seconds
+            </option>
 
-        </div>
-
-
-        <div class="toolbar-group">
-
-            <span class="label">
-                Suggestions
-            </span>
-
-            <label class="toggle">
-
-                <input
-                    type="checkbox"
-                    id="suggestions"
-                    checked
-                >
-
-                <span class="slider"></span>
-
-            </label>
-
-        </div>
+        </select>
 
     </div>
 
 
-    <!-- WORKSPACE -->
+    <div class="toolbar-group">
 
-    <section class="workspace">
+        <span class="label">
+            Suggestions
+        </span>
 
+        <label class="toggle">
 
-        <!-- CODE -->
+            <input
+                type="checkbox"
+                id="suggestions"
+                checked>
 
-        <div class="card">
+            <span class="slider"></span>
 
-            <div class="card-header">
+        </label>
 
-                <div class="card-title">
+    </div>
 
-                    <span class="circle blue"></span>
-
-                    Python Code
-
-                </div>
-
-                <span class="file">
-                    main.py
-                </span>
-
-            </div>
+</div>
 
 
-            <div class="editor">
+
+<!-- =====================================================
+     WORKSPACE
+===================================================== -->
+
+<section class="workspace">
+
+
+<!-- =====================================================
+     CODE CARD
+===================================================== -->
+
+<div class="card">
+
+    <div class="card-header">
+
+        <div class="card-title">
+
+            <span class="circle blue"></span>
+
+            Python Code
+
+        </div>
+
+        <span class="file">
+            main.py
+        </span>
+
+    </div>
+
+
+    <div
+        class="editor"
+        id="editorArea">
+
 
 <textarea
 id="code"
@@ -760,130 +1375,505 @@ for i in range(5):
     print("Number:", i)</textarea>
 
 
-                <div
-                    id="autocomplete"
-                    class="autocomplete">
-                </div>
-
-            </div>
-
-
-            <div class="controls">
-
-                <div class="buttons">
-
-                    <button
-                        id="run"
-                        class="run">
-                        ▶ Run
-                    </button>
-
-                    <button
-                        id="stop"
-                        class="stop">
-                        ■ Stop
-                    </button>
-
-                    <button id="clearCode">
-                        Clear
-                    </button>
-
-                    <button id="copy">
-                        Copy
-                    </button>
-
-                </div>
-
-
-                <div class="shortcut">
-
-                    <kbd>Ctrl</kbd>
-                    +
-                    <kbd>Enter</kbd>
-
-                </div>
-
-            </div>
-
+        <div
+            id="cursorMirror"
+            class="cursor-mirror">
         </div>
 
 
-        <!-- OUTPUT -->
-
-        <div class="card">
-
-            <div class="card-header">
-
-                <div class="card-title">
-
-                    <span class="circle green"></span>
-
-                    Live Output
-
-                </div>
-
-
-                <button id="clearOutput">
-                    Clear
-                </button>
-
-            </div>
-
-
-            <div
-                id="output"
-                class="output">
-
-                <div class="placeholder">
-                    Python output will appear here...
-                </div>
-
-            </div>
-
-
-            <div
-                id="inputBox"
-                class="input-box">
-
-                <input
-                    id="input"
-                    placeholder="Python is waiting for input..."
-                    autocomplete="off"
-                >
-
-                <button id="send">
-                    Enter
-                </button>
-
-            </div>
-
+        <div
+            id="autocomplete"
+            class="autocomplete">
         </div>
-
-    </section>
-
-
-    <div class="footer">
-
-        <span>
-            Built by Ritik
-        </span>
-
-        <span>
-            Python runs in your browser
-        </span>
 
     </div>
+
+
+    <div class="controls">
+
+        <div class="buttons">
+
+            <button
+                id="run"
+                class="run"
+                title="Run Python (Ctrl+Enter)">
+
+                ▶ Run
+
+            </button>
+
+
+            <button
+                id="stop"
+                class="stop"
+                title="Stop running program">
+
+                ■ Stop
+
+            </button>
+
+
+            <button
+                id="copy"
+                title="Copy code">
+
+                Copy
+
+            </button>
+
+        </div>
+
+
+        <div class="shortcut">
+
+            <kbd>Ctrl</kbd> +
+            <kbd>Enter</kbd>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     OUTPUT CARD
+===================================================== -->
+
+<div class="card">
+
+    <div class="card-header">
+
+        <div class="card-title">
+
+            <span class="circle green"></span>
+
+            Live Output
+
+        </div>
+
+
+        <button
+            id="clearOutput"
+            class="output-clear"
+            title="Clear output">
+
+            Clear Output
+
+        </button>
+
+    </div>
+
+
+    <div
+        id="output"
+        class="output">
+
+        <div class="placeholder">
+
+            Python output will appear here...
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="inputBox"
+        class="input-box">
+
+        <input
+            id="input"
+            placeholder="Python is waiting for input..."
+            autocomplete="off">
+
+
+        <button id="send">
+
+            Enter
+
+        </button>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<div class="footer">
+
+    <span>
+        Built by Ritik
+    </span>
+
+    <span>
+        Ctrl+Enter Run • Ctrl+Shift+Enter Force Run • Ctrl+/ Comment
+    </span>
+
+</div>
 
 </main>
 
 
+
+<!-- =====================================================
+     SETTINGS
+===================================================== -->
+
+<div
+    id="settingsOverlay"
+    class="settings-overlay">
+
+
+<div class="settings-panel">
+
+
+    <div class="settings-header">
+
+        <h2>
+            ⚙ Settings
+        </h2>
+
+        <button
+            id="closeSettings"
+            class="close-settings">
+
+            ×
+
+        </button>
+
+    </div>
+
+
+    <div class="settings-body">
+
+
+        <!-- COLORS -->
+
+        <div class="setting-section">
+
+            <h3>
+                🎨 Text Colors
+            </h3>
+
+
+            <div class="setting-row">
+
+                <span class="setting-name">
+                    Code Text
+                </span>
+
+                <input
+                    id="codeColor"
+                    class="color-input"
+                    type="color"
+                    value="#dce4ef">
+
+            </div>
+
+
+            <div class="setting-row">
+
+                <span class="setting-name">
+                    Output Text
+                </span>
+
+                <input
+                    id="outputColor"
+                    class="color-input"
+                    type="color"
+                    value="#d9e1ed">
+
+            </div>
+
+
+            <div class="setting-row">
+
+                <span class="setting-name">
+                    Input Text
+                </span>
+
+                <input
+                    id="inputColor"
+                    class="color-input"
+                    type="color"
+                    value="#ffffff">
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FONT -->
+
+        <div class="setting-section">
+
+            <h3>
+                🔤 Font Size
+            </h3>
+
+
+            <div class="setting-row">
+
+                <span class="setting-name">
+                    Code Font
+                </span>
+
+                <div class="setting-control">
+
+                    <input
+                        id="codeSize"
+                        class="number-input"
+                        type="number"
+                        min="10"
+                        max="22"
+                        value="13">
+
+                    <span class="label">
+                        px
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="setting-row">
+
+                <span class="setting-name">
+                    Output Font
+                </span>
+
+                <div class="setting-control">
+
+                    <input
+                        id="outputSize"
+                        class="number-input"
+                        type="number"
+                        min="10"
+                        max="22"
+                        value="12">
+
+                    <span class="label">
+                        px
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- EDITOR -->
+
+        <div class="setting-section">
+
+            <h3>
+                ✨ Editor
+            </h3>
+
+
+            <div class="setting-row">
+
+                <span class="setting-name">
+                    Autocomplete
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        id="settingsSuggestions"
+                        checked>
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="setting-row">
+
+                <span class="setting-name">
+                    Auto Run
+                </span>
+
+                <select id="settingsAutoRun">
+
+                    <option value="0">
+                        Off
+                    </option>
+
+                    <option value="3000">
+                        3 seconds
+                    </option>
+
+                    <option value="5000">
+                        5 seconds
+                    </option>
+
+                    <option value="8000">
+                        8 seconds
+                    </option>
+
+                    <option value="10000">
+                        10 seconds
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SHORTCUTS -->
+
+        <div class="setting-section">
+
+            <h3>
+                ⌨ Keyboard Shortcuts
+            </h3>
+
+
+            <div class="shortcuts">
+
+
+                <div class="shortcut-row">
+
+                    <span>
+                        Run
+                    </span>
+
+                    <span>
+                        Ctrl + Enter
+                    </span>
+
+                </div>
+
+
+                <div class="shortcut-row">
+
+                    <span>
+                        Force Run
+                    </span>
+
+                    <span>
+                        Ctrl + Shift + Enter
+                    </span>
+
+                </div>
+
+
+                <div class="shortcut-row">
+
+                    <span>
+                        Save
+                    </span>
+
+                    <span>
+                        Ctrl + S
+                    </span>
+
+                </div>
+
+
+                <div class="shortcut-row">
+
+                    <span>
+                        Comment
+                    </span>
+
+                    <span>
+                        Ctrl + /
+                    </span>
+
+                </div>
+
+
+                <div class="shortcut-row">
+
+                    <span>
+                        Accept Suggestion
+                    </span>
+
+                    <span>
+                        Enter / Tab
+                    </span>
+
+                </div>
+
+
+                <div class="shortcut-row">
+
+                    <span>
+                        Navigate Suggestions
+                    </span>
+
+                    <span>
+                        ↑ / ↓
+                    </span>
+
+                </div>
+
+
+                <div class="shortcut-row">
+
+                    <span>
+                        Close Popup
+                    </span>
+
+                    <span>
+                        Esc
+                    </span>
+
+                </div>
+
+
+                <div class="shortcut-row">
+
+                    <span>
+                        Indent
+                    </span>
+
+                    <span>
+                        Tab
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <button
+            id="resetSettings"
+            class="reset-btn">
+
+            Reset Settings
+
+        </button>
+
+
+    </div>
+
+</div>
+
+</div>
+
+
+
 <script>
-
-/* =====================================================
-   SETTINGS
-===================================================== */
-
-const MAX_RUNTIME = 10000;
 
 
 /* =====================================================
@@ -893,8 +1883,6 @@ const MAX_RUNTIME = 10000;
 let worker = null;
 
 let pythonReady = false;
-
-let loading = false;
 
 let running = false;
 
@@ -906,7 +1894,14 @@ let safetyTimer = null;
 
 let executionId = 0;
 
-let workerStarting = false;
+let suggestionItems = [];
+
+let selectedSuggestion = 0;
+
+
+
+const MAX_RUNTIME = 10000;
+
 
 
 /* =====================================================
@@ -928,11 +1923,17 @@ const input =
 const autoRun =
     document.getElementById("autoRun");
 
-const suggestionToggle =
+const suggestions =
     document.getElementById("suggestions");
 
 const autocomplete =
     document.getElementById("autocomplete");
+
+const editorArea =
+    document.getElementById("editorArea");
+
+const cursorMirror =
+    document.getElementById("cursorMirror");
 
 const statusText =
     document.getElementById("statusText");
@@ -940,18 +1941,22 @@ const statusText =
 const statusDot =
     document.getElementById("statusDot");
 
+const settingsOverlay =
+    document.getElementById("settingsOverlay");
+
 
 
 /* =====================================================
    STATUS
 ===================================================== */
 
-function status(
+function setStatus(
     text,
-    type = "normal"
+    type="normal"
 ){
 
-    statusText.textContent = text;
+    statusText.textContent =
+        text;
 
 
     if(type === "error"){
@@ -994,35 +1999,46 @@ function status(
 
 function clearOutput(){
 
-    output.innerHTML =
-        `<div class="placeholder">
+    output.innerHTML = `
+        <div class="placeholder">
             Python output will appear here...
-        </div>`;
+        </div>
+    `;
 
 }
 
 
 function printOutput(
     text,
-    type = "normal"
+    type="normal"
 ){
 
     const placeholder =
-        output.querySelector(".placeholder");
+        output.querySelector(
+            ".placeholder"
+        );
 
     if(placeholder){
+
         placeholder.remove();
+
     }
 
 
     const line =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
-    line.className = type;
+    line.className =
+        type;
 
-    line.textContent = text;
+    line.textContent =
+        text;
 
-    output.appendChild(line);
+    output.appendChild(
+        line
+    );
 
 
     output.scrollTop =
@@ -1038,90 +2054,114 @@ function printOutput(
 
 function explainError(error){
 
-    let title = "Python Error";
+    let title =
+        "Python Error";
 
     let why =
         "Python could not complete your program.";
 
     let fix =
-        "Read the line shown in the traceback and check the code around it.";
+        "Check the traceback and the line mentioned in the error.";
 
 
     if(error.includes("SyntaxError")){
 
-        title = "Syntax Error";
+        title =
+            "Syntax Error";
 
         why =
-            "Python found code that does not follow Python's syntax.";
+            "Python found code that does not follow Python syntax.";
 
         fix =
-            "Check brackets, quotes, colons (:), spelling and indentation.";
+            "Check brackets, quotes, colons (:), spelling and punctuation.";
 
     }
 
-    else if(error.includes("IndentationError")){
+    else if(
+        error.includes(
+            "IndentationError"
+        )
+    ){
 
-        title = "Indentation Error";
+        title =
+            "Indentation Error";
 
         why =
-            "Python uses indentation to know which code belongs inside a block.";
+            "Python uses spaces to identify which code belongs inside a block.";
 
         fix =
-            "Use consistent indentation. Usually 4 spaces are used.";
+            "Use consistent indentation. This editor automatically adds 4 spaces after ':' + Enter.";
 
     }
 
-    else if(error.includes("NameError")){
+    else if(
+        error.includes("NameError")
+    ){
 
-        title = "Name Error";
+        title =
+            "Name Error";
 
         why =
-            "Python cannot find the variable or function name you used.";
+            "Python cannot find the variable or function you used.";
 
         fix =
-            "Check the spelling or create the variable before using it.";
+            "Check the spelling and make sure the variable is created before you use it.";
 
     }
 
-    else if(error.includes("TypeError")){
+    else if(
+        error.includes("TypeError")
+    ){
 
-        title = "Type Error";
+        title =
+            "Type Error";
 
         why =
-            "Two values are being used in a way their data types do not allow.";
+            "The data types you're using cannot be combined in that way.";
 
         fix =
-            "Check the types. You may need int(), float(), str() or another conversion.";
+            "Check the types. You may need int(), float() or str().";
 
     }
 
-    else if(error.includes("ValueError")){
+    else if(
+        error.includes("ValueError")
+    ){
 
-        title = "Value Error";
+        title =
+            "Value Error";
 
         why =
-            "The value has the wrong form for the operation.";
+            "The value has an invalid form for this operation.";
 
         fix =
             "Check the value before converting or processing it.";
 
     }
 
-    else if(error.includes("ZeroDivisionError")){
+    else if(
+        error.includes(
+            "ZeroDivisionError"
+        )
+    ){
 
-        title = "Division by Zero";
+        title =
+            "Division by Zero";
 
         why =
-            "Your program tried to divide a number by zero.";
+            "Your program attempted to divide a number by zero.";
 
         fix =
-            "Make sure the value you divide by is not 0.";
+            "Make sure the denominator is not zero.";
 
     }
 
-    else if(error.includes("IndexError")){
+    else if(
+        error.includes("IndexError")
+    ){
 
-        title = "Index Error";
+        title =
+            "Index Error";
 
         why =
             "You tried to access a list or string position that does not exist.";
@@ -1131,35 +2171,38 @@ function explainError(error){
 
     }
 
-    else if(error.includes("KeyError")){
+    else if(
+        error.includes("KeyError")
+    ){
 
-        title = "Key Error";
+        title =
+            "Key Error";
 
         why =
-            "The dictionary key you requested does not exist.";
+            "The requested dictionary key does not exist.";
 
         fix =
             "Check the key spelling or use dictionary.get(key).";
 
     }
 
-    else if(error.includes("AttributeError")){
+    else if(
+        error.includes(
+            "AttributeError"
+        )
+    ){
 
-        title = "Attribute Error";
+        title =
+            "Attribute Error";
 
         why =
-            "The object does not have the method or property you requested.";
+            "The object does not have the property or method you requested.";
 
         fix =
             "Check the object's type and the spelling of the method.";
 
     }
 
-
-    printOutput(
-        "",
-        "error"
-    );
 
     printOutput(
         "❌ " + title,
@@ -1184,6 +2227,21 @@ function explainError(error){
         fix
     );
 
+    printOutput(
+        "",
+        "error"
+    );
+
+    printOutput(
+        "Python traceback:",
+        "info"
+    );
+
+    printOutput(
+        error,
+        "error"
+    );
+
 }
 
 
@@ -1195,13 +2253,13 @@ function explainError(error){
 function createWorker(){
 
     if(worker){
+
         worker.terminate();
+
     }
 
 
     pythonReady = false;
-
-    workerStarting = true;
 
 
     const workerCode = `
@@ -1239,8 +2297,11 @@ function createWorker(){
             catch(error){
 
                 self.postMessage({
+
                     type:"loadError",
+
                     message:String(error)
+
                 });
 
             }
@@ -1255,10 +2316,6 @@ function createWorker(){
                 event.data;
 
 
-            /* -----------------
-               INPUT
-            ----------------- */
-
             if(
                 data.type === "input"
             ){
@@ -1269,7 +2326,8 @@ function createWorker(){
                         data.value
                     );
 
-                    inputResolver = null;
+                    inputResolver =
+                        null;
 
                 }
 
@@ -1278,10 +2336,6 @@ function createWorker(){
             }
 
 
-            /* -----------------
-               RUN
-            ----------------- */
-
             if(
                 data.type === "run"
             ){
@@ -1289,9 +2343,12 @@ function createWorker(){
                 if(!pyodide){
 
                     self.postMessage({
+
                         type:"error",
+
                         message:
                         "Python is still loading."
+
                     });
 
                     return;
@@ -1306,8 +2363,11 @@ function createWorker(){
                         batched(message){
 
                             self.postMessage({
+
                                 type:"stdout",
+
                                 message:message
+
                             });
 
                         }
@@ -1320,8 +2380,11 @@ function createWorker(){
                         batched(message){
 
                             self.postMessage({
+
                                 type:"stderr",
+
                                 message:message
+
                             });
 
                         }
@@ -1329,16 +2392,15 @@ function createWorker(){
                     });
 
 
-                    /*
-                       Custom input()
-                    */
-
                     globalThis.pythonInput =
                     function(prompt){
 
                         self.postMessage({
+
                             type:"inputRequest",
+
                             prompt:prompt || ""
+
                         });
 
 
@@ -1353,10 +2415,6 @@ function createWorker(){
 
                     };
 
-
-                    /*
-                       Install custom input
-                    */
 
                     await pyodide.runPythonAsync(\`
 
@@ -1385,8 +2443,11 @@ builtins.input = custom_input
                 catch(error){
 
                     self.postMessage({
+
                         type:"pythonError",
+
                         message:String(error)
+
                     });
 
                 }
@@ -1413,7 +2474,9 @@ builtins.input = custom_input
 
     worker =
         new Worker(
-            URL.createObjectURL(blob),
+            URL.createObjectURL(
+                blob
+            ),
             {
                 type:"module"
             }
@@ -1423,30 +2486,12 @@ builtins.input = custom_input
     worker.onmessage =
         handleWorkerMessage;
 
-
-    worker.onerror =
-        function(error){
-
-            running = false;
-
-            status(
-                "Worker Error",
-                "error"
-            );
-
-            printOutput(
-                "Python worker stopped unexpectedly.",
-                "error"
-            );
-
-        };
-
 }
 
 
 
 /* =====================================================
-   WORKER MESSAGES
+   WORKER MESSAGE
 ===================================================== */
 
 function handleWorkerMessage(event){
@@ -1455,41 +2500,43 @@ function handleWorkerMessage(event){
         event.data;
 
 
-    if(data.type === "loading"){
+    if(
+        data.type === "loading"
+    ){
 
-        loading = true;
-
-        status(
+        setStatus(
             "Loading Python...",
             "waiting"
         );
 
         return;
+
     }
 
 
-    if(data.type === "ready"){
-
-        loading = false;
+    if(
+        data.type === "ready"
+    ){
 
         pythonReady = true;
 
-        workerStarting = false;
-
-        status("Ready");
+        setStatus(
+            "Ready"
+        );
 
         return;
+
     }
 
 
-    if(data.type === "loadError"){
-
-        loading = false;
+    if(
+        data.type === "loadError"
+    ){
 
         pythonReady = false;
 
-        status(
-            "Load Error",
+        setStatus(
+            "Python Load Error",
             "error"
         );
 
@@ -1499,10 +2546,13 @@ function handleWorkerMessage(event){
         );
 
         return;
+
     }
 
 
-    if(data.type === "stdout"){
+    if(
+        data.type === "stdout"
+    ){
 
         printOutput(
             data.message,
@@ -1510,10 +2560,13 @@ function handleWorkerMessage(event){
         );
 
         return;
+
     }
 
 
-    if(data.type === "stderr"){
+    if(
+        data.type === "stderr"
+    ){
 
         printOutput(
             data.message,
@@ -1521,10 +2574,13 @@ function handleWorkerMessage(event){
         );
 
         return;
+
     }
 
 
-    if(data.type === "inputRequest"){
+    if(
+        data.type === "inputRequest"
+    ){
 
         waitingInput = true;
 
@@ -1532,8 +2588,10 @@ function handleWorkerMessage(event){
             "active"
         );
 
-        input.focus();
-
+        setStatus(
+            "Waiting for input",
+            "waiting"
+        );
 
         if(data.prompt){
 
@@ -1544,11 +2602,16 @@ function handleWorkerMessage(event){
 
         }
 
+        input.focus();
+
         return;
+
     }
 
 
-    if(data.type === "finished"){
+    if(
+        data.type === "finished"
+    ){
 
         running = false;
 
@@ -1560,7 +2623,9 @@ function handleWorkerMessage(event){
 
         clearSafetyTimer();
 
-        status("Finished");
+        setStatus(
+            "Finished"
+        );
 
         printOutput(
             "✓ Program finished.",
@@ -1568,10 +2633,13 @@ function handleWorkerMessage(event){
         );
 
         return;
+
     }
 
 
-    if(data.type === "pythonError"){
+    if(
+        data.type === "pythonError"
+    ){
 
         running = false;
 
@@ -1583,7 +2651,7 @@ function handleWorkerMessage(event){
 
         clearSafetyTimer();
 
-        status(
+        setStatus(
             "Error",
             "error"
         );
@@ -1593,14 +2661,17 @@ function handleWorkerMessage(event){
         );
 
         return;
+
     }
 
 
-    if(data.type === "error"){
+    if(
+        data.type === "error"
+    ){
 
         running = false;
 
-        status(
+        setStatus(
             "Error",
             "error"
         );
@@ -1617,35 +2688,15 @@ function handleWorkerMessage(event){
 
 
 /* =====================================================
-   RUN
+   RUN PYTHON
 ===================================================== */
 
 async function runPython(){
 
     executionId++;
 
-    const myExecution =
-        executionId;
-
 
     clearSafetyTimer();
-
-
-    /*
-       Cancel old program
-    */
-
-    if(running){
-
-        running = false;
-
-        waitingInput = false;
-
-        inputBox.classList.remove(
-            "active"
-        );
-
-    }
 
 
     const source =
@@ -1666,59 +2717,41 @@ async function runPython(){
     }
 
 
+    if(running){
+
+        stopPython(
+            "Previous program stopped."
+        );
+
+    }
+
+
     clearOutput();
 
 
-    status(
+    setStatus(
         "Preparing...",
         "waiting"
     );
 
 
-    /*
-       Python is already loaded.
-       Therefore execution starts
-       immediately.
-    */
-
-    if(
-        !pythonReady
-    ){
+    if(!pythonReady){
 
         printOutput(
-            "Python is still loading...",
+            "Python is loading...",
             "system"
         );
 
 
-        /*
-           Wait until ready
-        */
-
         await waitForPython();
-
-
-        if(
-            myExecution !== executionId
-        ){
-            return;
-        }
 
     }
 
 
-    if(
-        !pythonReady ||
-        !worker
-    ){
+    if(!pythonReady){
 
         printOutput(
-            "Python could not start.",
-            "error"
-        );
-
-        status(
-            "Error",
+            "Python is not ready yet.",
             "error"
         );
 
@@ -1730,7 +2763,7 @@ async function runPython(){
     running = true;
 
 
-    status(
+    setStatus(
         "Running",
         "waiting"
     );
@@ -1766,7 +2799,7 @@ function waitForPython(){
     return new Promise(
         resolve => {
 
-            const start =
+            const started =
                 Date.now();
 
 
@@ -1789,7 +2822,7 @@ function waitForPython(){
 
                         if(
                             Date.now() -
-                            start >
+                            started >
                             15000
                         ){
 
@@ -1817,7 +2850,7 @@ function waitForPython(){
 ===================================================== */
 
 function stopPython(
-    message = "■ Program stopped."
+    message="■ Program stopped."
 ){
 
     executionId++;
@@ -1847,9 +2880,9 @@ function stopPython(
     );
 
 
-    status(
-        "Stopped",
-        "error"
+    setStatus(
+        "Restarting Python...",
+        "waiting"
     );
 
 
@@ -1860,12 +2893,9 @@ function stopPython(
 
 
     /*
-       IMPORTANT:
-       Start the Python engine again
-       immediately.
-
-       User doesn't have to press
-       anything.
+       Re-create worker.
+       Pyodide will load again only
+       when a program is forcibly stopped.
     */
 
     createWorker();
@@ -1887,9 +2917,7 @@ function startSafetyTimer(){
         setTimeout(
             function(){
 
-                if(
-                    running
-                ){
+                if(running){
 
                     stopPython(
                         "⚠ Program automatically stopped after 10 seconds."
@@ -1906,9 +2934,7 @@ function startSafetyTimer(){
 
 function clearSafetyTimer(){
 
-    if(
-        safetyTimer
-    ){
+    if(safetyTimer){
 
         clearTimeout(
             safetyTimer
@@ -1945,11 +2971,9 @@ function scheduleAutoRun(){
         );
 
 
-    if(
-        delay === 0
-    ){
+    if(delay === 0){
 
-        status(
+        setStatus(
             pythonReady ?
             "Ready" :
             "Loading Python...",
@@ -1972,41 +2996,25 @@ function scheduleAutoRun(){
     }
 
 
-    let remaining =
+    const seconds =
         Math.ceil(
             delay / 1000
         );
 
 
-    status(
+    setStatus(
         "Waiting " +
-        remaining +
+        seconds +
         "s...",
         "waiting"
     );
-
-
-    const started =
-        Date.now();
 
 
     autoTimer =
         setTimeout(
             function(){
 
-                /*
-                   If user has changed the code,
-                   this timer would have already
-                   been cancelled.
-                */
-
-                if(
-                    code.value.trim()
-                ){
-
-                    runPython();
-
-                }
+                runPython();
 
             },
             delay
@@ -2017,35 +3025,14 @@ function scheduleAutoRun(){
 
 
 /* =====================================================
-   CODE CHANGE
+   CODE INPUT
 ===================================================== */
 
 code.addEventListener(
     "input",
     function(){
 
-        /*
-           If program is running,
-           automatically stop old execution.
-
-           User can simply continue typing.
-        */
-
-        if(running){
-
-            stopPython(
-                "Previous run stopped. Waiting for your new code..."
-            );
-
-        }
-
-
         updateAutocomplete();
-
-
-        /*
-           Auto run
-        */
 
         scheduleAutoRun();
 
@@ -2062,17 +3049,6 @@ autoRun.addEventListener(
     "change",
     function(){
 
-        if(autoTimer){
-
-            clearTimeout(
-                autoTimer
-            );
-
-            autoTimer = null;
-
-        }
-
-
         scheduleAutoRun();
 
     }
@@ -2081,14 +3057,12 @@ autoRun.addEventListener(
 
 
 /* =====================================================
-   INPUT SEND
+   INPUT
 ===================================================== */
 
 function sendInput(){
 
-    if(
-        !waitingInput
-    ){
+    if(!waitingInput){
 
         return;
 
@@ -2100,8 +3074,7 @@ function sendInput(){
 
 
     printOutput(
-        "> " + value,
-        "normal"
+        "> " + value
     );
 
 
@@ -2124,6 +3097,12 @@ function sendInput(){
 
     inputBox.classList.remove(
         "active"
+    );
+
+
+    setStatus(
+        "Running",
+        "waiting"
     );
 
 }
@@ -2157,7 +3136,7 @@ input.addEventListener(
 
 
 /* =====================================================
-   PYTHON AUTOCOMPLETE
+   AUTOCOMPLETE DATA
 ===================================================== */
 
 const keywords = [
@@ -2235,6 +3214,18 @@ const keywords = [
     },
 
     {
+        word:"enumerate",
+        insert:"enumerate()",
+        type:"function"
+    },
+
+    {
+        word:"zip",
+        insert:"zip()",
+        type:"function"
+    },
+
+    {
         word:"for",
         insert:"for ",
         type:"keyword"
@@ -2295,6 +3286,30 @@ const keywords = [
     },
 
     {
+        word:"try",
+        insert:"try:",
+        type:"keyword"
+    },
+
+    {
+        word:"except",
+        insert:"except:",
+        type:"keyword"
+    },
+
+    {
+        word:"finally",
+        insert:"finally:",
+        type:"keyword"
+    },
+
+    {
+        word:"with",
+        insert:"with ",
+        type:"keyword"
+    },
+
+    {
         word:"True",
         insert:"True",
         type:"value"
@@ -2333,14 +3348,9 @@ const keywords = [
 ];
 
 
-let suggestionItems = [];
-
-let selectedSuggestion = 0;
-
-
 
 /* =====================================================
-   GET CURRENT WORD
+   CURRENT WORD
 ===================================================== */
 
 function getCurrentWord(){
@@ -2382,13 +3392,114 @@ function getCurrentWord(){
 
 
 /* =====================================================
-   UPDATE AUTOCOMPLETE
+   CURSOR POSITION
+===================================================== */
+
+function getCursorPosition(){
+
+    const text =
+        code.value.substring(
+            0,
+            code.selectionStart
+        );
+
+
+    const style =
+        getComputedStyle(
+            code
+        );
+
+
+    cursorMirror.style.fontFamily =
+        style.fontFamily;
+
+    cursorMirror.style.fontSize =
+        style.fontSize;
+
+    cursorMirror.style.lineHeight =
+        style.lineHeight;
+
+    cursorMirror.style.padding =
+        style.padding;
+
+    cursorMirror.style.width =
+        code.clientWidth + "px";
+
+
+    /*
+       Replace spaces with visible
+       whitespace so mirror keeps
+       exact position.
+    */
+
+    const safeText =
+        text
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /\n/g,
+            "<br>"
+        )
+        .replace(
+            / /g,
+            "&nbsp;"
+        );
+
+
+    cursorMirror.innerHTML =
+        safeText +
+        '<span id="mirrorCursor">|</span>';
+
+
+    const cursorElement =
+        document.getElementById(
+            "mirrorCursor"
+        );
+
+
+    const rect =
+        cursorElement.getBoundingClientRect();
+
+
+    const editorRect =
+        editorArea.getBoundingClientRect();
+
+
+    return {
+
+        left:
+            rect.left -
+            editorRect.left,
+
+        top:
+            rect.top -
+            editorRect.top +
+            20
+
+    };
+
+}
+
+
+
+/* =====================================================
+   AUTOCOMPLETE UPDATE
 ===================================================== */
 
 function updateAutocomplete(){
 
     if(
-        !suggestionToggle.checked
+        !suggestions.checked
     ){
 
         hideAutocomplete();
@@ -2407,7 +3518,7 @@ function updateAutocomplete(){
 
 
     if(
-        word.length < 1
+        word.length === 0
     ){
 
         hideAutocomplete();
@@ -2444,6 +3555,7 @@ function updateAutocomplete(){
 
 
     suggestionItems
+    .slice(0,8)
     .forEach(
         function(item,index){
 
@@ -2463,6 +3575,7 @@ function updateAutocomplete(){
 
 
             div.innerHTML = `
+
                 <span class="suggestion-name">
                     ${item.insert}
                 </span>
@@ -2470,6 +3583,7 @@ function updateAutocomplete(){
                 <span class="suggestion-type">
                     ${item.type}
                 </span>
+
             `;
 
 
@@ -2495,7 +3609,71 @@ function updateAutocomplete(){
     );
 
 
-    positionAutocomplete();
+    const position =
+        getCursorPosition();
+
+
+    /*
+       Keep popup near cursor.
+    */
+
+    let left =
+        position.left;
+
+
+    let top =
+        position.top;
+
+
+    /*
+       Prevent popup going outside
+       editor width.
+    */
+
+    if(
+        left + 210 >
+        editorArea.clientWidth
+    ){
+
+        left =
+            editorArea.clientWidth -
+            220;
+
+    }
+
+
+    if(left < 5){
+
+        left = 5;
+
+    }
+
+
+    /*
+       If cursor is near bottom,
+       show popup above it.
+    */
+
+    if(
+        top + 210 >
+        editorArea.clientHeight
+    ){
+
+        top =
+            Math.max(
+                5,
+                position.top - 215
+            );
+
+    }
+
+
+    autocomplete.style.left =
+        left + "px";
+
+    autocomplete.style.top =
+        top + "px";
+
 
     autocomplete.classList.add(
         "show"
@@ -2506,29 +3684,7 @@ function updateAutocomplete(){
 
 
 /* =====================================================
-   POSITION AUTOCOMPLETE
-===================================================== */
-
-function positionAutocomplete(){
-
-    /*
-       Simple fixed position inside editor.
-       Keeps the popup visible without
-       interfering with typing.
-    */
-
-    autocomplete.style.left =
-        "16px";
-
-    autocomplete.style.bottom =
-        "12px";
-
-}
-
-
-
-/* =====================================================
-   HIDE
+   HIDE AUTOCOMPLETE
 ===================================================== */
 
 function hideAutocomplete(){
@@ -2552,7 +3708,9 @@ function insertSuggestion(index){
 
 
     if(!item){
+
         return;
+
     }
 
 
@@ -2579,16 +3737,39 @@ function insertSuggestion(index){
         after;
 
 
-    const newCursor =
+    let cursor =
         current.start +
         item.insert.length;
 
 
+    /*
+       Put cursor inside ().
+       Example:
+
+       print()
+
+       becomes:
+
+       print(|)
+    */
+
+    if(
+        item.insert.endsWith("()")
+    ){
+
+        cursor =
+            current.start +
+            item.insert.length -
+            1;
+
+    }
+
+
     code.selectionStart =
-        newCursor;
+        cursor;
 
     code.selectionEnd =
-        newCursor;
+        cursor;
 
 
     hideAutocomplete();
@@ -2597,10 +3778,6 @@ function insertSuggestion(index){
     code.focus();
 
 
-    /*
-       Schedule auto-run again
-    */
-
     scheduleAutoRun();
 
 }
@@ -2608,12 +3785,16 @@ function insertSuggestion(index){
 
 
 /* =====================================================
-   AUTOCOMPLETE KEYBOARD
+   KEYBOARD
 ===================================================== */
 
 code.addEventListener(
     "keydown",
     function(event){
+
+        /*
+           AUTOCOMPLETE
+        */
 
         if(
             autocomplete.classList.contains(
@@ -2621,23 +3802,18 @@ code.addEventListener(
             )
         ){
 
-            /*
-               DOWN
-            */
-
             if(
                 event.key === "ArrowDown"
             ){
 
                 event.preventDefault();
 
-
                 selectedSuggestion =
                     (
-                        selectedSuggestion + 1
+                        selectedSuggestion +
+                        1
                     ) %
                     suggestionItems.length;
-
 
                 refreshSelection();
 
@@ -2646,16 +3822,11 @@ code.addEventListener(
             }
 
 
-            /*
-               UP
-            */
-
             if(
                 event.key === "ArrowUp"
             ){
 
                 event.preventDefault();
-
 
                 selectedSuggestion =
                     (
@@ -2665,17 +3836,12 @@ code.addEventListener(
                     ) %
                     suggestionItems.length;
 
-
                 refreshSelection();
 
                 return;
 
             }
 
-
-            /*
-               ENTER
-            */
 
             if(
                 event.key === "Enter"
@@ -2692,10 +3858,6 @@ code.addEventListener(
             }
 
 
-            /*
-               TAB
-            */
-
             if(
                 event.key === "Tab"
             ){
@@ -2711,13 +3873,11 @@ code.addEventListener(
             }
 
 
-            /*
-               ESC
-            */
-
             if(
                 event.key === "Escape"
             ){
+
+                event.preventDefault();
 
                 hideAutocomplete();
 
@@ -2729,11 +3889,13 @@ code.addEventListener(
 
 
         /*
-           Ctrl + Enter
+           CTRL + ENTER
+           Normal Run
         */
 
         if(
             event.ctrlKey &&
+            !event.shiftKey &&
             event.key === "Enter"
         ){
 
@@ -2757,7 +3919,85 @@ code.addEventListener(
 
 
         /*
-           TAB without suggestion
+           CTRL + SHIFT + ENTER
+           FORCE RUN
+        */
+
+        if(
+            event.ctrlKey &&
+            event.shiftKey &&
+            event.key === "Enter"
+        ){
+
+            event.preventDefault();
+
+            if(autoTimer){
+
+                clearTimeout(
+                    autoTimer
+                );
+
+                autoTimer = null;
+
+            }
+
+            if(running){
+
+                stopPython(
+                    "Previous program stopped."
+                );
+
+            }
+
+            setTimeout(
+                () => runPython(),
+                100
+            );
+
+            return;
+
+        }
+
+
+        /*
+           CTRL + S
+        */
+
+        if(
+            event.ctrlKey &&
+            event.key.toLowerCase() === "s"
+        ){
+
+            event.preventDefault();
+
+            saveCode();
+
+            return;
+
+        }
+
+
+        /*
+           CTRL + /
+           COMMENT / UNCOMMENT
+        */
+
+        if(
+            event.ctrlKey &&
+            event.key === "/"
+        ){
+
+            event.preventDefault();
+
+            toggleComment();
+
+            return;
+
+        }
+
+
+        /*
+           TAB WITHOUT SUGGESTION
         */
 
         if(
@@ -2789,6 +4029,111 @@ code.addEventListener(
                 this.selectionEnd =
                 start + 4;
 
+
+            updateAutocomplete();
+
+            return;
+
+        }
+
+
+        /*
+           SMART ENTER / AUTO INDENT
+        */
+
+        if(
+            event.key === "Enter"
+        ){
+
+            /*
+               If autocomplete isn't visible,
+               create smart indentation.
+            */
+
+            event.preventDefault();
+
+
+            const cursor =
+                this.selectionStart;
+
+
+            const before =
+                this.value.slice(
+                    0,
+                    cursor
+                );
+
+
+            const after =
+                this.value.slice(
+                    this.selectionEnd
+                );
+
+
+            const currentLine =
+                before.split("\n").pop();
+
+
+            const indentationMatch =
+                currentLine.match(
+                    /^[ \t]*/
+                );
+
+
+            let indentation =
+                indentationMatch ?
+                indentationMatch[0] :
+                "";
+
+
+            /*
+               If current line ends with ':'
+               add 4 spaces.
+            */
+
+            const trimmed =
+                currentLine.trimEnd();
+
+
+            if(
+                trimmed.endsWith(":")
+            ){
+
+                indentation +=
+                    "    ";
+
+            }
+
+
+            /*
+               If user has code after
+               cursor, preserve it.
+            */
+
+            this.value =
+                before +
+                "\n" +
+                indentation +
+                after;
+
+
+            const newCursor =
+                before.length +
+                1 +
+                indentation.length;
+
+
+            this.selectionStart =
+                newCursor;
+
+            this.selectionEnd =
+                newCursor;
+
+
+            updateAutocomplete();
+
+            scheduleAutoRun();
+
         }
 
     }
@@ -2797,7 +4142,7 @@ code.addEventListener(
 
 
 /* =====================================================
-   REFRESH SELECTED SUGGESTION
+   REFRESH SUGGESTION
 ===================================================== */
 
 function refreshSelection(){
@@ -2828,7 +4173,7 @@ function refreshSelection(){
    SUGGESTION TOGGLE
 ===================================================== */
 
-suggestionToggle.addEventListener(
+suggestions.addEventListener(
     "change",
     function(){
 
@@ -2851,17 +4196,171 @@ suggestionToggle.addEventListener(
 
 
 /* =====================================================
-   CLEAR CODE
+   COMMENT / UNCOMMENT
+===================================================== */
+
+function toggleComment(){
+
+    const start =
+        code.selectionStart;
+
+    const end =
+        code.selectionEnd;
+
+
+    const before =
+        code.value.slice(
+            0,
+            start
+        );
+
+    const selected =
+        code.value.slice(
+            start,
+            end
+        );
+
+    const after =
+        code.value.slice(
+            end
+        );
+
+
+    const lines =
+        selected.split("\n");
+
+
+    const nonEmpty =
+        lines.filter(
+            line =>
+                line.trim()
+        );
+
+
+    const shouldRemove =
+        nonEmpty.length > 0 &&
+        nonEmpty.every(
+            line =>
+                line.trimStart()
+                    .startsWith("#")
+        );
+
+
+    const modified =
+        lines.map(
+            line => {
+
+                if(
+                    !line.trim()
+                ){
+
+                    return line;
+
+                }
+
+
+                if(
+                    shouldRemove
+                ){
+
+                    return line.replace(
+                        /^(\s*)# ?/,
+                        "$1"
+                    );
+
+                }
+
+
+                return line.replace(
+                    /^(\s*)/,
+                    "$1# "
+                );
+
+            }
+        ).join("\n");
+
+
+    code.value =
+        before +
+        modified +
+        after;
+
+
+    code.selectionStart =
+        start;
+
+    code.selectionEnd =
+        start +
+        modified.length;
+
+
+    updateAutocomplete();
+
+    scheduleAutoRun();
+
+}
+
+
+
+/* =====================================================
+   SAVE
+===================================================== */
+
+function saveCode(){
+
+    const blob =
+        new Blob(
+            [code.value],
+            {
+                type:"text/plain"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const a =
+        document.createElement(
+            "a"
+        );
+
+
+    a.href = url;
+
+    a.download =
+        "main.py";
+
+
+    a.click();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    printOutput(
+        "✓ main.py saved.",
+        "success"
+    );
+
+}
+
+
+
+/* =====================================================
+   BUTTONS
 ===================================================== */
 
 document
-.getElementById("clearCode")
+.getElementById("run")
 .addEventListener(
     "click",
     function(){
-
-        executionId++;
-
 
         if(autoTimer){
 
@@ -2873,32 +4372,23 @@ document
 
         }
 
-
-        if(running){
-
-            stopPython(
-                "Program stopped."
-            );
-
-        }
-
-
-        code.value = "";
-
-        clearOutput();
-
-        hideAutocomplete();
-
-        code.focus();
+        runPython();
 
     }
 );
 
 
+document
+.getElementById("stop")
+.addEventListener(
+    "click",
+    function(){
 
-/* =====================================================
-   CLEAR OUTPUT
-===================================================== */
+        stopPython();
+
+    }
+);
+
 
 document
 .getElementById("clearOutput")
@@ -2907,11 +4397,6 @@ document
     clearOutput
 );
 
-
-
-/* =====================================================
-   COPY
-===================================================== */
 
 document
 .getElementById("copy")
@@ -2960,38 +4445,58 @@ document
 
 
 /* =====================================================
-   BUTTONS
+   SETTINGS
 ===================================================== */
 
-document
-.getElementById("run")
-.addEventListener(
+const settingsButton =
+    document.getElementById(
+        "settingsButton"
+    );
+
+const closeSettings =
+    document.getElementById(
+        "closeSettings"
+    );
+
+
+settingsButton.addEventListener(
     "click",
     function(){
 
-        if(autoTimer){
-
-            clearTimeout(
-                autoTimer
-            );
-
-            autoTimer = null;
-
-        }
-
-        runPython();
+        settingsOverlay.classList.add(
+            "show"
+        );
 
     }
 );
 
 
-document
-.getElementById("stop")
-.addEventListener(
+closeSettings.addEventListener(
     "click",
     function(){
 
-        stopPython();
+        settingsOverlay.classList.remove(
+            "show"
+        );
+
+    }
+);
+
+
+settingsOverlay.addEventListener(
+    "mousedown",
+    function(event){
+
+        if(
+            event.target ===
+            settingsOverlay
+        ){
+
+            settingsOverlay.classList.remove(
+                "show"
+            );
+
+        }
 
     }
 );
@@ -2999,18 +4504,198 @@ document
 
 
 /* =====================================================
-   CLOSE AUTOCOMPLETE WHEN CLICKING OUTSIDE
+   COLOR SETTINGS
 ===================================================== */
 
-document.addEventListener(
-    "mousedown",
-    function(event){
+const codeColor =
+    document.getElementById(
+        "codeColor"
+    );
+
+const outputColor =
+    document.getElementById(
+        "outputColor"
+    );
+
+const inputColor =
+    document.getElementById(
+        "inputColor"
+    );
+
+
+codeColor.addEventListener(
+    "input",
+    function(){
+
+        document.documentElement
+            .style
+            .setProperty(
+                "--code-text",
+                this.value
+            );
+
+    }
+);
+
+
+outputColor.addEventListener(
+    "input",
+    function(){
+
+        document.documentElement
+            .style
+            .setProperty(
+                "--output-text",
+                this.value
+            );
+
+    }
+);
+
+
+inputColor.addEventListener(
+    "input",
+    function(){
+
+        document.documentElement
+            .style
+            .setProperty(
+                "--input-text",
+                this.value
+            );
+
+    }
+);
+
+
+
+/* =====================================================
+   FONT SETTINGS
+===================================================== */
+
+const codeSize =
+    document.getElementById(
+        "codeSize"
+    );
+
+const outputSize =
+    document.getElementById(
+        "outputSize"
+    );
+
+
+codeSize.addEventListener(
+    "input",
+    function(){
+
+        const value =
+            Math.max(
+                10,
+                Math.min(
+                    22,
+                    Number(this.value)
+                )
+            );
+
+
+        document.documentElement
+            .style
+            .setProperty(
+                "--code-size",
+                value + "px"
+            );
+
+    }
+);
+
+
+outputSize.addEventListener(
+    "input",
+    function(){
+
+        const value =
+            Math.max(
+                10,
+                Math.min(
+                    22,
+                    Number(this.value)
+                )
+            );
+
+
+        document.documentElement
+            .style
+            .setProperty(
+                "--output-size",
+                value + "px"
+            );
+
+    }
+);
+
+
+
+/* =====================================================
+   SETTINGS AUTO RUN SYNC
+===================================================== */
+
+const settingsAutoRun =
+    document.getElementById(
+        "settingsAutoRun"
+    );
+
+
+settingsAutoRun.addEventListener(
+    "change",
+    function(){
+
+        autoRun.value =
+            this.value;
+
+        scheduleAutoRun();
+
+    }
+);
+
+
+autoRun.addEventListener(
+    "change",
+    function(){
+
+        settingsAutoRun.value =
+            this.value;
+
+    }
+);
+
+
+
+/* =====================================================
+   SETTINGS SUGGESTION SYNC
+===================================================== */
+
+const settingsSuggestions =
+    document.getElementById(
+        "settingsSuggestions"
+    );
+
+
+settingsSuggestions.addEventListener(
+    "change",
+    function(){
+
+        suggestions.checked =
+            this.checked;
+
 
         if(
-            !event.target.closest(
-                ".editor"
-            )
+            this.checked
         ){
+
+            updateAutocomplete();
+
+        }
+        else{
 
             hideAutocomplete();
 
@@ -3020,12 +4705,133 @@ document.addEventListener(
 );
 
 
+suggestions.addEventListener(
+    "change",
+    function(){
+
+        settingsSuggestions.checked =
+            this.checked;
+
+    }
+);
+
+
 
 /* =====================================================
-   START PYTHON ENGINE ONCE
+   RESET SETTINGS
+===================================================== */
+
+document
+.getElementById("resetSettings")
+.addEventListener(
+    "click",
+    function(){
+
+        codeColor.value =
+            "#dce4ef";
+
+        outputColor.value =
+            "#d9e1ed";
+
+        inputColor.value =
+            "#ffffff";
+
+
+        codeSize.value =
+            "13";
+
+        outputSize.value =
+            "12";
+
+
+        suggestions.checked =
+            true;
+
+        settingsSuggestions.checked =
+            true;
+
+
+        autoRun.value =
+            "5000";
+
+        settingsAutoRun.value =
+            "5000";
+
+
+        document.documentElement
+            .style
+            .setProperty(
+                "--code-text",
+                "#dce4ef"
+            );
+
+        document.documentElement
+            .style
+            .setProperty(
+                "--output-text",
+                "#d9e1ed"
+            );
+
+        document.documentElement
+            .style
+            .setProperty(
+                "--input-text",
+                "#ffffff"
+            );
+
+        document.documentElement
+            .style
+            .setProperty(
+                "--code-size",
+                "13px"
+            );
+
+        document.documentElement
+            .style
+            .setProperty(
+                "--output-size",
+                "12px"
+            );
+
+
+        scheduleAutoRun();
+
+    }
+);
+
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Escape"
+        ){
+
+            hideAutocomplete();
+
+            settingsOverlay.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   INITIALIZE
 ===================================================== */
 
 createWorker();
+
 
 </script>
 
